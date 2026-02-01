@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Trash, Info } from '@phosphor-icons/react'
+import { Trash, Info, ArrowSquareOut } from '@phosphor-icons/react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -24,13 +24,18 @@ export function IconCard({ icon, dragEnabled, onDelete }: IconCardProps) {
 
     setIsDragging(true)
     
-    fetch(icon.url)
-      .then(res => res.blob())
-      .then(blob => {
-        const file = new File([blob], icon.name, { type: blob.type })
-        e.dataTransfer.effectAllowed = 'copy'
-        e.dataTransfer.setData('DownloadURL', `${blob.type}:${icon.name}:${icon.url}`)
-      })
+    const extension = icon.format.toLowerCase() === 'svg+xml' ? 'svg' : icon.format.toLowerCase()
+    const filename = icon.name.includes('.') ? icon.name : `${icon.name}.${extension}`
+    
+    e.dataTransfer.effectAllowed = 'copy'
+    e.dataTransfer.setData('DownloadURL', `image/${icon.format}:${filename}:${icon.url}`)
+    
+    try {
+      e.dataTransfer.setData('text/uri-list', icon.url)
+      e.dataTransfer.setData('text/plain', icon.url)
+    } catch (err) {
+      console.warn('Some drag data could not be set:', err)
+    }
   }
 
   const handleDragEnd = () => {
@@ -60,6 +65,19 @@ export function IconCard({ icon, dragEnabled, onDelete }: IconCardProps) {
             className="max-w-full max-h-full object-contain"
             draggable={false}
           />
+          
+          {dragEnabled && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="absolute inset-0 pointer-events-none flex items-center justify-center bg-accent/10 opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <div className="flex flex-col items-center gap-1">
+                <ArrowSquareOut size={32} weight="bold" className="text-accent" />
+                <span className="text-xs font-semibold text-accent">Drag out</span>
+              </div>
+            </motion.div>
+          )}
           
           <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
             <TooltipProvider>

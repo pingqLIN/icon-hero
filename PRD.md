@@ -27,11 +27,11 @@ This is a specialized utility with a focused purpose - browsing/selecting icons,
 - **Success criteria**: Clear visual feedback of active/inactive states, drag behavior only works when enabled
 
 ### Icon Drag-and-Drop System
-- **Functionality**: Enable users to click and drag icon images from the browser to external system targets
-- **Purpose**: Core functionality that allows seamless icon replacement without file downloads
-- **Trigger**: User clicks and drags an icon while in drag mode
-- **Progression**: User clicks icon → Drags cursor outside browser → Hovers over system folder/app → Releases to apply icon
-- **Success criteria**: Browser creates proper drag data transfer, icons are in formats compatible with OS icon replacement
+- **Functionality**: Enable users to click and drag icon images from the browser window to external system targets (folders, applications) outside the browser
+- **Purpose**: Core functionality that allows seamless icon file transfer without traditional downloads, enabling direct system icon replacement
+- **Trigger**: User clicks and holds on an icon while in drag mode
+- **Progression**: User clicks and holds icon → Drags cursor outside browser window → Hovers over system folder/app in OS → Releases to save/apply icon file
+- **Success criteria**: Browser creates proper drag data with DownloadURL format, icons transfer as files to OS, formats are compatible with system icon replacement
 
 ### Icon Upload/Add
 - **Functionality**: Allow users to upload their own custom icon images to the gallery

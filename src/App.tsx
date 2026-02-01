@@ -82,7 +82,7 @@ function App() {
     setDragEnabled(checked)
     if (checked) {
       toast.success('Drag mode enabled', {
-        description: 'You can now drag icons to your system folders and applications'
+        description: 'Click and drag icons from browser to your system folders or apps'
       })
     } else {
       toast.info('Drag mode disabled', {
@@ -101,7 +101,7 @@ function App() {
                 Icon Changer
               </h1>
               <p className="text-sm text-muted-foreground" style={{ lineHeight: '1.6' }}>
-                Upload icons and drag them to system apps or folders to change their appearance
+                Upload and manage icon files, then drag them from browser to your system folders/apps
               </p>
             </div>
 
@@ -157,7 +157,7 @@ function App() {
               <Alert className="border-accent/50 bg-accent/5">
                 <Warning size={18} className="text-accent" />
                 <AlertDescription className="text-sm">
-                  Drag mode is active. Click and drag any icon onto a system folder or application to replace its icon.
+                  Drag mode active. Click and hold on any icon, then drag your cursor outside the browser window to your system folder or application to save/apply it.
                 </AlertDescription>
               </Alert>
             </motion.div>

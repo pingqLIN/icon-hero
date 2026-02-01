@@ -19,7 +19,7 @@ export function EmptyState({ onUploadClick }: EmptyStateProps) {
       
       <h3 className="text-xl font-bold mb-2">No Icons Yet</h3>
       <p className="text-muted-foreground text-center max-w-sm mb-6">
-        Start building your icon collection by uploading custom icons. Once added, enable drag mode to use them.
+        Upload icon files to your collection. Enable drag mode to drag them from the browser to your system folders or apps.
       </p>
       
       <Button onClick={onUploadClick} size="lg" className="gap-2">
