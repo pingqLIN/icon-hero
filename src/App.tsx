@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { WorkspaceDropZone } from '@/components/WorkspaceDropZone'
 import { WorkspaceQueue } from '@/components/WorkspaceQueue'
 import { PreviewDialog } from '@/components/PreviewDialog'
+import { DragInstructions } from '@/components/DragInstructions'
 import { WorkspaceItem } from '@/types/workspace'
 import { analyzeDroppedItem } from '@/lib/workspaceAnalyzer'
 import { convertIcon } from '@/lib/iconConverter'
@@ -170,6 +171,8 @@ function App() {
     setWorkspaceItems(prev => prev.filter(item => item.status !== 'completed'))
   }
 
+  const hasCompletedItems = workspaceItems.some(item => item.status === 'completed')
+
   return (
     <>
       <Toaster />
@@ -266,6 +269,11 @@ function App() {
             {workspaceItems.length > 0 && (
               <div>
                 <h2 className="text-xl font-bold mb-4">處理佇列</h2>
+                {hasCompletedItems && (
+                  <div className="mb-4">
+                    <DragInstructions />
+                  </div>
+                )}
                 <WorkspaceQueue
                   items={workspaceItems}
                   onPreview={handlePreview}

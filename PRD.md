@@ -41,11 +41,11 @@ This is a specialized utility focused on icon conversion and system replacement.
 - **Success criteria**: Clear status for each item, grouped by pending/completed/error, smooth animations between states
 
 ### Multi-Format Drag-to-System
-- **Functionality**: Each completed item displays PNG, ICO, ICNS buttons that can be clicked to download or dragged directly to system targets
-- **Purpose**: Enable direct system icon replacement by dragging specific formats to OS folders/applications
-- **Trigger**: User clicks and drags a format button from a completed item
-- **Progression**: User clicks format button → Drags outside browser → Hovers over OS target (folder/app) → Releases to apply icon → System replaces icon
-- **Success criteria**: All three format buttons are draggable, proper file metadata is attached for OS recognition, drag data includes DownloadURL format, ICO files work on Windows, ICNS on macOS
+- **Functionality**: Each completed item displays PNG, ICO, ICNS buttons that can be clicked to download or dragged directly to system targets for icon replacement
+- **Purpose**: Enable direct system icon replacement by dragging converted icon files to OS folders, applications, or shortcuts
+- **Trigger**: User clicks and holds on a format button (PNG/ICO/ICNS) from a completed item, then drags
+- **Progression**: User clicks format button → Holds and drags outside browser → Custom drag preview appears showing filename → Hovers over OS target (folder/app/file) → Releases to drop file → System receives .ico/.png/.icns file for icon replacement
+- **Success criteria**: All three format buttons are draggable with visual grab cursor, proper File object is created with correct MIME type, drag data includes DownloadURL format string, custom drag image shows filename clearly, ICO files work on Windows for icon replacement, ICNS on macOS, PNG works universally, tooltip explains drag functionality
 
 ### Batch Download All Formats
 - **Functionality**: Download all completed conversions at once as a ZIP file, with options to download all formats or filter by specific format (PNG, ICO, or ICNS)

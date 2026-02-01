@@ -8,7 +8,8 @@ import {
   Image as ImageIcon,
   Link as LinkIcon,
   Download,
-  DotsSixVertical
+  DotsSixVertical,
+  HandGrabbing
 } from '@phosphor-icons/react'
 import { WorkspaceItem } from '@/types/workspace'
 import { Card } from '@/components/ui/card'
@@ -83,7 +84,7 @@ export function WorkspaceQueueItem({
     }
   }
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, format: 'png' | 'ico' | 'icns') => {
+  const handleDragStart = async (e: React.DragEvent<HTMLDivElement>, format: 'png' | 'ico' | 'icns') => {
     if (item.status !== 'completed') {
       e.preventDefault()
       return
@@ -100,14 +101,57 @@ export function WorkspaceQueueItem({
     const filename = `${item.name}.${format}`
     
     e.dataTransfer.effectAllowed = 'copy'
-    e.dataTransfer.setData('DownloadURL', `image/${format}:${filename}:${url}`)
+    
+    const mimeType = format === 'ico' ? 'image/x-icon' : 
+                    format === 'icns' ? 'image/icns' : 
+                    'image/png'
+    
+    e.dataTransfer.setData('DownloadURL', `${mimeType}:${filename}:${url}`)
     
     try {
       e.dataTransfer.setData('text/uri-list', url)
       e.dataTransfer.setData('text/plain', url)
+      
+      if ('items' in e.dataTransfer) {
+        const file = new File([blob], filename, { type: mimeType })
+        e.dataTransfer.items.add(file)
+      }
     } catch (err) {
       console.warn('Some drag data could not be set:', err)
     }
+    
+    const dragImage = document.createElement('div')
+    dragImage.style.cssText = `
+      position: absolute;
+      top: -1000px;
+      left: -1000px;
+      background: oklch(1 0 0);
+      border: 2px solid oklch(0.35 0.15 290);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: oklch(0.25 0.02 290);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      pointer-events: none;
+      z-index: 10000;
+    `
+    dragImage.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" style="flex-shrink: 0;">
+        <path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"></path>
+      </svg>
+      <span>${filename}</span>
+    `
+    document.body.appendChild(dragImage)
+    e.dataTransfer.setDragImage(dragImage, 0, 0)
+    
+    setTimeout(() => {
+      document.body.removeChild(dragImage)
+    }, 0)
   }
 
   const handleReorderDragStart = (e: React.DragEvent) => {
@@ -210,21 +254,23 @@ export function WorkspaceQueueItem({
                         <div
                           draggable={true}
                           onDragStart={(e) => handleDragStart(e, format)}
-                          className="cursor-grab active:cursor-grabbing"
+                          className="relative group"
                         >
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-8 px-2 gap-1"
+                            className="h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all hover:border-primary hover:bg-primary/5"
                             onClick={() => onDownload?.(item, format)}
                           >
+                            <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary" />
                             <Download size={14} />
                             <span className="text-xs font-semibold">{format.toUpperCase()}</span>
                           </Button>
                         </div>
                       </TooltipTrigger>
-                      <TooltipContent>
-                        <p>下載或拖曳 {format.toUpperCase()} 至系統</p>
+                      <TooltipContent side="bottom">
+                        <p className="font-semibold">拖曳至系統檔案/資料夾替換圖示</p>
+                        <p className="text-xs text-muted-foreground">或點擊下載 {format.toUpperCase()} 檔案</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
