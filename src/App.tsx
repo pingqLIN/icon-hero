@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Toaster } from '@/components/ui/sonner'
 import { IconCard } from '@/components/IconCard'
 import { EmptyState } from '@/components/EmptyState'
 import { WorkspaceDropZone } from '@/components/WorkspaceDropZone'
@@ -274,8 +275,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+    <>
+      <Toaster />
+      <div className="min-h-screen bg-background">
+        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
             <div>
@@ -452,21 +455,22 @@ function App() {
         </Tabs>
       </main>
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="hidden"
-        id="icon-upload"
-      />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+          id="icon-upload"
+        />
 
-      <PreviewDialog
-        item={previewItem}
-        open={showPreview}
-        onOpenChange={setShowPreview}
-      />
-    </div>
+        <PreviewDialog
+          item={previewItem}
+          open={showPreview}
+          onOpenChange={setShowPreview}
+        />
+      </div>
+    </>
   )
 }
 
