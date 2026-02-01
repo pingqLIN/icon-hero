@@ -5,7 +5,7 @@ import { WorkspaceQueueItem } from '@/components/WorkspaceQueueItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
-import { Package, DownloadSimple, FileZip } from '@phosphor-icons/react'
+import { Package, DownloadSimple, FileZip, Trash } from '@phosphor-icons/react'
 import { batchDownloadAll, batchDownloadByFormat } from '@/lib/batchDownload'
 import { toast } from 'sonner'
 import {
@@ -21,9 +21,10 @@ interface WorkspaceQueueProps {
   onPreview?: (item: WorkspaceItem) => void
   onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
   onReorder?: (reorderedItems: WorkspaceItem[]) => void
+  onClearCompleted?: () => void
 }
 
-export function WorkspaceQueue({ items, onPreview, onDownload, onReorder }: WorkspaceQueueProps) {
+export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClearCompleted }: WorkspaceQueueProps) {
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
   const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
   const [isDownloading, setIsDownloading] = useState(false)
@@ -109,10 +110,28 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder }: Work
     setDragOverItemId(null)
   }
 
+  const handleClearCompleted = () => {
+    if (onClearCompleted) {
+      onClearCompleted()
+      toast.success('已清除完成項目', {
+        description: `已移除 ${completedItems.length} 個完成的項目`
+      })
+    }
+  }
+
   return (
     <div className="space-y-4">
       {completedItems.length > 0 && (
         <div className="flex justify-end gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="gap-2"
+            onClick={handleClearCompleted}
+          >
+            <Trash size={16} />
+            清除已完成
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 

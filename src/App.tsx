@@ -166,6 +166,10 @@ function App() {
     setWorkspaceItems(reorderedItems)
   }
 
+  const handleClearCompleted = () => {
+    setWorkspaceItems(prev => prev.filter(item => item.status !== 'completed'))
+  }
+
   return (
     <>
       <Toaster />
@@ -267,6 +271,7 @@ function App() {
                   onPreview={handlePreview}
                   onDownload={handleDownload}
                   onReorder={handleReorder}
+                  onClearCompleted={handleClearCompleted}
                 />
               </div>
             )}
