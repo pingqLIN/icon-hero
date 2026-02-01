@@ -11,6 +11,16 @@ export interface WorkspaceItem {
   format?: string
   convertedUrl?: string
   convertedFormat?: string
+  convertedUrls?: {
+    png?: string
+    ico?: string
+    icns?: string
+  }
+  convertedBlobs?: {
+    png?: Blob
+    ico?: Blob
+    icns?: Blob
+  }
   error?: string
   addedAt: number
   completedAt?: number

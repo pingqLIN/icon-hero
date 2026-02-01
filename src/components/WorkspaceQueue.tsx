@@ -8,7 +8,7 @@ import { Package } from '@phosphor-icons/react'
 interface WorkspaceQueueProps {
   items: WorkspaceItem[]
   onPreview?: (item: WorkspaceItem) => void
-  onDownload?: (item: WorkspaceItem) => void
+  onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
 }
 
 export function WorkspaceQueue({ items, onPreview, onDownload }: WorkspaceQueueProps) {

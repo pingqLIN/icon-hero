@@ -19,6 +19,8 @@ interface PreviewDialogProps {
 export function PreviewDialog({ item, open, onOpenChange }: PreviewDialogProps) {
   if (!item) return null
 
+  const previewUrl = item.convertedUrls?.png || item.convertedUrls?.ico || item.convertedUrls?.icns || item.originalUrl
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -33,16 +35,26 @@ export function PreviewDialog({ item, open, onOpenChange }: PreviewDialogProps) 
                 原始格式: {item.format.toUpperCase()}
               </Badge>
             )}
-            {item.convertedFormat && (
+            {item.convertedUrls?.png && (
               <Badge variant="default" className="text-xs">
-                轉換格式: {item.convertedFormat.toUpperCase()}
+                PNG
+              </Badge>
+            )}
+            {item.convertedUrls?.ico && (
+              <Badge variant="default" className="text-xs">
+                ICO
+              </Badge>
+            )}
+            {item.convertedUrls?.icns && (
+              <Badge variant="default" className="text-xs">
+                ICNS
               </Badge>
             )}
           </div>
 
           <div className="relative rounded-xl border-2 border-border bg-secondary/20 p-8">
             <AnimatePresence mode="wait">
-              {item.convertedUrl && (
+              {previewUrl && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -50,7 +62,7 @@ export function PreviewDialog({ item, open, onOpenChange }: PreviewDialogProps) 
                   className="flex items-center justify-center"
                 >
                   <img
-                    src={item.convertedUrl}
+                    src={previewUrl}
                     alt={item.name}
                     className="max-w-full max-h-[400px] object-contain"
                   />

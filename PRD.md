@@ -1,89 +1,79 @@
 # Planning Guide
 
-A browser-based icon customization tool that enables users to drag image files from the web browser directly onto operating system applications or folders to replace their default icons.
+A browser-based icon conversion and replacement tool that enables users to drag-and-drop image files or URLs into a workspace, automatically converts them to PNG, ICO, and ICNS formats, and allows direct system icon replacement via drag-and-drop.
 
 **Experience Qualities**:
-1. **Intuitive** - The drag-and-drop interaction should feel natural and immediate, requiring no explanation
-2. **Powerful** - Users should feel empowered to customize their system with minimal friction
-3. **Polished** - Every visual detail should communicate professionalism and reliability
+1. **Efficient** - Automatic batch processing with minimal user intervention required
+2. **Powerful** - Convert and manage icons in multiple formats simultaneously with drag-to-system capabilities
+3. **Streamlined** - Single unified workspace for all operations without mode switching
 
 **Complexity Level**: Light Application (multiple features with basic state)
-This is a specialized utility with a focused purpose - browsing/selecting icons, enabling drag mode, and facilitating system icon replacement. It maintains icon collections and operation modes but doesn't require complex routing or heavy data management.
+This is a specialized utility focused on icon conversion and system replacement. It processes files through analysis, conversion, and enables direct system integration through drag-and-drop, maintaining a processing queue without requiring complex routing.
 
 ## Essential Features
 
-### Icon Gallery Browser
-- **Functionality**: Display a curated collection of icon images in a grid layout that users can browse
-- **Purpose**: Provide users with a visual catalog of icons to choose from for system customization
-- **Trigger**: Automatically loads when the application opens
-- **Progression**: App loads → Icons render in grid → User scrolls to browse collection → User identifies desired icon
-- **Success criteria**: All icons load correctly with proper thumbnails, grid is responsive and easy to navigate
+### Unified Workspace Drop Zone
+- **Functionality**: Single drag-and-drop area that accepts image files, URLs, or clipboard content
+- **Purpose**: Provide a centralized entry point for all icon processing operations
+- **Trigger**: User drags files/URLs to drop zone, clicks upload button, or pastes content
+- **Progression**: User drops item → System analyzes type → Determines if image or URL → Begins conversion pipeline
+- **Success criteria**: Accepts multiple files/URLs simultaneously, provides immediate feedback on drop, handles various input types gracefully
 
-### Drag Mode Toggle
-- **Functionality**: A prominent toggle switch that enables/disables drag-and-drop functionality
-- **Purpose**: Prevent accidental drags and clearly communicate when the app is in "active" mode
-- **Trigger**: User clicks the toggle switch
-- **Progression**: User clicks toggle → Visual state change indicates mode is active → Icons become draggable → User can now perform drag operations
-- **Success criteria**: Clear visual feedback of active/inactive states, drag behavior only works when enabled
+### Automatic Multi-Format Conversion
+- **Functionality**: Automatically converts all dropped items to PNG, ICO, and ICNS formats simultaneously
+- **Purpose**: Eliminate manual format selection and prepare icons for all operating systems
+- **Trigger**: Immediately after item analysis completes
+- **Progression**: Analysis complete → PNG conversion starts → ICO conversion starts → ICNS conversion starts → All formats ready → Item marked complete
+- **Success criteria**: All three formats generated for each item, maintains quality across conversions, ICO includes multiple resolutions (16, 32, 48, 256px), ICNS includes full resolution set
 
-### Icon Drag-and-Drop System
-- **Functionality**: Enable users to click and drag icon images from the browser window to external system targets (folders, applications) outside the browser
-- **Purpose**: Core functionality that allows seamless icon file transfer without traditional downloads, enabling direct system icon replacement
-- **Trigger**: User clicks and holds on an icon while in drag mode
-- **Progression**: User clicks and holds icon → Drags cursor outside browser window → Hovers over system folder/app in OS → Releases to save/apply icon file
-- **Success criteria**: Browser creates proper drag data with DownloadURL format, icons transfer as files to OS, formats are compatible with system icon replacement
+### URL Parsing and Icon Extraction
+- **Functionality**: When URL is detected, fetch and parse webpage for icon metadata and resources
+- **Purpose**: Enable users to grab icons directly from websites without manual searching
+- **Trigger**: User drops or pastes a URL that doesn't point directly to an image
+- **Progression**: URL dropped → Fetch webpage → Parse HTML for icon links (favicon, og:image, apple-touch-icon) → Extract best quality icon → Convert to all formats
+- **Success criteria**: Successfully extracts icons from major websites, falls back to /favicon.ico if no metadata found, handles CORS and network errors gracefully
 
-### Icon Upload/Add
-- **Functionality**: Allow users to upload their own custom icon images to the gallery via file picker or URL
-- **Purpose**: Extend the icon collection beyond pre-loaded options and enable loading icons directly from web sources
-- **Trigger**: User clicks "Add Icon" button or "從 URL 載入" button
-- **Progression**: 
-  - File upload: User clicks add button → File picker opens → User selects image → Image validates → New icon appears in gallery
-  - URL load: User clicks URL button → URL input appears → User pastes URL → System fetches and parses → If direct image: downloads and displays → If webpage: parses HTML for icon metadata (favicon, og:image, apple-touch-icon) → Icon loads in gallery
-- **Success criteria**: Uploaded icons persist, are properly formatted, URL parsing correctly identifies icons from webpages, both methods work with drag system
+### Processing Queue Display
+- **Functionality**: Real-time status display showing all items being processed with progress indicators
+- **Purpose**: Provide transparency into the conversion pipeline and manage multiple items
+- **Trigger**: Automatically updates as items move through conversion stages
+- **Progression**: Item added → Shows "Analyzing" → Shows "Converting" with current format → Shows "Completed" with all format buttons
+- **Success criteria**: Clear status for each item, grouped by pending/completed/error, smooth animations between states
 
-### Icon Format Conversion
-- **Functionality**: Convert icons between PNG, ICO, and ICNS formats with multi-resolution support
-- **Purpose**: Enable users to prepare icons for different operating systems (Windows ICO, macOS ICNS) without external tools
-- **Trigger**: User clicks the conversion button on an icon card
-- **Progression**: User clicks convert button → Dialog opens showing format options → User selects target format → Conversion processes → User can download or add to collection
-- **Success criteria**: Accurate format conversion with proper multi-resolution support for ICO/ICNS, converted icons are draggable and downloadable
-
-### Icon Management
-- **Functionality**: Display icon metadata and provide delete/organize capabilities
-- **Purpose**: Help users curate their personal icon collection
-- **Trigger**: User hovers over or selects an icon
-- **Progression**: User interacts with icon → Actions appear → User selects delete/info → Confirmation if needed → Action completes
-- **Success criteria**: Icons can be removed, collection state persists across sessions
+### Multi-Format Drag-to-System
+- **Functionality**: Each completed item displays PNG, ICO, ICNS buttons that can be clicked to download or dragged directly to system targets
+- **Purpose**: Enable direct system icon replacement by dragging specific formats to OS folders/applications
+- **Trigger**: User clicks and drags a format button from a completed item
+- **Progression**: User clicks format button → Drags outside browser → Hovers over OS target (folder/app) → Releases to apply icon → System replaces icon
+- **Success criteria**: All three format buttons are draggable, proper file metadata is attached for OS recognition, drag data includes DownloadURL format, ICO files work on Windows, ICNS on macOS
 
 ## Edge Case Handling
 
-- **Empty Gallery State**: Display helpful onboarding message with upload prompt when no icons exist
-- **Invalid File Types**: Show clear error toast when unsupported image formats are uploaded
-- **Large File Uploads**: Validate file size limits and provide feedback for oversized images
-- **Drag Without Mode Active**: Prevent drag behavior and show subtle reminder to enable drag mode
-- **Failed Persistence**: Gracefully handle storage errors and notify user if icons can't be saved
-- **Format Conversion Errors**: Handle conversion failures with clear error messages and suggestions
-- **Unsupported Source Formats**: Inform users if source format cannot be reliably converted to target format
-- **Conversion of Current Format**: Disable conversion to the same format already being used
-- **Invalid URLs**: Validate URL format and show error for malformed URLs
-- **URL Fetch Failures**: Handle network errors, CORS issues, and missing resources gracefully
-- **URL Without Icons**: When parsing webpage URLs, fallback to /favicon.ico if no icon metadata found
-- **Non-Image Content Types**: Detect when URL points to non-image content and attempt to parse as webpage
+- **Empty Workspace State**: Display helpful onboarding message with drag zone when no items exist
+- **Invalid File Types**: Show clear error toast when unsupported file formats are dropped
+- **Large File Uploads**: Validate reasonable file size and provide feedback for oversized images
+- **Multiple Simultaneous Drops**: Process all items concurrently with individual status tracking
+- **Conversion Failures**: Mark individual items as error with specific messages, don't block other items
+- **Invalid URLs**: Validate URL format before processing and show error for malformed URLs
+- **URL Fetch Failures**: Handle network errors, CORS issues, and missing resources with fallback strategies
+- **URL Without Icons**: Attempt /favicon.ico fallback when webpage parsing finds no icon metadata
+- **Non-Image URLs**: Detect content type and attempt webpage parsing for icon extraction
+- **Duplicate Items**: Allow processing of duplicate items with unique IDs for independent tracking
+- **Browser Drag Restrictions**: Ensure DownloadURL format is properly set for cross-browser compatibility
 
 ## Design Direction
 
-The design should evoke a sense of precision, control, and creative empowerment. It should feel like a professional tool that respects the user's system customization workflow - clean, focused, and purposeful with just enough personality to feel delightful rather than sterile.
+The design should evoke efficiency and technical precision - a professional conversion tool that processes files automatically and provides immediate access to results. Clean, focused interface with clear status indicators and minimal interaction required.
 
 ## Color Selection
 
-A sophisticated, tech-forward palette centered around deep purples and electric accents that communicates both creativity and precision.
+A sophisticated, tech-forward palette centered around deep purples and electric accents that communicates both efficiency and technical capability.
 
-- **Primary Color**: Deep Purple `oklch(0.35 0.15 290)` - Communicates creativity, sophistication, and technical capability
+- **Primary Color**: Deep Purple `oklch(0.35 0.15 290)` - Communicates technical sophistication and processing capability
 - **Secondary Colors**: 
-  - Soft Lavender `oklch(0.85 0.08 290)` for backgrounds and subtle containers
+  - Soft Lavender `oklch(0.85 0.08 290)` for backgrounds and drop zone areas
   - Dark Charcoal `oklch(0.25 0.02 290)` for text and high-contrast elements
-- **Accent Color**: Electric Cyan `oklch(0.75 0.18 210)` - Vibrant highlight for the drag mode toggle and active states, creating visual excitement
+- **Accent Color**: Electric Cyan `oklch(0.75 0.18 210)` - Vibrant highlight for active processing states and interactive format buttons
 - **Foreground/Background Pairings**: 
   - Background White `oklch(0.98 0.005 290)`: Dark Charcoal text `oklch(0.25 0.02 290)` - Ratio 12.8:1 ✓
   - Primary Purple `oklch(0.35 0.15 290)`: White text `oklch(0.98 0.005 290)` - Ratio 8.2:1 ✓
@@ -105,61 +95,62 @@ Typography should convey modern technical precision while remaining approachable
 
 ## Animations
 
-Animations should emphasize the physicality of dragging and the satisfaction of mode changes, using smooth easing and purposeful motion.
+Animations should emphasize the flow of processing and the satisfaction of completion, using smooth transitions and purposeful motion.
 
-- **Drag Mode Toggle**: Smooth scale and color transition (300ms ease-out) with a subtle bounce when activated
-- **Icon Hover**: Gentle lift effect (transform translateY) with soft shadow expansion to suggest grabbability
-- **Icon Drag Start**: Quick scale-down (150ms) to create visual feedback that the icon is "picked up"
-- **Upload Success**: Brief scale-up pulse animation on newly added icons to draw attention
-- **Grid Loading**: Staggered fade-in of icons with slight upward motion for visual interest
+- **Item Drop**: Quick fade-in and slide-up animation when new items are added to queue (200ms ease-out)
+- **Status Changes**: Smooth color transitions as items move from analyzing → converting → completed
+- **Format Button Appearance**: Staggered fade-in of PNG, ICO, ICNS buttons on completion (100ms delay between each)
+- **Drag Start**: Subtle scale and opacity change to indicate button is being dragged
+- **Processing Indicators**: Gentle pulse animation on items being converted
+- **Success State**: Brief scale pulse on completion with color transition to success state
 
 ## Component Selection
 
 - **Components**: 
-  - `Switch` for the drag mode toggle with custom styling for prominence
-  - `Card` for individual icon containers with hover states
-  - `Dialog` for upload interface, format conversion, and icon detail views
-  - `Button` for primary actions (upload, delete, convert) with distinct variants
-  - `Alert` for status messages about drag mode or upload results
-  - `Tooltip` for contextual help on icons and controls
-  - `Badge` for file format indicators on icons
+  - `Card` for queue item containers with status-based styling
+  - `Button` for upload actions and format download/drag buttons
+  - `Input` for URL entry with clear action button
+  - `Badge` for status and format indicators with color coding
+  - `Tooltip` for contextual help on drag functionality
+  - `Dialog` for preview modal showing converted images
+  - `ScrollArea` for queue list with many items
+  - `Alert` for empty state messaging
   
 - **Customizations**: 
-  - Custom icon grid component using CSS Grid with responsive columns
-  - Styled drag preview element with semi-transparency
-  - Enhanced Switch component with larger hit area and icon indicators
-  - Custom empty state illustration component
-  - Format conversion dialog with visual format selection and preview
+  - Custom drop zone component with animated upload icon
+  - Enhanced format buttons with drag-enabled state and icon indicators
+  - Status-aware queue item cards with progress visualization
+  - Multi-format preview in dialog showing all three outputs
   
 - **States**: 
-  - Toggle Switch: Clear on/off states with color change (purple inactive, cyan active) and icon swap
-  - Icon Cards: Default, hover (lifted with shadow), dragging (reduced opacity), selected (border highlight)
-  - Upload Button: Rest (primary purple), hover (darker purple), active (pressed effect), disabled (muted)
-  - Drag Overlay: Visible only during drag operations with semi-transparent background
-  - Conversion Dialog: Format selection states, converting indicator, success state with download/add options
+  - Queue Items: Pending (muted), Analyzing (accent pulse), Converting (primary pulse), Completed (success border), Error (destructive)
+  - Format Buttons: Enabled drag state with cursor indication, hover lift effect, active pressed state
+  - Drop Zone: Default invitation state, drag-over highlight state, processing state
+  - Upload Button: Rest, hover, disabled during active processing
   
 - **Icon Selection**: 
   - Upload/Add: `UploadSimple` from Phosphor
-  - Drag Enabled: `Hand` from Phosphor
-  - Drag Disabled: `HandPalm` from Phosphor  
-  - Delete: `Trash` from Phosphor
-  - Info: `Info` from Phosphor
-  - Image/File: `Image` from Phosphor
-  - Convert: `ArrowsDownUp` from Phosphor
+  - Files/Workspace: `Files` from Phosphor
   - Download: `Download` from Phosphor
-  - Success: `Check` from Phosphor
-  - Link/URL: `Link` from Phosphor
+  - Preview: `Eye` from Phosphor
+  - Status - Analyzing: `CircleNotch` spinning from Phosphor
+  - Status - Converting: `ArrowsDownUp` pulsing from Phosphor
+  - Status - Complete: `CheckCircle` filled from Phosphor
+  - Status - Error: `Warning` filled from Phosphor
+  - Image Type: `Image` from Phosphor
+  - URL Type: `Link` from Phosphor
+  - Close: `X` from Phosphor
   
 - **Spacing**: 
   - Page padding: `p-8` (2rem)
-  - Grid gap: `gap-6` (1.5rem)
+  - Section spacing: `space-y-8` (2rem vertical)
+  - Queue item spacing: `space-y-2` (0.5rem vertical)
   - Card padding: `p-4` (1rem)
-  - Section spacing: `space-y-6` (1.5rem vertical)
-  - Button padding: `px-6 py-3`
+  - Button group gap: `gap-2` (0.5rem)
   
 - **Mobile**: 
-  - Grid: 2 columns on mobile, 3 on tablet (md:), 4 on desktop (lg:), 5 on xl screens
-  - Drag mode toggle: Larger touch target (min 56px height) with clear label
-  - Upload button: Full width on mobile, auto width on desktop
-  - Icon cards: Minimum 120px width for comfortable touch targets
-  - Sticky header with toggle for easy access while scrolling on mobile
+  - Single column layout for queue items
+  - Upload buttons: Full width on mobile, inline on desktop
+  - Format buttons: Stack vertically on narrow screens, inline on wide screens
+  - Drop zone: Reduced padding on mobile for better space utilization
+  - Sticky header for access to upload actions while scrolling

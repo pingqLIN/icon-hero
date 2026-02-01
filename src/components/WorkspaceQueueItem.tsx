@@ -18,7 +18,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 interface WorkspaceQueueItemProps {
   item: WorkspaceItem
   onPreview?: (item: WorkspaceItem) => void
-  onDownload?: (item: WorkspaceItem) => void
+  onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
 }
 
 export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQueueItemProps) {
@@ -63,21 +63,28 @@ export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQue
     }
   }
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    if (item.status !== 'completed' || !item.convertedUrl) {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, format: 'png' | 'ico' | 'icns') => {
+    if (item.status !== 'completed') {
+      e.preventDefault()
+      return
+    }
+
+    const url = item.convertedUrls?.[format]
+    const blob = item.convertedBlobs?.[format]
+    
+    if (!url || !blob) {
       e.preventDefault()
       return
     }
     
-    const extension = item.convertedFormat?.toLowerCase() || 'png'
-    const filename = `${item.name}.${extension}`
+    const filename = `${item.name}.${format}`
     
     e.dataTransfer.effectAllowed = 'copy'
-    e.dataTransfer.setData('DownloadURL', `image/${item.convertedFormat}:${filename}:${item.convertedUrl}`)
+    e.dataTransfer.setData('DownloadURL', `image/${format}:${filename}:${url}`)
     
     try {
-      e.dataTransfer.setData('text/uri-list', item.convertedUrl)
-      e.dataTransfer.setData('text/plain', item.convertedUrl)
+      e.dataTransfer.setData('text/uri-list', url)
+      e.dataTransfer.setData('text/plain', url)
     } catch (err) {
       console.warn('Some drag data could not be set:', err)
     }
@@ -90,15 +97,7 @@ export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQue
       exit={{ opacity: 0, x: 20 }}
       layout
     >
-      <Card 
-        className={`p-4 transition-all ${
-          item.status === 'completed' 
-            ? 'cursor-grab active:cursor-grabbing hover:shadow-md border-green-500/20 bg-green-500/5' 
-            : 'cursor-default'
-        }`}
-        draggable={item.status === 'completed'}
-        onDragStart={handleDragStart}
-      >
+      <Card className="p-4 transition-all">
         <div className="flex items-center gap-4">
           <div className="flex-shrink-0">
             {getStatusIcon()}
@@ -121,9 +120,9 @@ export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQue
                 </Badge>
               )}
               
-              {item.convertedFormat && item.status === 'completed' && (
-                <Badge variant="default" className="text-[10px] px-1.5 py-0">
-                  轉換為: {item.convertedFormat.toUpperCase()}
+              {item.convertedFormat && item.status === 'converting' && (
+                <Badge variant="default" className="text-[10px] px-1.5 py-0 animate-pulse">
+                  處理中: {item.convertedFormat.toUpperCase()}
                 </Badge>
               )}
             </div>
@@ -133,7 +132,7 @@ export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQue
             )}
           </div>
 
-          {item.status === 'completed' && item.convertedUrl && (
+          {item.status === 'completed' && item.convertedUrls && (
             <div className="flex items-center gap-2 flex-shrink-0">
               <TooltipProvider>
                 <Tooltip>
@@ -153,23 +152,37 @@ export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQue
                 </Tooltip>
               </TooltipProvider>
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="h-8 w-8"
-                      onClick={() => onDownload?.(item)}
-                    >
-                      <Download size={16} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>下載</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              {(['png', 'ico', 'icns'] as const).map((format) => {
+                const hasFormat = item.convertedUrls?.[format]
+                if (!hasFormat) return null
+                
+                return (
+                  <TooltipProvider key={format}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div
+                          draggable={true}
+                          onDragStart={(e) => handleDragStart(e, format)}
+                          className="cursor-grab active:cursor-grabbing"
+                        >
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-8 px-2 gap-1"
+                            onClick={() => onDownload?.(item, format)}
+                          >
+                            <Download size={14} />
+                            <span className="text-xs font-semibold">{format.toUpperCase()}</span>
+                          </Button>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>下載或拖曳 {format.toUpperCase()} 至系統</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )
+              })}
             </div>
           )}
         </div>
