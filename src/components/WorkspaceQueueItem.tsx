@@ -212,92 +212,92 @@ export function WorkspaceQueueItem({
               {getStatusIcon()}
             </div>
 
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              {getTypeIcon()}
-              <p className="text-sm font-semibold truncate">{item.name}</p>
-            </div>
-            
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                {getStatusText()}
-              </Badge>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-1">
+                {getTypeIcon()}
+                <p className="text-sm font-semibold truncate">{item.name}</p>
+              </div>
               
-              {item.format && (
-                <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                  原始: {item.format.toUpperCase()}
+              <div className="flex items-center gap-2 flex-wrap">
+                <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                  {getStatusText()}
                 </Badge>
-              )}
-              
-              {item.convertedFormat && item.status === 'converting' && (
-                <Badge variant="default" className="text-[10px] px-1.5 py-0 animate-pulse">
-                  處理中: {item.convertedFormat.toUpperCase()}
-                </Badge>
+                
+                {item.format && (
+                  <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                    原始: {item.format.toUpperCase()}
+                  </Badge>
+                )}
+                
+                {item.convertedFormat && item.status === 'converting' && (
+                  <Badge variant="default" className="text-[10px] px-1.5 py-0 animate-pulse">
+                    處理中: {item.convertedFormat.toUpperCase()}
+                  </Badge>
+                )}
+              </div>
+
+              {item.error && (
+                <p className="text-xs text-destructive mt-1">{item.error}</p>
               )}
             </div>
 
-            {item.error && (
-              <p className="text-xs text-destructive mt-1">{item.error}</p>
+            {item.status === 'completed' && item.convertedUrls && (
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-8 w-8"
+                        onClick={() => onPreview?.(item)}
+                      >
+                        <Eye size={16} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>預覽</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                {(['png', 'ico', 'icns'] as const).map((format) => {
+                  const hasFormat = item.convertedUrls?.[format]
+                  if (!hasFormat) return null
+                  
+                  return (
+                    <TooltipProvider key={format}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div
+                            draggable={true}
+                            onDragStart={(e) => handleDragStart(e, format)}
+                            className="relative group"
+                          >
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all hover:border-primary hover:bg-primary/5"
+                              onClick={() => onDownload?.(item, format)}
+                            >
+                              <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary" />
+                              <Download size={14} />
+                              <span className="text-xs font-semibold">{format.toUpperCase()}</span>
+                            </Button>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <p className="font-semibold">拖曳至系統檔案/資料夾替換圖示</p>
+                          <p className="text-xs text-muted-foreground">或點擊下載 {format.toUpperCase()} 檔案</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )
+                })}
+              </div>
             )}
           </div>
-
-          {item.status === 'completed' && item.convertedUrls && (
-            <div className="flex items-center gap-2 flex-shrink-0">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="h-8 w-8"
-                      onClick={() => onPreview?.(item)}
-                    >
-                      <Eye size={16} />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>預覽</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              {(['png', 'ico', 'icns'] as const).map((format) => {
-                const hasFormat = item.convertedUrls?.[format]
-                if (!hasFormat) return null
-                
-                return (
-                  <TooltipProvider key={format}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div
-                          draggable={true}
-                          onDragStart={(e) => handleDragStart(e, format)}
-                          className="relative group"
-                        >
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all hover:border-primary hover:bg-primary/5"
-                            onClick={() => onDownload?.(item, format)}
-                          >
-                            <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary" />
-                            <Download size={14} />
-                            <span className="text-xs font-semibold">{format.toUpperCase()}</span>
-                          </Button>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom">
-                        <p className="font-semibold">拖曳至系統檔案/資料夾替換圖示</p>
-                        <p className="text-xs text-muted-foreground">或點擊下載 {format.toUpperCase()} 檔案</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      </Card>
+        </Card>
       </motion.div>
     </div>
   )
