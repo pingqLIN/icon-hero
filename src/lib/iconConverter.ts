@@ -6,12 +6,81 @@ export interface ConversionResult {
   blob: Blob
 }
 
+async function isRemoteUrl(url: string): Promise<boolean> {
+  return url.startsWith('http://') || url.startsWith('https://')
+}
+
+async function parseImageFromUrl(url: string): Promise<string> {
+  if (!await isRemoteUrl(url)) {
+    return url
+  }
+
+  try {
+    const response = await fetch(url)
+    const contentType = response.headers.get('content-type')
+    
+    if (contentType && contentType.startsWith('image/')) {
+      const blob = await response.blob()
+      return URL.createObjectURL(blob)
+    }
+    
+    const html = await response.text()
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(html, 'text/html')
+    
+    const possibleSelectors = [
+      'link[rel="icon"]',
+      'link[rel="shortcut icon"]',
+      'link[rel="apple-touch-icon"]',
+      'meta[property="og:image"]',
+      'meta[name="twitter:image"]',
+      'link[rel="apple-touch-icon-precomposed"]',
+    ]
+    
+    for (const selector of possibleSelectors) {
+      const element = doc.querySelector(selector)
+      if (element) {
+        let iconUrl = element.getAttribute('href') || element.getAttribute('content')
+        if (iconUrl) {
+          if (iconUrl.startsWith('//')) {
+            iconUrl = 'https:' + iconUrl
+          } else if (iconUrl.startsWith('/')) {
+            const urlObj = new URL(url)
+            iconUrl = urlObj.origin + iconUrl
+          } else if (!iconUrl.startsWith('http')) {
+            const urlObj = new URL(url)
+            iconUrl = urlObj.origin + '/' + iconUrl
+          }
+          
+          const iconResponse = await fetch(iconUrl)
+          const iconBlob = await iconResponse.blob()
+          return URL.createObjectURL(iconBlob)
+        }
+      }
+    }
+    
+    const defaultFaviconUrl = new URL('/favicon.ico', url).href
+    const faviconResponse = await fetch(defaultFaviconUrl)
+    if (faviconResponse.ok) {
+      const faviconBlob = await faviconResponse.blob()
+      return URL.createObjectURL(faviconBlob)
+    }
+    
+    throw new Error('無法從 URL 中找到圖示')
+  } catch (error) {
+    throw new Error(`解析 URL 失敗: ${error instanceof Error ? error.message : '未知錯誤'}`)
+  }
+}
+
 async function loadImage(url: string): Promise<HTMLImageElement> {
+  const imageUrl = await parseImageFromUrl(url)
+  
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => resolve(img)
     img.onerror = reject
-    img.src = url
+    img.crossOrigin = 'anonymous'
+    img.src = imageUrl
   })
 }
 

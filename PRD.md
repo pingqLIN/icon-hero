@@ -34,11 +34,13 @@ This is a specialized utility with a focused purpose - browsing/selecting icons,
 - **Success criteria**: Browser creates proper drag data with DownloadURL format, icons transfer as files to OS, formats are compatible with system icon replacement
 
 ### Icon Upload/Add
-- **Functionality**: Allow users to upload their own custom icon images to the gallery
-- **Purpose**: Extend the icon collection beyond pre-loaded options
-- **Trigger**: User clicks "Add Icon" button
-- **Progression**: User clicks add button → File picker opens → User selects image → Image validates → New icon appears in gallery
-- **Success criteria**: Uploaded icons persist, are properly formatted, and work with drag system
+- **Functionality**: Allow users to upload their own custom icon images to the gallery via file picker or URL
+- **Purpose**: Extend the icon collection beyond pre-loaded options and enable loading icons directly from web sources
+- **Trigger**: User clicks "Add Icon" button or "從 URL 載入" button
+- **Progression**: 
+  - File upload: User clicks add button → File picker opens → User selects image → Image validates → New icon appears in gallery
+  - URL load: User clicks URL button → URL input appears → User pastes URL → System fetches and parses → If direct image: downloads and displays → If webpage: parses HTML for icon metadata (favicon, og:image, apple-touch-icon) → Icon loads in gallery
+- **Success criteria**: Uploaded icons persist, are properly formatted, URL parsing correctly identifies icons from webpages, both methods work with drag system
 
 ### Icon Format Conversion
 - **Functionality**: Convert icons between PNG, ICO, and ICNS formats with multi-resolution support
@@ -64,6 +66,10 @@ This is a specialized utility with a focused purpose - browsing/selecting icons,
 - **Format Conversion Errors**: Handle conversion failures with clear error messages and suggestions
 - **Unsupported Source Formats**: Inform users if source format cannot be reliably converted to target format
 - **Conversion of Current Format**: Disable conversion to the same format already being used
+- **Invalid URLs**: Validate URL format and show error for malformed URLs
+- **URL Fetch Failures**: Handle network errors, CORS issues, and missing resources gracefully
+- **URL Without Icons**: When parsing webpage URLs, fallback to /favicon.ico if no icon metadata found
+- **Non-Image Content Types**: Detect when URL points to non-image content and attempt to parse as webpage
 
 ## Design Direction
 
@@ -142,6 +148,7 @@ Animations should emphasize the physicality of dragging and the satisfaction of 
   - Convert: `ArrowsDownUp` from Phosphor
   - Download: `Download` from Phosphor
   - Success: `Check` from Phosphor
+  - Link/URL: `Link` from Phosphor
   
 - **Spacing**: 
   - Page padding: `p-8` (2rem)
