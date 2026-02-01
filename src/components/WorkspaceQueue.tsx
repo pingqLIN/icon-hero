@@ -1,4 +1,5 @@
 import { AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 import { WorkspaceItem } from '@/types/workspace'
 import { WorkspaceQueueItem } from '@/components/WorkspaceQueueItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -9,9 +10,13 @@ interface WorkspaceQueueProps {
   items: WorkspaceItem[]
   onPreview?: (item: WorkspaceItem) => void
   onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
+  onReorder?: (reorderedItems: WorkspaceItem[]) => void
 }
 
-export function WorkspaceQueue({ items, onPreview, onDownload }: WorkspaceQueueProps) {
+export function WorkspaceQueue({ items, onPreview, onDownload, onReorder }: WorkspaceQueueProps) {
+  const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
+  const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
+
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4">
@@ -27,6 +32,49 @@ export function WorkspaceQueue({ items, onPreview, onDownload }: WorkspaceQueueP
   const completedItems = items.filter(item => item.status === 'completed')
   const errorItems = items.filter(item => item.status === 'error')
 
+  const handleDragStart = (itemId: string) => {
+    setDraggedItemId(itemId)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedItemId(null)
+    setDragOverItemId(null)
+  }
+
+  const handleDragOver = (e: React.DragEvent, itemId: string) => {
+    e.preventDefault()
+    if (draggedItemId && draggedItemId !== itemId) {
+      setDragOverItemId(itemId)
+    }
+  }
+
+  const handleDrop = (e: React.DragEvent, targetItemId: string) => {
+    e.preventDefault()
+    
+    if (!draggedItemId || draggedItemId === targetItemId || !onReorder) {
+      setDraggedItemId(null)
+      setDragOverItemId(null)
+      return
+    }
+
+    const draggedIndex = items.findIndex(item => item.id === draggedItemId)
+    const targetIndex = items.findIndex(item => item.id === targetItemId)
+
+    if (draggedIndex === -1 || targetIndex === -1) {
+      setDraggedItemId(null)
+      setDragOverItemId(null)
+      return
+    }
+
+    const newItems = [...items]
+    const [draggedItem] = newItems.splice(draggedIndex, 1)
+    newItems.splice(targetIndex, 0, draggedItem)
+
+    onReorder(newItems)
+    setDraggedItemId(null)
+    setDragOverItemId(null)
+  }
+
   return (
     <div className="space-y-4">
       {pendingItems.length > 0 && (
@@ -41,6 +89,13 @@ export function WorkspaceQueue({ items, onPreview, onDownload }: WorkspaceQueueP
                     item={item}
                     onPreview={onPreview}
                     onDownload={onDownload}
+                    isDragging={draggedItemId === item.id}
+                    isDragOver={dragOverItemId === item.id}
+                    onDragStart={() => handleDragStart(item.id)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={(e) => handleDragOver(e, item.id)}
+                    onDrop={(e) => handleDrop(e, item.id)}
+                    enableReorder={onReorder !== undefined}
                   />
                 ))}
               </AnimatePresence>
@@ -63,6 +118,13 @@ export function WorkspaceQueue({ items, onPreview, onDownload }: WorkspaceQueueP
                       item={item}
                       onPreview={onPreview}
                       onDownload={onDownload}
+                      isDragging={draggedItemId === item.id}
+                      isDragOver={dragOverItemId === item.id}
+                      onDragStart={() => handleDragStart(item.id)}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={(e) => handleDragOver(e, item.id)}
+                      onDrop={(e) => handleDrop(e, item.id)}
+                      enableReorder={onReorder !== undefined}
                     />
                   ))}
                 </AnimatePresence>
@@ -85,6 +147,13 @@ export function WorkspaceQueue({ items, onPreview, onDownload }: WorkspaceQueueP
                     item={item}
                     onPreview={onPreview}
                     onDownload={onDownload}
+                    isDragging={draggedItemId === item.id}
+                    isDragOver={dragOverItemId === item.id}
+                    onDragStart={() => handleDragStart(item.id)}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={(e) => handleDragOver(e, item.id)}
+                    onDrop={(e) => handleDrop(e, item.id)}
+                    enableReorder={onReorder !== undefined}
                   />
                 ))}
               </AnimatePresence>

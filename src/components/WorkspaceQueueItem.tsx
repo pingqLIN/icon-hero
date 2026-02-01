@@ -7,21 +7,41 @@ import {
   ArrowsDownUp,
   Image as ImageIcon,
   Link as LinkIcon,
-  Download
+  Download,
+  DotsSixVertical
 } from '@phosphor-icons/react'
 import { WorkspaceItem } from '@/types/workspace'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 
 interface WorkspaceQueueItemProps {
   item: WorkspaceItem
   onPreview?: (item: WorkspaceItem) => void
   onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
+  isDragging?: boolean
+  isDragOver?: boolean
+  onDragStart?: () => void
+  onDragEnd?: () => void
+  onDragOver?: (e: React.DragEvent) => void
+  onDrop?: (e: React.DragEvent) => void
+  enableReorder?: boolean
 }
 
-export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQueueItemProps) {
+export function WorkspaceQueueItem({ 
+  item, 
+  onPreview, 
+  onDownload,
+  isDragging = false,
+  isDragOver = false,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  onDrop,
+  enableReorder = false
+}: WorkspaceQueueItemProps) {
   const getStatusIcon = () => {
     switch (item.status) {
       case 'pending':
@@ -90,18 +110,45 @@ export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQue
     }
   }
 
+  const handleReorderDragStart = (e: React.DragEvent) => {
+    e.stopPropagation()
+    onDragStart?.()
+  }
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 20 }}
-      layout
+    <div
+      draggable={enableReorder}
+      onDragStart={handleReorderDragStart}
+      onDragEnd={onDragEnd}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      className={cn(
+        "transition-all",
+        isDragging && "opacity-50",
+        isDragOver && "scale-105"
+      )}
     >
-      <Card className="p-4 transition-all">
-        <div className="flex items-center gap-4">
-          <div className="flex-shrink-0">
-            {getStatusIcon()}
-          </div>
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 20 }}
+        layout
+      >
+        <Card className={cn(
+          "p-4 transition-all",
+          enableReorder && "cursor-grab active:cursor-grabbing",
+          isDragOver && "ring-2 ring-primary"
+        )}>
+          <div className="flex items-center gap-4">
+            {enableReorder && (
+              <div className="flex-shrink-0 cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground transition-colors">
+                <DotsSixVertical size={20} weight="bold" />
+              </div>
+            )}
+            
+            <div className="flex-shrink-0">
+              {getStatusIcon()}
+            </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
@@ -187,6 +234,7 @@ export function WorkspaceQueueItem({ item, onPreview, onDownload }: WorkspaceQue
           )}
         </div>
       </Card>
-    </motion.div>
+      </motion.div>
+    </div>
   )
 }

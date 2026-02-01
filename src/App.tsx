@@ -162,6 +162,10 @@ function App() {
     })
   }
 
+  const handleReorder = (reorderedItems: WorkspaceItem[]) => {
+    setWorkspaceItems(reorderedItems)
+  }
+
   return (
     <>
       <Toaster />
@@ -262,6 +266,7 @@ function App() {
                   items={workspaceItems}
                   onPreview={handlePreview}
                   onDownload={handleDownload}
+                  onReorder={handleReorder}
                 />
               </div>
             )}
