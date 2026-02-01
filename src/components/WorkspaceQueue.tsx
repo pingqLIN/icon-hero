@@ -4,7 +4,17 @@ import { WorkspaceItem } from '@/types/workspace'
 import { WorkspaceQueueItem } from '@/components/WorkspaceQueueItem'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
-import { Package } from '@phosphor-icons/react'
+import { Button } from '@/components/ui/button'
+import { Package, DownloadSimple, FileZip } from '@phosphor-icons/react'
+import { batchDownloadAll, batchDownloadByFormat } from '@/lib/batchDownload'
+import { toast } from 'sonner'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 
 interface WorkspaceQueueProps {
   items: WorkspaceItem[]
@@ -16,6 +26,7 @@ interface WorkspaceQueueProps {
 export function WorkspaceQueue({ items, onPreview, onDownload, onReorder }: WorkspaceQueueProps) {
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
   const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
+  const [isDownloading, setIsDownloading] = useState(false)
 
   if (items.length === 0) {
     return (
@@ -31,6 +42,29 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder }: Work
   const pendingItems = items.filter(item => item.status === 'pending' || item.status === 'analyzing' || item.status === 'converting')
   const completedItems = items.filter(item => item.status === 'completed')
   const errorItems = items.filter(item => item.status === 'error')
+
+  const handleBatchDownload = async (format?: 'png' | 'ico' | 'icns') => {
+    try {
+      setIsDownloading(true)
+      if (format) {
+        await batchDownloadByFormat(items, format)
+        toast.success('批次下載完成', {
+          description: `已下載所有 ${format.toUpperCase()} 格式檔案`
+        })
+      } else {
+        await batchDownloadAll(items)
+        toast.success('批次下載完成', {
+          description: '已下載所有轉換檔案'
+        })
+      }
+    } catch (error) {
+      toast.error('下載失敗', {
+        description: error instanceof Error ? error.message : '批次下載時發生錯誤'
+      })
+    } finally {
+      setIsDownloading(false)
+    }
+  }
 
   const handleDragStart = (itemId: string) => {
     setDraggedItemId(itemId)
@@ -77,6 +111,43 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder }: Work
 
   return (
     <div className="space-y-4">
+      {completedItems.length > 0 && (
+        <div className="flex justify-end gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2"
+                disabled={isDownloading}
+              >
+                <FileZip size={16} />
+                批次下載
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => handleBatchDownload()}>
+                <DownloadSimple size={16} className="mr-2" />
+                下載全部格式
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleBatchDownload('png')}>
+                <DownloadSimple size={16} className="mr-2" />
+                僅下載 PNG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleBatchDownload('ico')}>
+                <DownloadSimple size={16} className="mr-2" />
+                僅下載 ICO
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleBatchDownload('icns')}>
+                <DownloadSimple size={16} className="mr-2" />
+                僅下載 ICNS
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
+
       {pendingItems.length > 0 && (
         <div>
           <h4 className="text-sm font-semibold mb-3 text-muted-foreground">處理中 ({pendingItems.length})</h4>

@@ -47,6 +47,13 @@ This is a specialized utility focused on icon conversion and system replacement.
 - **Progression**: User clicks format button → Drags outside browser → Hovers over OS target (folder/app) → Releases to apply icon → System replaces icon
 - **Success criteria**: All three format buttons are draggable, proper file metadata is attached for OS recognition, drag data includes DownloadURL format, ICO files work on Windows, ICNS on macOS
 
+### Batch Download All Formats
+- **Functionality**: Download all completed conversions at once as a ZIP file, with options to download all formats or filter by specific format (PNG, ICO, or ICNS)
+- **Purpose**: Enable efficient bulk export of converted icons for offline use or distribution
+- **Trigger**: User clicks "批次下載" dropdown button when completed items exist
+- **Progression**: User clicks batch download → Selects format option → System packages all matching files into ZIP → Downloads ZIP with timestamped filename
+- **Success criteria**: Creates organized ZIP with folders per item containing respective formats, handles multiple items efficiently, provides clear success feedback, supports format-specific downloads
+
 ## Edge Case Handling
 
 - **Empty Workspace State**: Display helpful onboarding message with drag zone when no items exist
@@ -131,7 +138,8 @@ Animations should emphasize the flow of processing and the satisfaction of compl
 - **Icon Selection**: 
   - Upload/Add: `UploadSimple` from Phosphor
   - Files/Workspace: `Files` from Phosphor
-  - Download: `Download` from Phosphor
+  - Download: `DownloadSimple` from Phosphor
+  - Batch Download: `FileZip` from Phosphor
   - Preview: `Eye` from Phosphor
   - Status - Analyzing: `CircleNotch` spinning from Phosphor
   - Status - Converting: `ArrowsDownUp` pulsing from Phosphor
