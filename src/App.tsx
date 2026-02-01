@@ -78,6 +78,10 @@ function App() {
     })
   }
 
+  const handleConvertIcon = (newIcon: IconItem) => {
+    setIcons((currentIcons) => [...(currentIcons || []), newIcon])
+  }
+
   const handleDragModeToggle = (checked: boolean) => {
     setDragEnabled(checked)
     if (checked) {
@@ -180,6 +184,7 @@ function App() {
                     icon={icon}
                     dragEnabled={dragEnabled}
                     onDelete={handleDeleteIcon}
+                    onConvert={handleConvertIcon}
                   />
                 </motion.div>
               ))}

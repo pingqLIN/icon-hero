@@ -40,6 +40,13 @@ This is a specialized utility with a focused purpose - browsing/selecting icons,
 - **Progression**: User clicks add button → File picker opens → User selects image → Image validates → New icon appears in gallery
 - **Success criteria**: Uploaded icons persist, are properly formatted, and work with drag system
 
+### Icon Format Conversion
+- **Functionality**: Convert icons between PNG, ICO, and ICNS formats with multi-resolution support
+- **Purpose**: Enable users to prepare icons for different operating systems (Windows ICO, macOS ICNS) without external tools
+- **Trigger**: User clicks the conversion button on an icon card
+- **Progression**: User clicks convert button → Dialog opens showing format options → User selects target format → Conversion processes → User can download or add to collection
+- **Success criteria**: Accurate format conversion with proper multi-resolution support for ICO/ICNS, converted icons are draggable and downloadable
+
 ### Icon Management
 - **Functionality**: Display icon metadata and provide delete/organize capabilities
 - **Purpose**: Help users curate their personal icon collection
@@ -54,6 +61,9 @@ This is a specialized utility with a focused purpose - browsing/selecting icons,
 - **Large File Uploads**: Validate file size limits and provide feedback for oversized images
 - **Drag Without Mode Active**: Prevent drag behavior and show subtle reminder to enable drag mode
 - **Failed Persistence**: Gracefully handle storage errors and notify user if icons can't be saved
+- **Format Conversion Errors**: Handle conversion failures with clear error messages and suggestions
+- **Unsupported Source Formats**: Inform users if source format cannot be reliably converted to target format
+- **Conversion of Current Format**: Disable conversion to the same format already being used
 
 ## Design Direction
 
@@ -102,8 +112,8 @@ Animations should emphasize the physicality of dragging and the satisfaction of 
 - **Components**: 
   - `Switch` for the drag mode toggle with custom styling for prominence
   - `Card` for individual icon containers with hover states
-  - `Dialog` for upload interface and icon detail views
-  - `Button` for primary actions (upload, delete) with distinct variants
+  - `Dialog` for upload interface, format conversion, and icon detail views
+  - `Button` for primary actions (upload, delete, convert) with distinct variants
   - `Alert` for status messages about drag mode or upload results
   - `Tooltip` for contextual help on icons and controls
   - `Badge` for file format indicators on icons
@@ -113,12 +123,14 @@ Animations should emphasize the physicality of dragging and the satisfaction of 
   - Styled drag preview element with semi-transparency
   - Enhanced Switch component with larger hit area and icon indicators
   - Custom empty state illustration component
+  - Format conversion dialog with visual format selection and preview
   
 - **States**: 
   - Toggle Switch: Clear on/off states with color change (purple inactive, cyan active) and icon swap
   - Icon Cards: Default, hover (lifted with shadow), dragging (reduced opacity), selected (border highlight)
   - Upload Button: Rest (primary purple), hover (darker purple), active (pressed effect), disabled (muted)
   - Drag Overlay: Visible only during drag operations with semi-transparent background
+  - Conversion Dialog: Format selection states, converting indicator, success state with download/add options
   
 - **Icon Selection**: 
   - Upload/Add: `UploadSimple` from Phosphor
@@ -127,6 +139,9 @@ Animations should emphasize the physicality of dragging and the satisfaction of 
   - Delete: `Trash` from Phosphor
   - Info: `Info` from Phosphor
   - Image/File: `Image` from Phosphor
+  - Convert: `ArrowsDownUp` from Phosphor
+  - Download: `Download` from Phosphor
+  - Success: `Check` from Phosphor
   
 - **Spacing**: 
   - Page padding: `p-8` (2rem)

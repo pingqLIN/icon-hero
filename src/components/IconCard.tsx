@@ -5,15 +5,17 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { IconItem } from '@/types/icon'
+import { ConversionDialog } from '@/components/ConversionDialog'
 import { useState } from 'react'
 
 interface IconCardProps {
   icon: IconItem
   dragEnabled: boolean
   onDelete: (id: string) => void
+  onConvert: (newIcon: IconItem) => void
 }
 
-export function IconCard({ icon, dragEnabled, onDelete }: IconCardProps) {
+export function IconCard({ icon, dragEnabled, onDelete, onConvert }: IconCardProps) {
   const [isDragging, setIsDragging] = useState(false)
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
@@ -80,6 +82,8 @@ export function IconCard({ icon, dragEnabled, onDelete }: IconCardProps) {
           )}
           
           <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <ConversionDialog icon={icon} onConvert={onConvert} />
+            
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
