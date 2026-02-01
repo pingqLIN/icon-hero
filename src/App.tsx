@@ -293,7 +293,7 @@ function App() {
               <div>
                 <h2 className="text-xl font-bold mb-4">處理佇列</h2>
                 {hasCompletedItems && (
-                  <div className="mb-4">
+                  <div className="mb-4 text-sm">
                     <DragInstructions />
                   </div>
                 )}
@@ -326,7 +326,7 @@ function App() {
         />
       </div>
     </>
-  )
+  );
 }
 
 export default App
