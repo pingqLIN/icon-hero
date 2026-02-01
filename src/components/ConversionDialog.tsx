@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ArrowsDownUp, Check, Download } from '@phosphor-icons/react'
+import { ArrowsDownUp, Check, Download, X } from '@phosphor-icons/react'
 import {
   Dialog,
   DialogContent,
@@ -21,9 +21,9 @@ interface ConversionDialogProps {
 }
 
 const formatOptions: { value: IconFormat; label: string; description: string }[] = [
-  { value: 'png', label: 'PNG', description: 'Universal format, best for web and general use' },
-  { value: 'ico', label: 'ICO', description: 'Windows icon format, multi-size support' },
-  { value: 'icns', label: 'ICNS', description: 'macOS icon format, for Mac applications' },
+  { value: 'png', label: 'PNG', description: '通用格式，適用於網頁和一般用途' },
+  { value: 'ico', label: 'ICO', description: 'Windows 圖示格式，支援多尺寸' },
+  { value: 'icns', label: 'ICNS', description: 'macOS 圖示格式，適用於 Mac 應用程式' },
 ]
 
 export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
@@ -41,12 +41,12 @@ export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
     try {
       const result = await convertIcon(icon.url, selectedFormat)
       setConvertedResult(result)
-      toast.success('Conversion complete', {
-        description: `Successfully converted to ${selectedFormat.toUpperCase()}`
+      toast.success('轉換完成', {
+        description: `已成功轉換為 ${selectedFormat.toUpperCase()} 格式`
       })
     } catch (error) {
-      toast.error('Conversion failed', {
-        description: 'There was an error converting the icon'
+      toast.error('轉換失敗', {
+        description: '處理圖示時發生錯誤'
       })
       console.error('Conversion error:', error)
     } finally {
@@ -57,25 +57,25 @@ export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
   const handleDownload = () => {
     if (!convertedResult) return
     downloadConvertedIcon(convertedResult, icon.name)
-    toast.success('Download started', {
-      description: `${icon.name}.${selectedFormat} has been downloaded`
+    toast.success('下載已開始', {
+      description: `${icon.name}.${selectedFormat} 已開始下載`
     })
   }
 
-  const handleAddToCollection = () => {
+  const handleReplaceAndClose = () => {
     if (!convertedResult) return
 
     const newIcon: IconItem = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      name: `${icon.name}-${selectedFormat}`,
+      name: `${icon.name}`,
       url: convertedResult.url,
       format: selectedFormat,
       uploadedAt: Date.now()
     }
 
     onConvert(newIcon)
-    toast.success('Icon added', {
-      description: `${newIcon.name} has been added to your collection`
+    toast.success('已切換至轉換後的圖示', {
+      description: `現在可以拖曳 ${selectedFormat.toUpperCase()} 格式的圖示`
     })
     setOpen(false)
     setConvertedResult(null)
@@ -95,23 +95,23 @@ export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
         <Button
           size="icon"
           variant="secondary"
-          className="h-7 w-7"
+          className="h-8 w-8"
           onClick={(e) => e.stopPropagation()}
         >
-          <ArrowsDownUp size={14} />
+          <ArrowsDownUp size={16} />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[520px]">
         <DialogHeader>
-          <DialogTitle>Convert Icon Format</DialogTitle>
+          <DialogTitle>轉換圖示格式</DialogTitle>
           <DialogDescription>
-            Convert {icon.name} to a different icon format
+            將 {icon.name} 轉換為其他圖示格式
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-4">
           <div className="flex items-center gap-4">
-            <div className="w-20 h-20 rounded-lg bg-secondary/30 flex items-center justify-center p-2 flex-shrink-0">
+            <div className="w-20 h-20 rounded-lg bg-secondary/30 flex items-center justify-center p-3 flex-shrink-0 border border-border">
               <img
                 src={icon.url}
                 alt={icon.name}
@@ -119,17 +119,17 @@ export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
               />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate">{icon.name}</p>
-              <div className="flex items-center gap-2 mt-1">
+              <p className="font-semibold truncate text-base">{icon.name}</p>
+              <div className="flex items-center gap-2 mt-2">
                 <Badge variant="secondary" className="text-xs">
-                  Current: {currentFormat.toUpperCase()}
+                  目前格式: {currentFormat.toUpperCase()}
                 </Badge>
               </div>
             </div>
           </div>
 
           <div>
-            <label className="text-sm font-medium mb-3 block">Select Target Format</label>
+            <label className="text-sm font-semibold mb-3 block">選擇目標格式</label>
             <div className="grid gap-2">
               {formatOptions.map((format) => (
                 <button
@@ -162,7 +162,7 @@ export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
                       <span className="font-semibold text-sm">{format.label}</span>
                       {currentFormat === format.value && (
                         <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                          Current
+                          目前格式
                         </Badge>
                       )}
                     </div>
@@ -186,9 +186,9 @@ export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
                     <Check size={24} weight="bold" className="text-accent" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">Conversion Complete</p>
+                    <p className="text-sm font-semibold">轉換完成</p>
                     <p className="text-xs text-muted-foreground">
-                      Ready to download or add to collection
+                      可以下載檔案或切換為此格式繼續拖曳
                     </p>
                   </div>
                 </div>
@@ -200,30 +200,38 @@ export function ConversionDialog({ icon, onConvert }: ConversionDialogProps) {
             {!convertedResult ? (
               <>
                 <Button
+                  onClick={() => setOpen(false)}
+                  variant="outline"
+                  className="flex-1 gap-2"
+                >
+                  <X size={16} />
+                  取消
+                </Button>
+                <Button
                   onClick={handleConvert}
                   disabled={isConverting || currentFormat === selectedFormat}
                   className="flex-1 gap-2"
                 >
                   <ArrowsDownUp size={16} />
-                  {isConverting ? 'Converting...' : 'Convert'}
+                  {isConverting ? '轉換中...' : '開始轉換'}
                 </Button>
               </>
             ) : (
               <>
                 <Button
                   onClick={handleDownload}
-                  variant="secondary"
+                  variant="outline"
                   className="flex-1 gap-2"
                 >
                   <Download size={16} />
-                  Download
+                  下載檔案
                 </Button>
                 <Button
-                  onClick={handleAddToCollection}
+                  onClick={handleReplaceAndClose}
                   className="flex-1 gap-2"
                 >
                   <Check size={16} />
-                  Add to Collection
+                  切換格式
                 </Button>
               </>
             )}
