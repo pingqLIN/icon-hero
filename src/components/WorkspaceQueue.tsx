@@ -69,6 +69,20 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClea
 
   const handleDragStart = (itemId: string) => {
     setDraggedItemId(itemId)
+    
+    const cleanup = () => {
+      setDraggedItemId(null)
+      setDragOverItemId(null)
+      document.removeEventListener('dragend', cleanup)
+      document.removeEventListener('drop', cleanup)
+      document.removeEventListener('mouseup', cleanup)
+      window.removeEventListener('blur', cleanup)
+    }
+    
+    document.addEventListener('dragend', cleanup)
+    document.addEventListener('drop', cleanup)
+    document.addEventListener('mouseup', cleanup)
+    window.addEventListener('blur', cleanup)
   }
 
   const handleDragEnd = () => {

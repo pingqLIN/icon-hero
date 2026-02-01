@@ -31,6 +31,17 @@ export function IconCard({ icon, onConvert }: IconCardProps) {
     } catch (err) {
       console.warn('Some drag data could not be set:', err)
     }
+    
+    const cleanup = () => {
+      setIsDragging(false)
+      document.removeEventListener('dragend', cleanup)
+      document.removeEventListener('drop', cleanup)
+      document.removeEventListener('mouseup', cleanup)
+    }
+    
+    document.addEventListener('dragend', cleanup)
+    document.addEventListener('drop', cleanup)
+    document.addEventListener('mouseup', cleanup)
   }
 
   const handleDragEnd = () => {

@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { UploadSimple, Link as LinkIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
@@ -172,6 +172,29 @@ function App() {
   }
 
   const hasCompletedItems = workspaceItems.some(item => item.status === 'completed')
+
+  useEffect(() => {
+    const handleGlobalDragEnd = () => {
+      document.querySelectorAll('[draggable="true"]').forEach(element => {
+        const htmlElement = element as HTMLElement
+        htmlElement.style.pointerEvents = ''
+        htmlElement.style.cursor = ''
+      })
+    }
+
+    const handleGlobalMouseUp = handleGlobalDragEnd
+    const handleWindowBlur = handleGlobalDragEnd
+
+    document.addEventListener('dragend', handleGlobalDragEnd, true)
+    document.addEventListener('mouseup', handleGlobalMouseUp, true)
+    window.addEventListener('blur', handleWindowBlur)
+
+    return () => {
+      document.removeEventListener('dragend', handleGlobalDragEnd, true)
+      document.removeEventListener('mouseup', handleGlobalMouseUp, true)
+      window.removeEventListener('blur', handleWindowBlur)
+    }
+  }, [])
 
   return (
     <>

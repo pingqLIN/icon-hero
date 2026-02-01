@@ -150,8 +150,26 @@ export function WorkspaceQueueItem({
     e.dataTransfer.setDragImage(dragImage, 0, 0)
     
     setTimeout(() => {
-      document.body.removeChild(dragImage)
+      if (document.body.contains(dragImage)) {
+        document.body.removeChild(dragImage)
+      }
     }, 0)
+    
+    const target = e.currentTarget as HTMLElement
+    target.style.pointerEvents = 'auto'
+    
+    const cleanup = () => {
+      target.style.pointerEvents = ''
+      document.removeEventListener('dragend', cleanup)
+      document.removeEventListener('drop', cleanup) 
+      document.removeEventListener('mouseup', cleanup)
+      window.removeEventListener('blur', cleanup)
+    }
+    
+    document.addEventListener('dragend', cleanup)
+    document.addEventListener('drop', cleanup)
+    document.addEventListener('mouseup', cleanup)
+    window.addEventListener('blur', cleanup)
   }
 
   const handleReorderDragStart = (e: React.DragEvent) => {
