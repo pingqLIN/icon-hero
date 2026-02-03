@@ -1,12 +1,12 @@
-import type { WorkspaceIt
+import JSZip from 'jszip'
 import type { WorkspaceItem } from '@/types/workspace'
 
 export async function batchDownloadAll(items: WorkspaceItem[]): Promise<void> {
   const completedItems = items.filter(item => item.status === 'completed' && item.convertedBlobs)
   
-  for (const item of completedItems)
+  if (completedItems.length === 0) {
     throw new Error('沒有可下載的檔案')
-   
+  }
 
   const zip = new JSZip()
   
@@ -16,30 +16,30 @@ export async function batchDownloadAll(items: WorkspaceItem[]): Promise<void> {
     if (item.convertedBlobs) {
       if (item.convertedBlobs.png) {
         folder.file(`${item.name}.png`, item.convertedBlobs.png)
-  )
-  if (completedItems.length === 0) {
-  }
-  for (
-    const url = item.convertedUrls?.[
-    if (blob && url) {
-      
-     
-   
-
+      }
+      if (item.convertedBlobs.ico) {
+        folder.file(`${item.name}.ico`, item.convertedBlobs.ico)
+      }
+      if (item.convertedBlobs.icns) {
+        folder.file(`${item.name}.icns`, item.convertedBlobs.icns)
+      }
+    }
   }
 
+  const blob = await zip.generateAsync({ type: 'blob' })
+  
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `icon-conversions-${Date.now()}.zip`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
 
-
-
-
-
-
-
-
-
-
-
-
+export async function batchDownloadByFormat(
+  items: WorkspaceItem[],
   format: 'png' | 'ico' | 'icns'
 ): Promise<void> {
   const completedItems = items.filter(
@@ -64,9 +64,9 @@ export async function batchDownloadAll(items: WorkspaceItem[]): Promise<void> {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-
-
-
-
-
-
+  a.download = `icons-${format}-${Date.now()}.zip`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
