@@ -7,21 +7,19 @@ export async function batchDownloadAll(items: WorkspaceItem[]): Promise<void> {
   if (completedItems.length === 0) {
     throw new Error('沒有可下載的檔案')
   }
-
+  
   const zip = new JSZip()
   
   for (const item of completedItems) {
-    const folder = zip.folder(item.name) || zip
+    const formats = ['png', 'ico', 'icns'] as const
+    const folder = zip.folder(item.name)
     
-    if (item.convertedBlobs) {
-      if (item.convertedBlobs.png) {
-        folder.file(`${item.name}.png`, item.convertedBlobs.png)
-      }
-      if (item.convertedBlobs.ico) {
-        folder.file(`${item.name}.ico`, item.convertedBlobs.ico)
-      }
-      if (item.convertedBlobs.icns) {
-        folder.file(`${item.name}.icns`, item.convertedBlobs.icns)
+    if (folder) {
+      for (const format of formats) {
+        const blob = item.convertedBlobs?.[format]
+        if (blob) {
+          folder.file(`${item.name}.${format}`, blob)
+        }
       }
     }
   }
@@ -45,7 +43,7 @@ export async function batchDownloadByFormat(
   const completedItems = items.filter(
     item => item.status === 'completed' && item.convertedBlobs?.[format]
   )
-  
+
   if (completedItems.length === 0) {
     throw new Error(`沒有可下載的 ${format.toUpperCase()} 格式檔案`)
   }
