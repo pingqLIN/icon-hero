@@ -62,209 +62,190 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClea
       toast.error('下載失敗', {
         description: error instanceof Error ? error.message : '批次下載時發生錯誤'
       })
-      setIsDown
-  }
-  con
-   
-
-      document.removeEventListener('dragend', c
-      document.removeEventLi
-    
-    document.addEventListen
-    document.addEventListene
-  }
-  const handleDragEnd = () => {
-    setDragOverItemId(null)
-
-    e.preventDefault()
-     
-  }
-  const handleDrop = (e: React.DragEvent, targetI
-    
-      setDraggedItemId(null)
-      return
-
-
-    if (draggedIndex === -1 || 
-      setDragOverItemId(nu
+    } finally {
+      setIsDownloading(false)
     }
-   
+  }
+
+  const handleDragStart = (item: WorkspaceItem) => {
+    setDraggedItemId(item.id)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedItemId(null)
+    setDragOverItemId(null)
+  }
+
+  const handleDragOver = (e: React.DragEvent, targetItemId: string) => {
+    e.preventDefault()
+    if (draggedItemId && draggedItemId !== targetItemId) {
+      setDragOverItemId(targetItemId)
+    }
+  }
+
+  const handleDrop = (e: React.DragEvent, targetItemId: string) => {
+    e.preventDefault()
+    
+    if (!draggedItemId || !onReorder) {
+      setDraggedItemId(null)
+      setDragOverItemId(null)
+      return
+    }
+
+    const draggedIndex = completedItems.findIndex(item => item.id === draggedItemId)
+    const targetIndex = completedItems.findIndex(item => item.id === targetItemId)
+
+    if (draggedIndex === -1 || targetIndex === -1) {
+      setDraggedItemId(null)
+      setDragOverItemId(null)
+      return
+    }
+
+    const newCompletedItems = [...completedItems]
+    const [draggedItem] = newCompletedItems.splice(draggedIndex, 1)
+    newCompletedItems.splice(targetIndex, 0, draggedItem)
+
+    const newItems = [
+      ...pendingItems,
+      ...newCompletedItems,
+      ...errorItems
+    ]
 
     onReorder(newItems)
-    setDragOverItemId(
+    setDraggedItemId(null)
+    setDragOverItemId(null)
+  }
 
+  const handleClearCompleted = () => {
     if (onClearCompleted) {
-     
-   
+      onClearCompleted()
+    }
+  }
 
   return (
-      {completedItems.
-    
+    <div className="space-y-6">
+      {completedItems.length > 0 && (
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button 
+            variant="outline" 
             size="sm" 
-            onClick={handleC
-            <Trash size={16} 
-          </
-     
+            onClick={handleClearCompleted}
+            className="gap-2"
+          >
+            <Trash size={16} />
+            清除已完成
+          </Button>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="default" 
+                size="sm"
+                disabled={isDownloading || completedItems.length === 0}
                 className="gap-2"
               >
-
+                <FileZip size={16} />
+                批次下載
+              </Button>
             </DropdownMenuTrigger>
-              <DropdownMenuI
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => handleBatchDownload()}>
+                <FileZip size={16} className="mr-2" />
                 下載全部格式
-            
-     
-
-                <DownloadSimple
               </DropdownMenuItem>
-                <DownloadSimple size={16} classN
-
-          </DropdownMen
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => handleBatchDownload('png')}>
+                <DownloadSimple size={16} className="mr-2" />
+                下載所有 PNG
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleBatchDownload('ico')}>
+                <DownloadSimple size={16} className="mr-2" />
+                下載所有 ICO
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleBatchDownload('icns')}>
+                <DownloadSimple size={16} className="mr-2" />
+                下載所有 ICNS
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       )}
-      {pendingItems.length 
-   
 
-                {pendingItems.map((ite
-                    key={it
-                    onPr
-                    isDragging={
-                    onDragStart={() => handleDragStart(ite
-        
-     
-   
+      {pendingItems.length > 0 && (
+        <div>
+          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">處理中</h3>
+          <div className="space-y-2">
+            <AnimatePresence>
+              {pendingItems.map((item) => (
+                <WorkspaceQueueItem
+                  key={item.id}
+                  item={item}
+                  onPreview={onPreview}
+                  onDownload={onDownload}
+                  isDragging={false}
+                  isDragOver={false}
+                  enableReorder={false}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+        </div>
+      )}
 
-        </
+      {(pendingItems.length > 0 && completedItems.length > 0) && <Separator />}
 
+      {completedItems.length > 0 && (
         <>
           <div>
-            <Scrol
-                <AnimatePresen
-                    <W
-                      item={i
-                      onDownload={onDownlo
-           
-                      onDragEnd
-                 
-                   
-                </Animat
+            <h3 className="text-sm font-semibold mb-3 text-muted-foreground">已完成</h3>
+            <ScrollArea className="h-auto max-h-[600px]">
+              <div className="space-y-2 pr-4">
+                <AnimatePresence>
+                  {completedItems.map((item) => (
+                    <WorkspaceQueueItem
+                      key={item.id}
+                      item={item}
+                      onPreview={onPreview}
+                      onDownload={onDownload}
+                      isDragging={draggedItemId === item.id}
+                      isDragOver={dragOverItemId === item.id}
+                      onDragStart={() => handleDragStart(item)}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={(e) => handleDragOver(e, item.id)}
+                      onDrop={(e) => handleDrop(e, item.id)}
+                      enableReorder={onReorder !== undefined}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
             </ScrollArea>
+          </div>
         </>
+      )}
 
+      {errorItems.length > 0 && (
         <>
+          {(pendingItems.length > 0 || completedItems.length > 0) && <Separator />}
           <div>
+            <h3 className="text-sm font-semibold mb-3 text-destructive">發生錯誤</h3>
             <div className="space-y-2">
-               
+              <AnimatePresence>
+                {errorItems.map((item) => (
+                  <WorkspaceQueueItem
                     key={item.id}
-                    
-                    isD
-                    onDragStart={(
-                    onDragOver={(e) => handle
-                    enableReorder={onReorder !== undefined}
+                    item={item}
+                    onPreview={onPreview}
+                    onDownload={onDownload}
+                    isDragging={false}
+                    isDragOver={false}
+                    enableReorder={false}
+                  />
                 ))}
+              </AnimatePresence>
             </div>
+          </div>
         </>
+      )}
     </div>
+  )
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
