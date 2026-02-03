@@ -6,7 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { Package, DownloadSimple, FileZip, Trash } from '@phosphor-icons/react'
-import { batchDownloadAll, batchDownloadByFormat } from '@/lib/batchDownload'
+import { downloadAllAsZip, downloadByFormat } from '@/lib/batchDownload'
 import { toast } from 'sonner'
 import {
   DropdownMenu,
@@ -48,12 +48,12 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClea
     try {
       setIsDownloading(true)
       if (format) {
-        await batchDownloadByFormat(items, format)
+        await downloadByFormat(completedItems, format)
         toast.success('批次下載完成', {
           description: `已下載所有 ${format.toUpperCase()} 格式檔案`
         })
       } else {
-        await batchDownloadAll(items)
+        await downloadAllAsZip(completedItems)
         toast.success('批次下載完成', {
           description: '已下載所有轉換檔案'
         })
