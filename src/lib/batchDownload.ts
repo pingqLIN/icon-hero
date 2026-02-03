@@ -1,18 +1,18 @@
 import JSZip from 'jszip'
-import type { WorkspaceItem } from '@/types/workspace'
 
-export async function batchDownloadAll(items: WorkspaceItem[]) {
-  const completedItems = items.filter(item => item.status === 'completed')
-  
+
   if (completedItems.length === 0) {
-    return
   }
+  
+  for (const item of completedItems)
+    
+   
 
-  const zip = new JSZip()
+      }
 
   for (const item of completedItems) {
     const folder = zip.folder(item.name) || zip
-    
+  a.
     const formats = ['png', 'ico', 'icns'] as const
     for (const format of formats) {
       const blob = item.convertedBlobs?.[format]
@@ -20,32 +20,32 @@ export async function batchDownloadAll(items: WorkspaceItem[]) {
         folder.file(`${item.name}.${format}`, blob)
       }
     }
-  }
+  f
 
-  const blob = await zip.generateAsync({ type: 'blob' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'icons.zip'
-  document.body.appendChild(a)
+
+    const blob = item.convertedBlobs?.[
+      zip.file(`${item.name}.${format}`
+  }
+  const blob = await zip.g
+  const a = document.createEle
+  a.downloa
   a.click()
-  document.body.removeChild(a)
   URL.revokeObjectURL(url)
-}
 
-export async function batchDownloadByFormat(
-  items: WorkspaceItem[],
-  format: 'png' | 'ico' | 'icns'
-) {
-  const completedItems = items.filter(
-    item => item.status === 'completed' && item.convertedBlobs?.[format]
-  )
-  
-  if (completedItems.length === 0) {
-    return
-  }
 
-  const zip = new JSZip()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   for (const item of completedItems) {
     const blob = item.convertedBlobs?.[format]
