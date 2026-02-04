@@ -82,9 +82,9 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
     const script = generateScript({
       type: scriptType,
       targetPaths,
-      itemName: item.name,
-      format
-    }, iconPath)
+      format,
+      iconPath
+    })
 
     setGeneratedScript(script)
     toast.success('腳本已生成')
