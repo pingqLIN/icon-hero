@@ -80,7 +80,6 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
     const format = getRecommendedFormat(scriptType)
     const script = generateScript({
       type: scriptType,
-      iconPath: `C:\\Icons\\${item.name}.${format}`,
       targetPaths,
       itemName: item.name,
       format
