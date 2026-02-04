@@ -265,6 +265,8 @@ export function WorkspaceQueueItem({
                   const hasFormat = item.convertedUrls?.[format]
                   if (!hasFormat) return null
                   
+                  const isIco = format === 'ico'
+                  
                   return (
                     <TooltipProvider key={format}>
                       <Tooltip>
@@ -276,19 +278,29 @@ export function WorkspaceQueueItem({
                           >
                             <Button
                               size="sm"
-                              variant="outline"
-                              className="h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all hover:border-primary hover:bg-primary/5"
+                              variant={isIco ? "default" : "outline"}
+                              className={cn(
+                                "h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all",
+                                isIco 
+                                  ? "bg-primary hover:bg-primary/90 shadow-sm" 
+                                  : "hover:border-primary hover:bg-primary/5"
+                              )}
                               onClick={() => onDownload?.(item, format)}
                             >
-                              <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary" />
+                              <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary-foreground" />
                               <Download size={14} />
                               <span className="text-xs font-semibold">{format.toUpperCase()}</span>
                             </Button>
                           </div>
                         </TooltipTrigger>
-                        <TooltipContent side="bottom">
-                          <p className="font-semibold">拖曳至系統檔案/資料夾替換圖示</p>
-                          <p className="text-xs text-muted-foreground">或點擊下載 {format.toUpperCase()} 檔案</p>
+                        <TooltipContent side="bottom" className="max-w-xs">
+                          <p className="font-semibold">拖曳至系統檔案/資料夾{isIco ? '（推薦 Windows）' : ''}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {isIco 
+                              ? '拖曳 ICO 至 Windows 資料夾內，然後在資料夾屬性中自訂圖示'
+                              : `或點擊下載 ${format.toUpperCase()} 檔案`
+                            }
+                          </p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>

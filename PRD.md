@@ -42,10 +42,10 @@ This is a specialized utility focused on icon conversion and system replacement.
 
 ### Multi-Format Drag-to-System
 - **Functionality**: Each completed item displays PNG, ICO, ICNS buttons that can be clicked to download or dragged directly to system targets for icon replacement
-- **Purpose**: Enable direct system icon replacement by dragging converted icon files to OS folders, applications, or shortcuts
+- **Purpose**: Enable direct system icon replacement by dragging converted icon files to OS folders, applications, or shortcuts, particularly optimized for Windows folder icon replacement
 - **Trigger**: User clicks and holds on a format button (PNG/ICO/ICNS) from a completed item, then drags
 - **Progression**: User clicks format button → Holds and drags outside browser → Custom drag preview appears showing filename → Hovers over OS target (folder/app/file) → Releases to drop file → System receives .ico/.png/.icns file for icon replacement
-- **Success criteria**: All three format buttons are draggable with visual grab cursor, proper File object is created with correct MIME type, drag data includes DownloadURL format string, custom drag image shows filename clearly, ICO files work on Windows for icon replacement, ICNS on macOS, PNG works universally, tooltip explains drag functionality
+- **Success criteria**: All three format buttons are draggable with visual grab cursor, proper File object is created with correct MIME type, drag data includes DownloadURL format string, custom drag image shows filename clearly, ICO files work on Windows for icon replacement (especially folder icons via desktop.ini), ICNS on macOS, PNG works universally, tooltip explains drag functionality with Windows-specific instructions
 
 ### Batch Download All Formats
 - **Functionality**: Download all completed conversions at once as a ZIP file, with options to download all formats or filter by specific format (PNG, ICO, or ICNS)
@@ -67,6 +67,7 @@ This is a specialized utility focused on icon conversion and system replacement.
 - **Non-Image URLs**: Detect content type and attempt webpage parsing for icon extraction
 - **Duplicate Items**: Allow processing of duplicate items with unique IDs for independent tracking
 - **Browser Drag Restrictions**: Ensure DownloadURL format is properly set for cross-browser compatibility
+- **Windows Folder Icon Replacement**: Provide clear instructions for users on how to use dragged ICO files to replace folder icons in Windows (drag ICO to folder, then customize folder properties)
 
 ## Design Direction
 
