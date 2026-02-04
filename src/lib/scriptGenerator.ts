@@ -2,10 +2,9 @@ export type ScriptType = 'powershell' | 'applescript' | 'bash'
 
 export interface ScriptConfig {
   type: ScriptType
-  itemName: string
+  targetPaths: str
   format: 'png' | 'ico' | 'icns'
   targetPaths: string[]
-  iconPath?: string
 }
 
 export function generateWindowsPowerShell(iconPath: string, targetPaths: string[], itemName: string): string {
@@ -17,60 +16,60 @@ export function generateWindowsPowerShell(iconPath: string, targetPaths: string[
 
 $iconPath = "${iconPath.replace(/\\/g, '\\\\')}"
 $folders = @(
-${sanitizedPaths.map(p => `    "${p}"`).join(',\n')}
-)
-
-Write-Host "開始套用圖示..." -ForegroundColor Cyan
 Write-Host ""
+R
 
-foreach ($folder in $folders) {
-    if (Test-Path $folder) {
-        $folderItem = Get-Item $folder -Force
-        $folderItem.Attributes = $folderItem.Attributes -bor [System.IO.FileAttributes]::ReadOnly
-        
-        Write-Host "✓ 已套用圖示至: $folder" -ForegroundColor Green
-    } else {
-        Write-Host "✗ 資料夾不存在: $folder" -ForegroundColor Red
-    }
-}
-
-Write-Host ""
-Write-Host "完成! 請按 F5 重新整理檔案總管以查看變更" -ForegroundColor Cyan
-Read-Host "按 Enter 鍵關閉"`
-}
-
-export function generateMacOSAppleScript(iconPath: string, targetPaths: string[], itemName: string): string {
   return `-- macOS 圖示自動化腳本
--- 圖示: ${itemName}.icns
--- 生成時間: ${new Date().toLocaleString('zh-TW')}
+-- 生成時間: ${ne
 
-set iconPath to POSIX file "${iconPath}"
-set targetPaths to {${targetPaths.map(p => `"${p}"`).join(', ')}}
 
-tell application "Finder"
-    set iconFile to iconPath as alias
-    
+    set iconFile to iconPath
     repeat with targetPath in targetPaths
-        try
             set targetFolder to POSIX file targetPath as alias
-            set icon of targetFolder to icon of iconFile
-            display notification "已套用圖示至: " & targetPath
-        on error errMsg
+        
             display notification "無法套用圖示至: " & targetPath
-        end try
-    end repeat
-    
+    end repe
     display notification "完成!" with title "圖示自動化腳本"
-end tell`
 }
+e
 
-export function generateLinuxBashScript(iconPath: string, targetPaths: string[], itemName: string): string {
-  return `#!/bin/bash
-# Linux 圖示自動化腳本
-# 圖示: ${itemName}.png
-# 生成時間: ${new Date().toLocaleString('zh-TW')}
-
+# 生成時間: ${new
 ICON_PATH="${iconPath}"
+${targetPaths.map(p => `
+
+
+for folder in "\${TARGET_PATHS[@]}"; do
+        gio set "$folder" 
+        if [ $? -eq 0 ]
+        else
+
+        echo "✗ 資料夾不存在: $folder"
+done
+
+read -p "按 Enter 鍵關閉"`
+
+  co
+  switch (type) {
+      retur
+      return generateMacOSAppleScript(iconPath, targetPaths, i
+      return generateLinuxBashScript(iconPath, targetPat
+      throw new Error(`Unsupported script type: ${type}`
+}
+export function getScriptExtension(type: ScriptType): str
+    case 'power
+    case 'appl
+    
+    default:
+  }
+
+
+}
+export function downl
+  const url = U
+  a.href = url
+  document.body.appendChild(a)
+
+}
 TARGET_PATHS=(
 ${targetPaths.map(p => `    "${p}"`).join('\n')}
 )
@@ -97,8 +96,8 @@ echo "完成!"
 read -p "按 Enter 鍵關閉"`
 }
 
-export function generateScript(config: ScriptConfig): string {
-  const { type, itemName, targetPaths, iconPath = `/path/to/${itemName}.${config.format}` } = config
+export function generateScript(config: ScriptConfig, iconPath: string): string {
+  const { type, itemName, targetPaths } = config
 
   switch (type) {
     case 'powershell':
@@ -140,26 +139,4 @@ export function downloadScript(scriptContent: string, fileName: string): void {
   a.click()
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
-}
-
-export function getScriptInstructions(type: ScriptType): string {
-  switch (type) {
-    case 'powershell':
-      return `1. 將圖示檔案 (.ico) 放在穩定的位置
-2. 以系統管理員身分執行此 PowerShell 腳本
-3. 等待腳本完成
-4. 按 F5 重新整理檔案總管以查看變更`
-    case 'applescript':
-      return `1. 將圖示檔案 (.icns) 放在穩定的位置
-2. 開啟「腳本編輯器」應用程式
-3. 貼上並執行此腳本
-4. 授予 Finder 存取權限（如有提示）`
-    case 'bash':
-      return `1. 將圖示檔案 (.png) 放在穩定的位置
-2. 賦予腳本執行權限: chmod +x script.sh
-3. 執行腳本: ./script.sh
-4. 重新整理檔案管理員以查看變更`
-    default:
-      return ''
-  }
 }
