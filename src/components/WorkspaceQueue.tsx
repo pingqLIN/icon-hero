@@ -20,11 +20,23 @@ interface WorkspaceQueueProps {
   items: WorkspaceItem[]
   onPreview?: (item: WorkspaceItem) => void
   onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
+  onAutomation?: (item: WorkspaceItem) => void
   onReorder?: (reorderedItems: WorkspaceItem[]) => void
   onClearCompleted?: () => void
+  onFileDragStart?: (fileName: string) => void
+  onFileDragEnd?: () => void
 }
 
-export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClearCompleted }: WorkspaceQueueProps) {
+export function WorkspaceQueue({ 
+  items, 
+  onPreview, 
+  onDownload, 
+  onAutomation,
+  onReorder, 
+  onClearCompleted,
+  onFileDragStart,
+  onFileDragEnd
+}: WorkspaceQueueProps) {
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
   const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
   const [isDownloading, setIsDownloading] = useState(false)
@@ -182,9 +194,12 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClea
                   item={item}
                   onPreview={onPreview}
                   onDownload={onDownload}
+                  onAutomation={onAutomation}
                   isDragging={false}
                   isDragOver={false}
                   enableReorder={false}
+                  onFileDragStart={onFileDragStart}
+                  onFileDragEnd={onFileDragEnd}
                 />
               ))}
             </AnimatePresence>
@@ -207,6 +222,7 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClea
                       item={item}
                       onPreview={onPreview}
                       onDownload={onDownload}
+                      onAutomation={onAutomation}
                       isDragging={draggedItemId === item.id}
                       isDragOver={dragOverItemId === item.id}
                       onDragStart={() => handleDragStart(item)}
@@ -214,6 +230,8 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClea
                       onDragOver={(e) => handleDragOver(e, item.id)}
                       onDrop={(e) => handleDrop(e, item.id)}
                       enableReorder={onReorder !== undefined}
+                      onFileDragStart={onFileDragStart}
+                      onFileDragEnd={onFileDragEnd}
                     />
                   ))}
                 </AnimatePresence>
@@ -236,9 +254,12 @@ export function WorkspaceQueue({ items, onPreview, onDownload, onReorder, onClea
                     item={item}
                     onPreview={onPreview}
                     onDownload={onDownload}
+                    onAutomation={onAutomation}
                     isDragging={false}
                     isDragOver={false}
                     enableReorder={false}
+                    onFileDragStart={onFileDragStart}
+                    onFileDragEnd={onFileDragEnd}
                   />
                 ))}
               </AnimatePresence>

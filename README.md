@@ -1,23 +1,65 @@
-# ✨ Welcome to Your Spark Template!
-You've just launched your brand-new Spark Template Codespace — everything’s fired up and ready for you to explore, build, and create with Spark!
+# Icon Changer - 圖示轉換與自動化工具
 
-This template is your blank canvas. It comes with a minimal setup to help you get started quickly with Spark development.
+一個專業的圖示轉換工作區，結合即時拖曳追蹤與自動化腳本生成功能。
 
-🚀 What's Inside?
-- A clean, minimal Spark environment
-- Pre-configured for local development
-- Ready to scale with your ideas
-  
-🧠 What Can You Do?
+## ✨ 主要功能
 
-Right now, this is just a starting point — the perfect place to begin building and testing your Spark applications.
+### 🔄 圖示轉換
+- 支援多種圖檔格式（PNG, JPG, ICO, ICNS）
+- 自動轉換為 PNG、ICO、ICNS 三種格式
+- 批次處理多個圖示檔案
+- URL 圖示解析與下載
 
-🧹 Just Exploring?
-No problem! If you were just checking things out and don’t need to keep this code:
+### 🎯 拖曳互動
+- **視覺追蹤系統**: 拖曳檔案時顯示即時動畫軌跡
+- **智慧拖放**: 直接拖曳轉換後的圖示至系統資料夾
+- **自訂拖曳預覽**: 顯示檔案名稱的拖曳圖示
+- **跨平台支援**: Windows (ICO)、macOS (ICNS)、Linux (PNG)
 
-- Simply delete your Spark.
-- Everything will be cleaned up — no traces left behind.
+### 🤖 自動化腳本生成
+- **Windows PowerShell**: 自動套用 ICO 至多個資料夾（含 desktop.ini 設定）
+- **macOS AppleScript**: 批次更新資料夾圖示
+- **Linux Bash**: 設定 .directory 檔案
+- **路徑拖放**: 可直接拖曳資料夾至腳本生成器
+- **一鍵下載**: 生成的腳本可複製或下載
 
-📄 License For Spark Template Resources 
+### 📦 批次下載
+- 打包所有格式為 ZIP 檔案
+- 依格式篩選下載（僅 PNG / ICO / ICNS）
+- 自動組織檔案結構
 
-The Spark Template files and resources from GitHub are licensed under the terms of the MIT license, Copyright GitHub, Inc.
+## 🎨 設計特色
+
+- **現代化介面**: 使用 Space Grotesk 字型與紫藍色調
+- **流暢動畫**: Framer Motion 驅動的狀態轉場
+- **即時回饋**: 處理狀態即時更新
+- **響應式設計**: 完整支援桌面與行動裝置
+
+## 🛠️ 技術架構
+
+- **框架**: React 19 + TypeScript
+- **UI 元件**: Shadcn UI (v4)
+- **樣式**: Tailwind CSS 4
+- **動畫**: Framer Motion
+- **圖示**: Phosphor Icons
+- **建置工具**: Vite
+
+## 📋 使用說明
+
+1. **上傳圖示**: 拖曳圖檔或輸入 URL
+2. **等待轉換**: 系統自動分析並轉換為多種格式
+3. **拖曳使用**: 直接拖曳格式按鈕至目標位置
+4. **生成腳本**: 點擊自動化按鈕，設定目標路徑，生成批次腳本
+5. **批次下載**: 使用下載選單打包所有檔案
+
+## 🎯 適用場景
+
+- 開發者自訂應用程式圖示
+- 系統管理員批次更新資料夾圖示
+- 設計師快速轉換圖示格式
+- 網站管理員處理 favicon
+
+---
+
+📄 **授權條款**  
+Spark Template 相關資源依 MIT 授權條款提供，版權所有 © GitHub, Inc.

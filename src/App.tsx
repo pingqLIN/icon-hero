@@ -7,7 +7,9 @@ import { Toaster } from '@/components/ui/sonner'
 import { WorkspaceDropZone } from '@/components/WorkspaceDropZone'
 import { WorkspaceQueue } from '@/components/WorkspaceQueue'
 import { PreviewDialog } from '@/components/PreviewDialog'
+import { AutomationDialog } from '@/components/AutomationDialog'
 import { DragInstructions } from '@/components/DragInstructions'
+import { DragTrackingOverlay } from '@/components/DragTrackingOverlay'
 import { WorkspaceItem } from '@/types/workspace'
 import { analyzeDroppedItem } from '@/lib/workspaceAnalyzer'
 import { convertIcon } from '@/lib/iconConverter'
@@ -20,6 +22,10 @@ function App() {
   const [workspaceItems, setWorkspaceItems] = useState<WorkspaceItem[]>([])
   const [previewItem, setPreviewItem] = useState<WorkspaceItem | null>(null)
   const [showPreview, setShowPreview] = useState(false)
+  const [automationItem, setAutomationItem] = useState<WorkspaceItem | null>(null)
+  const [showAutomation, setShowAutomation] = useState(false)
+  const [isDraggingFile, setIsDraggingFile] = useState(false)
+  const [draggedFileName, setDraggedFileName] = useState<string>('')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleUploadClick = () => {
@@ -147,6 +153,21 @@ function App() {
     setShowPreview(true)
   }
 
+  const handleAutomation = (item: WorkspaceItem) => {
+    setAutomationItem(item)
+    setShowAutomation(true)
+  }
+
+  const handleFileDragStart = (fileName: string) => {
+    setIsDraggingFile(true)
+    setDraggedFileName(fileName)
+  }
+
+  const handleFileDragEnd = () => {
+    setIsDraggingFile(false)
+    setDraggedFileName('')
+  }
+
   const handleDownload = (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => {
     const url = item.convertedUrls?.[format]
     if (!url) return
@@ -199,6 +220,7 @@ function App() {
   return (
     <>
       <Toaster />
+      <DragTrackingOverlay isActive={isDraggingFile} fileName={draggedFileName} />
       <div className="min-h-screen bg-background">
         <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -208,7 +230,7 @@ function App() {
                   Icon Changer
                 </h1>
                 <p className="text-sm text-muted-foreground" style={{ lineHeight: '1.6' }}>
-                  拖曳圖檔或 URL 到工作區，自動轉換為 PNG、ICO、ICNS 格式並支援拖曳替換系統圖示
+                  拖曳圖檔或 URL 到工作區，自動轉換為 PNG、ICO、ICNS 格式，支援拖曳替換與自動化腳本生成
                 </p>
               </div>
             </div>
@@ -301,8 +323,11 @@ function App() {
                   items={workspaceItems}
                   onPreview={handlePreview}
                   onDownload={handleDownload}
+                  onAutomation={handleAutomation}
                   onReorder={handleReorder}
                   onClearCompleted={handleClearCompleted}
+                  onFileDragStart={handleFileDragStart}
+                  onFileDragEnd={handleFileDragEnd}
                 />
               </div>
             )}
@@ -323,6 +348,12 @@ function App() {
           item={previewItem}
           open={showPreview}
           onOpenChange={setShowPreview}
+        />
+
+        <AutomationDialog
+          item={automationItem}
+          open={showAutomation}
+          onOpenChange={setShowAutomation}
         />
       </div>
     </>

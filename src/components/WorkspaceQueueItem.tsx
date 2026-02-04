@@ -9,7 +9,8 @@ import {
   Link as LinkIcon,
   Download,
   DotsSixVertical,
-  HandGrabbing
+  HandGrabbing,
+  Code
 } from '@phosphor-icons/react'
 import { WorkspaceItem } from '@/types/workspace'
 import { Card } from '@/components/ui/card'
@@ -22,6 +23,7 @@ interface WorkspaceQueueItemProps {
   item: WorkspaceItem
   onPreview?: (item: WorkspaceItem) => void
   onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
+  onAutomation?: (item: WorkspaceItem) => void
   isDragging?: boolean
   isDragOver?: boolean
   onDragStart?: () => void
@@ -29,19 +31,24 @@ interface WorkspaceQueueItemProps {
   onDragOver?: (e: React.DragEvent) => void
   onDrop?: (e: React.DragEvent) => void
   enableReorder?: boolean
+  onFileDragStart?: (fileName: string) => void
+  onFileDragEnd?: () => void
 }
 
 export function WorkspaceQueueItem({ 
   item, 
   onPreview, 
   onDownload,
+  onAutomation,
   isDragging = false,
   isDragOver = false,
   onDragStart,
   onDragEnd,
   onDragOver,
   onDrop,
-  enableReorder = false
+  enableReorder = false,
+  onFileDragStart,
+  onFileDragEnd
 }: WorkspaceQueueItemProps) {
   const getStatusIcon = () => {
     switch (item.status) {
@@ -99,6 +106,8 @@ export function WorkspaceQueueItem({
     }
     
     const filename = `${item.name}.${format}`
+    
+    onFileDragStart?.(filename)
     
     e.dataTransfer.effectAllowed = 'copy'
     
@@ -160,6 +169,7 @@ export function WorkspaceQueueItem({
     
     const cleanup = () => {
       target.style.pointerEvents = ''
+      onFileDragEnd?.()
       document.removeEventListener('dragend', cleanup)
       document.removeEventListener('drop', cleanup) 
       document.removeEventListener('mouseup', cleanup)
@@ -257,6 +267,24 @@ export function WorkspaceQueueItem({
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>預覽</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8"
+                        onClick={() => onAutomation?.(item)}
+                      >
+                        <Code size={16} weight="bold" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>自動化腳本</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
