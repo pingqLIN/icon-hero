@@ -2,6 +2,7 @@ import { AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
 import { WorkspaceItem } from '@/types/workspace'
 import { WorkspaceQueueItem } from '@/components/WorkspaceQueueItem'
+import { MascotDisplay } from '@/components/MascotDisplay'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
@@ -21,21 +22,25 @@ interface WorkspaceQueueProps {
   onPreview?: (item: WorkspaceItem) => void
   onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
   onAutomation?: (item: WorkspaceItem) => void
+  onApplyIcon?: (item: WorkspaceItem) => void
   onReorder?: (reorderedItems: WorkspaceItem[]) => void
   onClearCompleted?: () => void
   onFileDragStart?: (fileName: string) => void
   onFileDragEnd?: () => void
+  mascotType?: 'bot' | 'hero' | 'abstract'
 }
 
-export function WorkspaceQueue({ 
-  items, 
-  onPreview, 
-  onDownload, 
+export function WorkspaceQueue({
+  items,
+  onPreview,
+  onDownload,
   onAutomation,
-  onReorder, 
+  onApplyIcon,
+  onReorder,
   onClearCompleted,
   onFileDragStart,
-  onFileDragEnd
+  onFileDragEnd,
+  mascotType = 'bot'
 }: WorkspaceQueueProps) {
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
   const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
@@ -195,6 +200,7 @@ export function WorkspaceQueue({
                   onPreview={onPreview}
                   onDownload={onDownload}
                   onAutomation={onAutomation}
+                  onApplyIcon={onApplyIcon}
                   isDragging={false}
                   isDragOver={false}
                   enableReorder={false}
@@ -210,9 +216,39 @@ export function WorkspaceQueue({
       {(pendingItems.length > 0 && completedItems.length > 0) && <Separator />}
 
       {completedItems.length > 0 && (
-        <>
-          <div>
-            <h3 className="text-sm font-semibold mb-3 text-muted-foreground">已完成</h3>
+        <div className="relative">
+          {/* 吉祥物 - 向下看，遮罩穿透效果 */}
+          {/* Tool Hero (hero) → PNG 按鍵上方左側，放大110%，向上移動30px */}
+          {/* Tech-Bot (bot) → ICO 按鍵上方，向上移動13px */}
+          <div className={`absolute z-20 pointer-events-none ${
+            mascotType === 'hero'
+              ? 'right-[210px] -top-[70px]'  // PNG 按鍵上方，向上移動30px (原-40px → -70px)
+              : 'right-[110px] -top-[53px]'  // ICO 按鍵上方，向上移動13px (原-40px → -53px)
+          }`}>
+            <MascotDisplay
+              type={mascotType}
+              state="success"
+              variant="lookDown"
+              className={`drop-shadow-2xl w-32 h-32 ${
+                mascotType === 'hero' ? 'scale-110' : ''
+              }`}
+            />
+          </div>
+
+          <div className="overflow-hidden rounded-xl border border-primary/20 p-4">
+            <div className="flex items-center gap-3 mb-3">
+              {/* 顯示第一個完成項目的縮圖 */}
+              {completedItems[0]?.convertedUrls?.png && (
+                <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-primary/30 bg-background/50 flex-shrink-0">
+                  <img
+                    src={completedItems[0].convertedUrls.png}
+                    alt="completed icon"
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              )}
+              <h3 className="text-sm font-semibold text-muted-foreground">已完成</h3>
+            </div>
             <ScrollArea className="h-auto max-h-[600px]">
               <div className="space-y-2 pr-4">
                 <AnimatePresence>
@@ -223,6 +259,7 @@ export function WorkspaceQueue({
                       onPreview={onPreview}
                       onDownload={onDownload}
                       onAutomation={onAutomation}
+                      onApplyIcon={onApplyIcon}
                       isDragging={draggedItemId === item.id}
                       isDragOver={dragOverItemId === item.id}
                       onDragStart={() => handleDragStart(item)}
@@ -238,7 +275,7 @@ export function WorkspaceQueue({
               </div>
             </ScrollArea>
           </div>
-        </>
+        </div>
       )}
 
       {errorItems.length > 0 && (
@@ -255,6 +292,7 @@ export function WorkspaceQueue({
                     onPreview={onPreview}
                     onDownload={onDownload}
                     onAutomation={onAutomation}
+                  onApplyIcon={onApplyIcon}
                     isDragging={false}
                     isDragOver={false}
                     enableReorder={false}

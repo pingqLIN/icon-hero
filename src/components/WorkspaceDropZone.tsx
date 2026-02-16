@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion'
-import { UploadSimple, Files } from '@phosphor-icons/react'
+import { UploadSimple, Folder } from '@phosphor-icons/react'
+import { MascotDisplay } from './MascotDisplay'
 
 interface WorkspaceDropZoneProps {
   onDrop: (items: (File | string)[]) => void
   isProcessing?: boolean
+  mascotType?: 'bot' | 'hero' | 'abstract'
+  hasCompletedItems?: boolean
 }
 
-export function WorkspaceDropZone({ onDrop, isProcessing }: WorkspaceDropZoneProps) {
+export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', hasCompletedItems = false }: WorkspaceDropZoneProps) {
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -48,18 +51,18 @@ export function WorkspaceDropZone({ onDrop, isProcessing }: WorkspaceDropZonePro
 
   const handlePaste = (e: React.ClipboardEvent<HTMLDivElement>) => {
     const items: (File | string)[] = []
-    
+
     if (e.clipboardData.files.length > 0) {
       Array.from(e.clipboardData.files).forEach(file => {
         items.push(file)
       })
     }
-    
+
     const text = e.clipboardData.getData('text')
     if (text && (text.startsWith('http://') || text.startsWith('https://'))) {
       items.push(text)
     }
-    
+
     if (items.length > 0) {
       e.preventDefault()
       onDrop(items)
@@ -70,49 +73,73 @@ export function WorkspaceDropZone({ onDrop, isProcessing }: WorkspaceDropZonePro
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative"
+      className="relative group"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
       onPaste={handlePaste}
       tabIndex={0}
     >
-      <div className="border-2 border-dashed border-border rounded-2xl bg-secondary/20 p-12 transition-all hover:border-primary/50 hover:bg-secondary/30">
-        <div className="flex flex-col items-center justify-center gap-4">
-          <div className="relative">
-            <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <Files size={40} className="text-primary" weight="duotone" />
-            </div>
-            <motion.div
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -top-2 -right-2"
-            >
-              <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center">
-                <UploadSimple size={20} weight="bold" className="text-accent-foreground" />
-              </div>
-            </motion.div>
-          </div>
-          
-          <div className="text-center space-y-2">
-            <h3 className="text-xl font-bold">拖曳檔案或連結到此處</h3>
-            <p className="text-sm text-muted-foreground max-w-md">
-              支援圖檔 (PNG, JPG, ICO, ICNS) 和網站 URL，系統將自動分析並執行轉換
-            </p>
-            <p className="text-xs text-muted-foreground">
-              也可以使用 Ctrl+V / Cmd+V 貼上
-            </p>
-          </div>
+      <div className="relative border-2 border-dashed border-border rounded-2xl bg-secondary/5 p-12 transition-all duration-300 hover:border-primary/50 hover:bg-secondary/10 hover:shadow-[0_0_30px_rgba(var(--primary),0.1)] overflow-hidden">
 
-          {isProcessing && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-sm text-primary font-medium"
-            >
-              處理中...
-            </motion.div>
-          )}
+        {/* Background Grid Pattern */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
         </div>
+
+        <div className="flex flex-col items-center justify-center gap-6 relative z-10">
+
+          {/* MASCOT DISPLAY vs FOLDER ICON */}
+          {/* If NO completed items, show Mascot in DropZone. If completed, show simple Folder (Mascot moves to Instructions) */}
+          {!hasCompletedItems ? (
+            <div className="scale-125 transition-transform duration-300 group-hover:scale-[1.35]">
+              <MascotDisplay
+                type={mascotType}
+                state={isProcessing ? 'processing' : 'idle'}
+              />
+            </div>
+          ) : (
+            <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-border">
+              <Folder
+                size={32}
+                weight="duotone"
+                className={`transition-colors duration-300 ${isProcessing ? 'text-primary animate-pulse' : 'text-muted-foreground group-hover:text-primary'}`}
+              />
+            </div>
+          )}
+
+          <div className="text-center space-y-3">
+            <h3 className="text-2xl font-bold bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-transparent">
+              {isProcessing ? '正在處理您的圖示...' : '拖曳檔案或連結到此處'}
+            </h3>
+            <p className="text-base text-muted-foreground max-w-md mx-auto leading-relaxed">
+              支援 <span className="text-primary font-medium">PNG, JPG, ICO, ICNS</span> 和網站 URL<br />
+              系統將自動啟動轉換引擎
+            </p>
+
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 px-3 py-1 bg-background border border-border rounded-full text-xs text-muted-foreground shadow-sm mt-2"
+            >
+              <span className="w-4 h-4 flex items-center justify-center bg-muted rounded text-[10px]">⌘</span>
+              <span>+</span>
+              <span className="w-4 h-4 flex items-center justify-center bg-muted rounded text-[10px]">V</span>
+              <span>貼上也可以</span>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Corner Decoration */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none"
+        />
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          className="absolute -bottom-10 -left-10 w-32 h-32 bg-secondary/5 rounded-full blur-2xl pointer-events-none"
+        />
       </div>
     </motion.div>
   )

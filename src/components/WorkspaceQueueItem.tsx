@@ -10,7 +10,8 @@ import {
   Download,
   DotsSixVertical,
   HandGrabbing,
-  Code
+  Code,
+  FolderOpen
 } from '@phosphor-icons/react'
 import { WorkspaceItem } from '@/types/workspace'
 import { Card } from '@/components/ui/card'
@@ -24,6 +25,7 @@ interface WorkspaceQueueItemProps {
   onPreview?: (item: WorkspaceItem) => void
   onDownload?: (item: WorkspaceItem, format: 'png' | 'ico' | 'icns') => void
   onAutomation?: (item: WorkspaceItem) => void
+  onApplyIcon?: (item: WorkspaceItem) => void
   isDragging?: boolean
   isDragOver?: boolean
   onDragStart?: () => void
@@ -40,6 +42,7 @@ export function WorkspaceQueueItem({
   onPreview, 
   onDownload,
   onAutomation,
+  onApplyIcon,
   isDragging = false,
   isDragOver = false,
   onDragStart,
@@ -267,6 +270,24 @@ export function WorkspaceQueueItem({
                     </TooltipTrigger>
                     <TooltipContent>
                       <p>預覽</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        variant="outline"
+                        className="h-8 w-8"
+                        onClick={() => onApplyIcon?.(item)}
+                      >
+                        <FolderOpen size={16} weight="fill" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>一鍵套用圖示到資料夾</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

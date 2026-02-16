@@ -5,17 +5,34 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Toaster } from '@/components/ui/sonner'
 import { WorkspaceDropZone } from '@/components/WorkspaceDropZone'
+import { LogoDisplay } from '@/components/LogoDisplay'
 import { WorkspaceQueue } from '@/components/WorkspaceQueue'
 import { PreviewDialog } from '@/components/PreviewDialog'
 import { AutomationDialog } from '@/components/AutomationDialog'
-import { DragInstructions } from '@/components/DragInstructions'
+import { ApplyIconDialog } from '@/components/ApplyIconDialog'
+// import { DragInstructions } from '@/components/DragInstructions'
 import { DragTrackingOverlay } from '@/components/DragTrackingOverlay'
 import { WorkspaceItem } from '@/types/workspace'
 import { analyzeDroppedItem } from '@/lib/workspaceAnalyzer'
 import { convertIcon } from '@/lib/iconConverter'
 import { toast } from 'sonner'
 
+
 function App() {
+  // Theme State
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+
+  useEffect(() => {
+    const root = window.document.documentElement
+    root.classList.remove('light', 'dark')
+    root.classList.add(theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light')
+  }
+
+  // Original Logic
   const [isProcessing, setIsProcessing] = useState(false)
   const [urlInput, setUrlInput] = useState('')
   const [showUrlInput, setShowUrlInput] = useState(false)
@@ -26,6 +43,8 @@ function App() {
   const [showAutomation, setShowAutomation] = useState(false)
   const [isDraggingFile, setIsDraggingFile] = useState(false)
   const [draggedFileName, setDraggedFileName] = useState<string>('')
+  const [applyItem, setApplyItem] = useState<WorkspaceItem | null>(null)
+  const [showApply, setShowApply] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleUploadClick = () => {
@@ -34,7 +53,7 @@ function App() {
 
   const handleUrlSubmit = async () => {
     const trimmedUrl = urlInput.trim()
-    
+
     if (!trimmedUrl) {
       toast.error('請輸入有效的 URL')
       return
@@ -108,7 +127,7 @@ function App() {
             if (wi.id === workspaceItem.id) {
               const existingUrls = wi.convertedUrls || {}
               const existingBlobs = wi.convertedBlobs || {}
-              
+
               return {
                 ...wi,
                 status: 'completed',
@@ -134,10 +153,10 @@ function App() {
         setWorkspaceItems(prev => prev.map(wi =>
           wi.id === workspaceItem.id
             ? {
-                ...wi,
-                status: 'error',
-                error: error instanceof Error ? error.message : '轉換失敗'
-              }
+              ...wi,
+              status: 'error',
+              error: error instanceof Error ? error.message : '轉換失敗'
+            }
             : wi
         ))
 
@@ -156,6 +175,11 @@ function App() {
   const handleAutomation = (item: WorkspaceItem) => {
     setAutomationItem(item)
     setShowAutomation(true)
+  }
+
+  const handleApplyIcon = (item: WorkspaceItem) => {
+    setApplyItem(item)
+    setShowApply(true)
   }
 
   const handleFileDragStart = (fileName: string) => {
@@ -221,17 +245,22 @@ function App() {
     <>
       <Toaster />
       <DragTrackingOverlay isActive={isDraggingFile} fileName={draggedFileName} />
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              <div>
-                <h1 className="text-3xl font-bold tracking-tight mb-1" style={{ letterSpacing: '-0.02em' }}>
-                  Icon Changer
-                </h1>
-                <p className="text-sm text-muted-foreground" style={{ lineHeight: '1.6' }}>
-                  拖曳圖檔或 URL 到工作區，自動轉換為 PNG、ICO、ICNS 格式，支援拖曳替換與自動化腳本生成
-                </p>
+              <div className="flex items-center gap-4">
+                <LogoDisplay />
+              </div>
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={toggleTheme}
+                  className="gap-2"
+                >
+                  {theme === 'dark' ? '切換至 Creative Studio (亮色)' : '切換至 Neon Forge (暗色)'}
+                </Button>
               </div>
             </div>
           </div>
@@ -308,26 +337,32 @@ function App() {
               <WorkspaceDropZone
                 onDrop={handleWorkspaceDrop}
                 isProcessing={isProcessing}
+                mascotType={theme === 'dark' ? 'bot' : 'hero'}
+                hasCompletedItems={hasCompletedItems}
               />
             </div>
 
             {workspaceItems.length > 0 && (
               <div>
-                <h2 className="text-xl font-bold mb-4">處理佇列</h2>
-                {hasCompletedItems && (
-                  <div className="mb-6">
-                    <DragInstructions />
-                  </div>
-                )}
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-4">
+                  <h2 className="text-xl font-bold">處理佇列</h2>
+                  <span className="text-xs text-muted-foreground">
+                    拖曳功能啟用：長按格式按鈕（PNG / ICO /
+                    ICNS）並拖曳至系統檔案或資料夾，即可替換該目標
+                  </span>
+                </div>
+                {/* DragInstructions removed as mascot is moved to Completed area */}
                 <WorkspaceQueue
                   items={workspaceItems}
                   onPreview={handlePreview}
                   onDownload={handleDownload}
                   onAutomation={handleAutomation}
+                  onApplyIcon={handleApplyIcon}
                   onReorder={handleReorder}
                   onClearCompleted={handleClearCompleted}
                   onFileDragStart={handleFileDragStart}
                   onFileDragEnd={handleFileDragEnd}
+                  mascotType={theme === 'dark' ? 'bot' : 'hero'}
                 />
               </div>
             )}
@@ -354,6 +389,12 @@ function App() {
           item={automationItem}
           open={showAutomation}
           onOpenChange={setShowAutomation}
+        />
+
+        <ApplyIconDialog
+          item={applyItem}
+          open={showApply}
+          onOpenChange={setShowApply}
         />
       </div>
     </>
