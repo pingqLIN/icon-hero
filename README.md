@@ -10,6 +10,11 @@ A professional icon conversion workspace combining real-time drag-and-drop track
 - **Drag & Drop**: Visual tracking and smart drag-and-drop.
 - **Automation**: Generate PowerShell, AppleScript, and Bash scripts for icon replacement.
 
+## 🚀 GitHub Pages Deployment
+
+- The workflow `.github/workflows/deploy-pages.yml` deploys `dist/` to `gh-pages` with `peaceiris/actions-gh-pages@v4.0.0`.
+- Build uses `--base "/<repo-name>/"` for project pages so static assets load correctly.
+
 ## 🤖 AI-Assisted Development
 
 This project was developed with AI assistance.
