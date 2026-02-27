@@ -1,4 +1,4 @@
-import{r as t,p as S,J as I,j as e,b as A,B as u,a as b,c as E,s as N,t as g}from"./index-UWlKnUzh.js";import{L as C,T as j,a as _,b as w,m as W,s as H,c as v,F as R}from"./FolderPathInput-D6HmE8Es.js";import{D as k,a as D,b as L,c as O,d as T}from"./dialog-CKhH3eEE.js";const Z=new Map([["bold",t.createElement(t.Fragment,null,t.createElement("path",{d:"M108,84a16,16,0,1,1,16,16A16,16,0,0,1,108,84Zm128,44A108,108,0,1,1,128,20,108.12,108.12,0,0,1,236,128Zm-24,0a84,84,0,1,0-84,84A84.09,84.09,0,0,0,212,128Zm-72,36.68V132a20,20,0,0,0-20-20,12,12,0,0,0-4,23.32V168a20,20,0,0,0,20,20,12,12,0,0,0,4-23.32Z"}))],["duotone",t.createElement(t.Fragment,null,t.createElement("path",{d:"M224,128a96,96,0,1,1-96-96A96,96,0,0,1,224,128Z",opacity:"0.2"}),t.createElement("path",{d:"M144,176a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176Zm88-48A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128ZM124,96a12,12,0,1,0-12-12A12,12,0,0,0,124,96Z"}))],["fill",t.createElement(t.Fragment,null,t.createElement("path",{d:"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-4,48a12,12,0,1,1-12,12A12,12,0,0,1,124,72Zm12,112a16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40a8,8,0,0,1,0,16Z"}))],["light",t.createElement(t.Fragment,null,t.createElement("path",{d:"M142,176a6,6,0,0,1-6,6,14,14,0,0,1-14-14V128a2,2,0,0,0-2-2,6,6,0,0,1,0-12,14,14,0,0,1,14,14v40a2,2,0,0,0,2,2A6,6,0,0,1,142,176ZM124,94a10,10,0,1,0-10-10A10,10,0,0,0,124,94Zm106,34A102,102,0,1,1,128,26,102.12,102.12,0,0,1,230,128Zm-12,0a90,90,0,1,0-90,90A90.1,90.1,0,0,0,218,128Z"}))],["regular",t.createElement(t.Fragment,null,t.createElement("path",{d:"M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"}))],["thin",t.createElement(t.Fragment,null,t.createElement("path",{d:"M140,176a4,4,0,0,1-4,4,12,12,0,0,1-12-12V128a4,4,0,0,0-4-4,4,4,0,0,1,0-8,12,12,0,0,1,12,12v40a4,4,0,0,0,4,4A4,4,0,0,1,140,176ZM124,92a8,8,0,1,0-8-8A8,8,0,0,0,124,92Zm104,36A100,100,0,1,1,128,28,100.11,100.11,0,0,1,228,128Zm-8,0a92,92,0,1,0-92,92A92.1,92.1,0,0,0,220,128Z"}))]]),P=t.forwardRef((o,a)=>t.createElement(S,{ref:a,...o,weights:Z}));P.displayName="InfoIcon";const M=P;function F(o){switch(o){case"windows":return"ico";case"macos":return"icns";case"linux":return"png"}}function U(o){switch(o){case"windows":return"apply-icon.ps1";case"macos":return"apply-icon.command";case"linux":return"apply-icon.sh"}}function z(o,a){const n=F(a);return`${o}.${n}`}function K(o,a){return`# ============================================
+import{r as h,j as e,h as S,a1 as I,a2 as F,a3 as N,H as b,s as j,a6 as _}from"./vendor-react-C6e-5eE6.js";import{D as W,a as H,b as E,c as A,d as k}from"./dialog-n6Et0HJq.js";import{B as u,a as D}from"./index-C7NKU9uD.js";import{L as C,T as R,a as v,b as w,F as L}from"./FolderPathInput-DyixXoL2.js";import{J as O}from"./vendor-utils-BkFDvfcB.js";import{ag as g}from"./vendor-misc-DGu4uscJ.js";import"./vendor-ui-BQCqNqg0.js";import"./vendor-spark-DzJFg9d8.js";import"./vendor-motion-DHv8ew7D.js";function y(o){switch(o){case"windows":return"ico";case"macos":return"icns";case"linux":return"png"}}function T(o){switch(o){case"windows":return"apply-icon.ps1";case"macos":return"apply-icon.command";case"linux":return"apply-icon.sh"}}function U(o,r){const a=y(r);return`${o}.${a}`}function z(o,r){return`# ============================================
 # Windows 資料夾圖示一鍵套用腳本
 # 生成時間: ${new Date().toLocaleString("zh-TW")}
 # ============================================
@@ -58,7 +58,7 @@ $iconFullPath = (Resolve-Path $iconPath).Path
 
 # 原始目標清單
 $rawFolders = @(
-${a.map(n=>`    "${n.replace(/\\/g,"\\\\")}"`).join(`,
+${r.map(a=>`    "${a.replace(/\\/g,"\\\\")}"`).join(`,
 `)}
 )
 
@@ -164,7 +164,7 @@ ie4uinit.exe -show 2>$null
 Write-Host "完成。如果圖示沒有立即更新，請重新啟動檔案總管或登出再登入。" -ForegroundColor Gray
 Write-Host ""
 Read-Host "按 Enter 鍵關閉"
-`}function G(o,a){return`#!/bin/bash
+`}function K(o,r){return`#!/bin/bash
 # ============================================
 # macOS 資料夾圖示一鍵套用腳本
 # 生成時間: ${new Date().toLocaleString("zh-TW")}
@@ -251,7 +251,7 @@ echo "===================================="
 echo ""
 
 RAW_FOLDERS=(
-${a.map(n=>`    "${n.replace(/"/g,'\\"')}"`).join(`
+${r.map(a=>`    "${a.replace(/"/g,'\\"')}"`).join(`
 `)}
 )
 
@@ -311,7 +311,7 @@ echo "  完成！成功: $SUCCESS / 跳過: $SKIP / 失敗: $FAIL"
 echo "===================================="
 echo ""
 read -p "按 Enter 鍵關閉"
-`}function q(o,a){return`#!/bin/bash
+`}function M(o,r){return`#!/bin/bash
 # ============================================
 # Linux 資料夾圖示一鍵套用腳本
 # 生成時間: ${new Date().toLocaleString("zh-TW")}
@@ -374,7 +374,7 @@ echo "===================================="
 echo ""
 
 RAW_FOLDERS=(
-${a.map(n=>`    "${n.replace(/"/g,'\\"')}"`).join(`
+${r.map(a=>`    "${a.replace(/"/g,'\\"')}"`).join(`
 `)}
 )
 
@@ -434,14 +434,14 @@ echo "  完成！成功: $SUCCESS / 跳過: $SKIP / 失敗: $FAIL"
 echo "===================================="
 echo ""
 read -p "按 Enter 鍵關閉"
-`}function V(o,a){return`===================================
+`}function G(o,r){return`===================================
   資料夾圖示一鍵套用工具
   Icon Changer - Apply Package
 ===================================
 
 ${{windows:`使用方式（Windows）：
 1. 將此資料夾解壓縮到任意位置
-2. 確認「${a}」和「apply-icon.ps1」在同一個資料夾中
+2. 確認「${r}」和「apply-icon.ps1」在同一個資料夾中
 3. 右鍵點擊「apply-icon.ps1」→ 選擇「以 PowerShell 執行」
 4. 腳本會自動將圖示套用到所有目標資料夾
 
@@ -454,7 +454,7 @@ ${{windows:`使用方式（Windows）：
 - 重新啟動檔案總管（工作管理員 → 重新啟動 explorer.exe）
 - 或登出再登入`,macos:`使用方式（macOS）：
 1. 將此資料夾解壓縮到任意位置
-2. 確認「${a}」和「apply-icon.command」在同一個資料夾中
+2. 確認「${r}」和「apply-icon.command」在同一個資料夾中
 3. 雙擊「apply-icon.command」即可執行
 4. 首次執行可能需要在「系統偏好設定 → 安全性」中允許
 
@@ -463,7 +463,7 @@ ${{windows:`使用方式（Windows）：
 - 執行：chmod +x apply-icon.command
 - 再次雙擊執行`,linux:`使用方式（Linux）：
 1. 將此資料夾解壓縮到任意位置
-2. 確認「${a}」和「apply-icon.sh」在同一個資料夾中
+2. 確認「${r}」和「apply-icon.sh」在同一個資料夾中
 3. 開啟終端機，切換到此資料夾
 4. 執行：chmod +x apply-icon.sh
 5. 執行：./apply-icon.sh
@@ -475,4 +475,4 @@ ${{windows:`使用方式（Windows）：
 ---
 由 Icon Changer 自動生成
 ${new Date().toLocaleString("zh-TW")}
-`}async function B(o){const{iconBlob:a,iconName:n,targetPaths:i,platform:l}=o,d=new I,m=`${n}-icon-apply`,$=d.folder(m);if(!$)throw new Error("無法建立 ZIP 資料夾");const c=z(n,l);$.file(c,a);let s;switch(l){case"windows":s=K(c,i);break;case"macos":s=G(c,i);break;case"linux":s=q(c,i);break}const h=U(l);$.file(h,s);const x=V(l,c);$.file("README.txt",x);const y=await d.generateAsync({type:"blob"}),p=URL.createObjectURL(y),r=document.createElement("a");r.href=p,r.download=`${m}.zip`,document.body.appendChild(r),r.click(),document.body.removeChild(r),URL.revokeObjectURL(p)}function X({item:o,open:a,onOpenChange:n}){const[i,l]=t.useState("windows"),[d,m]=t.useState([]),[$,c]=t.useState(!1);if(t.useEffect(()=>{const r=navigator.userAgent.toLowerCase();r.includes("mac")?l("macos"):r.includes("linux")?l("linux"):l("windows")},[]),t.useEffect(()=>{a&&(m([]),c(!1))},[a]),!o||o.status!=="completed")return null;const s=F(i),h=o.convertedBlobs?.[s],x=async()=>{if(d.length===0){g.error("請至少新增一個目標資料夾路徑");return}const r=o.convertedBlobs?.[s];if(!r){g.error(`找不到 ${s.toUpperCase()} 格式的圖示檔案`);return}c(!0);try{await B({iconBlob:r,iconName:o.name,targetPaths:d,platform:i}),g.success("安裝包已下載！",{description:"解壓縮後執行腳本即可套用圖示"}),n(!1)}catch(f){g.error("打包失敗",{description:f instanceof Error?f.message:"未知錯誤"})}finally{c(!1)}},p={windows:{steps:["解壓縮下載的 ZIP","右鍵「apply-icon.ps1」→ 以 PowerShell 執行","圖示會自動套用到所有目標資料夾"],script:"apply-icon.ps1"},macos:{steps:["解壓縮下載的 ZIP","雙擊「apply-icon.command」","首次可能需在「系統偏好 → 安全性」允許"],script:"apply-icon.command"},linux:{steps:["解壓縮下載的 ZIP","終端機執行 chmod +x apply-icon.sh","執行 ./apply-icon.sh"],script:"apply-icon.sh"}}[i];return e.jsx(k,{open:a,onOpenChange:n,children:e.jsxs(D,{className:"max-w-2xl max-h-[90vh] overflow-y-auto",children:[e.jsxs(L,{children:[e.jsxs(O,{className:"flex items-center gap-2",children:[e.jsx(A,{size:24,weight:"fill",className:"text-primary"}),"一鍵套用圖示到資料夾"]}),e.jsx(T,{children:"下載安裝包，解壓縮後執行腳本即可自動替換資料夾圖示"})]}),e.jsxs("div",{className:"space-y-5",children:[e.jsxs("div",{className:"space-y-2",children:[e.jsxs(C,{className:"text-sm font-semibold flex items-center gap-2",children:[e.jsx(u,{variant:"secondary",className:"text-[10px] px-1.5 py-0 font-mono",children:"1"}),"選擇作業系統"]}),e.jsx(j,{value:i,onValueChange:r=>l(r),children:e.jsxs(_,{className:"grid w-full grid-cols-3",children:[e.jsxs(w,{value:"windows",className:"gap-2",children:[e.jsx(W,{size:16,weight:"fill"}),"Windows"]}),e.jsxs(w,{value:"macos",className:"gap-2",children:[e.jsx(H,{size:16,weight:"fill"}),"macOS"]}),e.jsxs(w,{value:"linux",className:"gap-2",children:[e.jsx(v,{size:16,weight:"fill"}),"Linux"]})]})}),e.jsxs("div",{className:"flex items-center justify-between p-2.5 bg-secondary/20 rounded-lg border border-border",children:[e.jsx("span",{className:"text-xs text-muted-foreground",children:"圖示檔案"}),e.jsxs("span",{className:"text-xs font-mono font-semibold",children:[o.name,".",s]}),!h&&e.jsx(u,{variant:"destructive",className:"text-[10px] px-1.5 py-0",children:"格式不可用"})]})]}),e.jsxs("div",{className:"space-y-2",children:[e.jsxs(C,{className:"text-sm font-semibold flex items-center gap-2",children:[e.jsx(u,{variant:"secondary",className:"text-[10px] px-1.5 py-0 font-mono",children:"2"}),"新增目標資料夾路徑"]}),e.jsx(R,{paths:d,onPathsChange:m,placeholder:i==="windows"?"C:\\Users\\Username\\Desktop\\MyFolder":i==="macos"?"/Users/username/Desktop/MyFolder":"/home/username/Desktop/MyFolder"})]}),e.jsxs("div",{className:"space-y-3",children:[e.jsxs(C,{className:"text-sm font-semibold flex items-center gap-2",children:[e.jsx(u,{variant:"secondary",className:"text-[10px] px-1.5 py-0 font-mono",children:"3"}),"下載安裝包"]}),e.jsx(b,{onClick:x,className:"w-full gap-2 h-11",disabled:d.length===0||!h||$,size:"lg",children:$?e.jsxs(e.Fragment,{children:[e.jsx(E,{size:18,className:"animate-spin"}),"正在打包..."]}):e.jsxs(e.Fragment,{children:[e.jsx(N,{size:18,weight:"bold"}),"下載安裝包（",s.toUpperCase()," + 腳本）"]})}),e.jsxs("div",{className:"p-3 bg-accent/10 rounded-lg border border-accent/20",children:[e.jsxs("p",{className:"text-xs font-semibold text-accent-foreground mb-2 flex items-center gap-1",children:[e.jsx(M,{size:14}),"下載後的使用步驟："]}),e.jsx("ol",{className:"text-xs text-muted-foreground space-y-1 list-decimal list-inside",children:p.steps.map((r,f)=>e.jsx("li",{children:r},f))})]})]})]})]})})}export{X as ApplyIconDialog};
+`}async function q(o){const{iconBlob:r,iconName:a,targetPaths:n,platform:s}=o,c=new O,$=`${a}-icon-apply`,d=c.folder($);if(!d)throw new Error("無法建立 ZIP 資料夾");const l=U(a,s);d.file(l,r);let i;switch(s){case"windows":i=z(l,n);break;case"macos":i=K(l,n);break;case"linux":i=M(l,n);break}const p=T(s);d.file(p,i);const x=G(s,l);d.file("README.txt",x);const P=await c.generateAsync({type:"blob"}),m=URL.createObjectURL(P),t=document.createElement("a");t.href=m,t.download=`${$}.zip`,document.body.appendChild(t),t.click(),document.body.removeChild(t),URL.revokeObjectURL(m)}function re({item:o,open:r,onOpenChange:a}){const[n,s]=h.useState("windows"),[c,$]=h.useState([]),[d,l]=h.useState(!1);if(h.useEffect(()=>{const t=navigator.userAgent.toLowerCase();t.includes("mac")?s("macos"):t.includes("linux")?s("linux"):s("windows")},[]),h.useEffect(()=>{r&&($([]),l(!1))},[r]),!o||o.status!=="completed")return null;const i=y(n),p=o.convertedBlobs?.[i],x=async()=>{if(c.length===0){g.error("請至少新增一個目標資料夾路徑");return}const t=o.convertedBlobs?.[i];if(!t){g.error(`找不到 ${i.toUpperCase()} 格式的圖示檔案`);return}l(!0);try{await q({iconBlob:t,iconName:o.name,targetPaths:c,platform:n}),g.success("安裝包已下載！",{description:"解壓縮後執行腳本即可套用圖示"}),a(!1)}catch(f){g.error("打包失敗",{description:f instanceof Error?f.message:"未知錯誤"})}finally{l(!1)}},m={windows:{steps:["解壓縮下載的 ZIP","右鍵「apply-icon.ps1」→ 以 PowerShell 執行","圖示會自動套用到所有目標資料夾"],script:"apply-icon.ps1"},macos:{steps:["解壓縮下載的 ZIP","雙擊「apply-icon.command」","首次可能需在「系統偏好 → 安全性」允許"],script:"apply-icon.command"},linux:{steps:["解壓縮下載的 ZIP","終端機執行 chmod +x apply-icon.sh","執行 ./apply-icon.sh"],script:"apply-icon.sh"}}[n];return e.jsx(W,{open:r,onOpenChange:a,children:e.jsxs(H,{className:"max-w-2xl max-h-[90vh] overflow-y-auto",children:[e.jsxs(E,{children:[e.jsxs(A,{className:"flex items-center gap-2",children:[e.jsx(S,{size:24,weight:"fill",className:"text-primary"}),"一鍵套用圖示到資料夾"]}),e.jsx(k,{children:"下載安裝包，解壓縮後執行腳本即可自動替換資料夾圖示"})]}),e.jsxs("div",{className:"space-y-5",children:[e.jsxs("div",{className:"space-y-2",children:[e.jsxs(C,{className:"text-sm font-semibold flex items-center gap-2",children:[e.jsx(u,{variant:"secondary",className:"text-[10px] px-1.5 py-0 font-mono",children:"1"}),"選擇作業系統"]}),e.jsx(R,{value:n,onValueChange:t=>s(t),children:e.jsxs(v,{className:"grid w-full grid-cols-3",children:[e.jsxs(w,{value:"windows",className:"gap-2",children:[e.jsx(I,{size:16,weight:"fill"}),"Windows"]}),e.jsxs(w,{value:"macos",className:"gap-2",children:[e.jsx(F,{size:16,weight:"fill"}),"macOS"]}),e.jsxs(w,{value:"linux",className:"gap-2",children:[e.jsx(N,{size:16,weight:"fill"}),"Linux"]})]})}),e.jsxs("div",{className:"flex items-center justify-between p-2.5 bg-secondary/20 rounded-lg border border-border",children:[e.jsx("span",{className:"text-xs text-muted-foreground",children:"圖示檔案"}),e.jsxs("span",{className:"text-xs font-mono font-semibold",children:[o.name,".",i]}),!p&&e.jsx(u,{variant:"destructive",className:"text-[10px] px-1.5 py-0",children:"格式不可用"})]})]}),e.jsxs("div",{className:"space-y-2",children:[e.jsxs(C,{className:"text-sm font-semibold flex items-center gap-2",children:[e.jsx(u,{variant:"secondary",className:"text-[10px] px-1.5 py-0 font-mono",children:"2"}),"新增目標資料夾路徑"]}),e.jsx(L,{paths:c,onPathsChange:$,placeholder:n==="windows"?"C:\\Users\\Username\\Desktop\\MyFolder":n==="macos"?"/Users/username/Desktop/MyFolder":"/home/username/Desktop/MyFolder"})]}),e.jsxs("div",{className:"space-y-3",children:[e.jsxs(C,{className:"text-sm font-semibold flex items-center gap-2",children:[e.jsx(u,{variant:"secondary",className:"text-[10px] px-1.5 py-0 font-mono",children:"3"}),"下載安裝包"]}),e.jsx(D,{onClick:x,className:"w-full gap-2 h-11",disabled:c.length===0||!p||d,size:"lg",children:d?e.jsxs(e.Fragment,{children:[e.jsx(b,{size:18,className:"animate-spin"}),"正在打包..."]}):e.jsxs(e.Fragment,{children:[e.jsx(j,{size:18,weight:"bold"}),"下載安裝包（",i.toUpperCase()," + 腳本）"]})}),e.jsxs("div",{className:"p-3 bg-accent/10 rounded-lg border border-accent/20",children:[e.jsxs("p",{className:"text-xs font-semibold text-accent-foreground mb-2 flex items-center gap-1",children:[e.jsx(_,{size:14}),"下載後的使用步驟："]}),e.jsx("ol",{className:"text-xs text-muted-foreground space-y-1 list-decimal list-inside",children:m.steps.map((t,f)=>e.jsx("li",{children:t},f))})]})]})]})]})})}export{re as ApplyIconDialog};
