@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <a href="https://pingqlin.github.io/icon-hero/">🌐 Live Demo</a> •
+  <a href="https://github.colorgeek.co/icon-hero/">🌐 Live Demo</a> •
   <a href="#-features">Features</a> •
   <a href="#-how-to-use">How to Use</a> •
   <a href="#-platform-support">Platform Support</a> •
