@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { UploadSimple, Folder } from '@phosphor-icons/react'
+import { Folder } from '@phosphor-icons/react'
 import { MascotDisplay } from './MascotDisplay'
 
 interface WorkspaceDropZoneProps {
