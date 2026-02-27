@@ -2,6 +2,10 @@
 
 > [中文版](README.zh-TW.md)
 
+[![Deploy to GitHub Pages](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg)](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml)
+
+🌐 **Live Demo**: [https://pingqlin.github.io/icon-hero/](https://pingqlin.github.io/icon-hero/)
+
 A professional icon conversion workspace combining real-time drag-and-drop tracking with automated script generation.
 
 ## ✨ Features
