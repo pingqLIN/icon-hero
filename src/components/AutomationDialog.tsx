@@ -45,6 +45,8 @@ const detectScriptType = (): ScriptType => {
   return 'bash'
 }
 
+const detectedType: ScriptType = detectScriptType()
+
 export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogProps) {
   const [scriptType, setScriptType] = useState<ScriptType>(() => detectScriptType())
   const [scriptFormat, setScriptFormat] = useState<'file' | 'inline'>('file')  // 腳本格式：檔案執行 / 複製貼上
@@ -59,7 +61,7 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
       setTargetPaths([])
       setGeneratedScript('')
     }
-  }, [open, detectedType])
+  }, [open])
 
   if (!item || item.status !== 'completed') return null
 
