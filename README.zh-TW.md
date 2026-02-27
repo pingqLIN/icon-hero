@@ -5,8 +5,12 @@
 <h1 align="center">ICON HERO</h1>
 
 <p align="center">
-  <b>專業圖示轉換工作區</b><br>
+  <b>瀏覽器圖示轉換與自動化工具包</b><br>
   將任意圖片轉換為 PNG · ICO · ICNS，並自動化跨平台圖示替換
+</p>
+
+<p align="center">
+  <b>💡 100% 本地運算 — 您的檔案不會離開瀏覽器。</b>
 </p>
 
 <p align="center">
@@ -16,7 +20,7 @@
   <img src="https://img.shields.io/badge/React-19-61dafb?logo=react" alt="React 19">
   <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript" alt="TypeScript">
   <img src="https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss" alt="Tailwind CSS">
-  <img src="https://img.shields.io/badge/授權-MIT-green" alt="MIT 授權">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/授權-MIT-green" alt="MIT 授權"></a>
 </p>
 
 <p align="center">
@@ -35,7 +39,20 @@
   <img src="docs/images/demo.gif" width="800" alt="Icon Hero 完整操作示範">
 </p>
 
-> 拖曳圖片、輸入網址，或直接貼上 — ICON HERO 即時轉換為三種格式，並生成可直接執行的自動化腳本。
+> 拖曳圖片、輸入網址，或直接貼上 — ICON HERO 自動轉換為三種格式，並生成可直接執行的自動化腳本。
+
+---
+
+## ⚡ 功能特色
+
+- **格式轉換** — 支援 PNG、JPG、ICO、ICNS 輸入，同時輸出三種格式（PNG + ICO + ICNS）
+- **多種輸入方式** — 上傳檔案、拖曳放置、剪貼簿貼上、或輸入任意網站 URL
+- **URL 解析** — 自動擷取網站的 favicon 與 Open Graph 圖片（受限於 CORS/CSP，部分網站可能失敗）
+- **視覺拖曳追蹤** — 拖曳圖示至資料夾時顯示即時動畫軌跡（建議使用 Chromium 系瀏覽器）
+- **自動化腳本生成** — 產生 PowerShell、Bash 及 osascript 批次替換腳本
+- **一鍵打包下載** — 將圖示 + 腳本 + 說明文件打包為 ZIP 檔
+- **批次處理** — 工作區佇列同時處理多個圖示
+- **雙主題系統** — Neon Forge（暗色）與 Creative Studio（亮色），含動態吉祥物動畫
 
 ---
 
@@ -53,19 +70,6 @@
     </td>
   </tr>
 </table>
-
----
-
-## ⚡ 功能特色
-
-- **格式轉換** — 支援 PNG、JPG、ICO、ICNS 輸入，同時輸出三種格式
-- **多種輸入方式** — 上傳檔案、拖曳放置、剪貼簿貼上、或輸入任意網站 URL
-- **URL 解析** — 自動擷取網站的 favicon 與 Open Graph 圖片
-- **視覺拖曳追蹤** — 拖曳圖示至資料夾時顯示即時動畫軌跡
-- **自動化腳本生成** — 產生 PowerShell、AppleScript、Bash 批次替換腳本
-- **一鍵打包下載** — 將圖示 + 腳本 + 說明文件打包為 ZIP 檔
-- **批次處理** — 工作區佇列同時處理多個圖示
-- **雙主題系統** — Neon Forge（暗色）與 Creative Studio（亮色），含動態吉祥物動畫
 
 ---
 
@@ -97,7 +101,7 @@
 | 操作 | 方式 |
 |------|------|
 | 下載單一格式 | 點擊 **PNG**、**ICO** 或 **ICNS** 按鈕 |
-| 拖曳至資料夾 | 長按格式按鈕並拖曳至目標位置 |
+| 拖曳至資料夾 | 長按格式按鈕並拖曳至目標位置（僅限 Chromium 系瀏覽器） |
 | 批次下載 ZIP | 點擊佇列上方的 **批次下載** 按鈕 |
 
 **第四步：生成自動化腳本** — 點擊佇列項目的 `</>` 按鈕
@@ -110,8 +114,10 @@
 ① 選擇平台：Windows / macOS / Linux
 ② 輸入目標資料夾路徑（支援直接拖曳資料夾）
 ③ 點擊「生成腳本」預覽腳本內容
-④ 複製貼上或下載為腳本檔案
+④ 複製貼上，或下載為腳本檔案直接執行
 ```
+
+> 生成的腳本在您的**本機電腦**執行，與瀏覽器無關，不需要伺服器。
 
 ---
 
@@ -120,8 +126,14 @@
 | 平台 | 格式 | 腳本語言 | 實作方式 |
 |------|------|----------|----------|
 | **Windows** | ICO | PowerShell | `desktop.ini` + `IconResource` |
-| **macOS** | ICNS | AppleScript / Bash | `fileicon` CLI 或 `osascript` |
-| **Linux** | PNG | Bash | `gio set metadata::custom-icon` |
+| **macOS** | ICNS | Bash + osascript | `fileicon` CLI 或 `osascript` fallback |
+| **Linux** | PNG | Bash | `gio set metadata::custom-icon`（GNOME/Nautilus） |
+
+### 注意事項
+
+- **macOS**：腳本優先使用 `fileicon`，請以 `brew install fileicon` 安裝；未安裝時自動 fallback 至 `osascript`。
+- **Linux**：`gio` 方式適用於 GNOME 桌面環境（Ubuntu、Fedora 等），其他桌面環境可能需要調整。
+- **Windows**：腳本透過 `desktop.ini` 設定資料夾圖示，需允許執行 PowerShell 腳本（`Set-ExecutionPolicy RemoteSigned`）。
 
 ### 腳本功能特色
 
@@ -129,6 +141,15 @@
 - **模糊搜尋** — 路徑不完全符合時自動在上層目錄搜尋
 - **批次套用** — 一次設定多個目標路徑
 - **雙模式輸出** — 複製貼上版（含暫停指令）與下載執行版
+
+### 瀏覽器相容性
+
+| 功能 | Chrome/Edge | Firefox | Safari |
+|------|-------------|---------|--------|
+| 格式轉換 | ✅ | ✅ | ✅ |
+| URL favicon 擷取 | ✅ | ✅ | ✅ |
+| 拖曳至資料夾下載 | ✅ | ❌ | ❌ |
+| 剪貼簿貼上 | ✅ | ✅ | ✅ |
 
 ---
 
@@ -144,9 +165,26 @@
 | ZIP 打包 | JSZip |
 | 圖示庫 | Phosphor Icons + Lucide React |
 
+### 程式架構
+
+```
+Upload/URL Input
+      ↓
+workspaceAnalyzer.ts   ← 分析檔案、擷取 favicon
+      ↓
+iconConverter.ts       ← Canvas API → PNG / ICO / ICNS
+      ↓
+WorkspaceQueue         ← 即時狀態顯示
+      ↓
+scriptGenerator.ts     ← PowerShell / Bash / osascript
+iconApplyPackager.ts   ← ZIP 打包（圖示 + 腳本 + README）
+```
+
 ---
 
 ## 🚀 本地開發
+
+**環境需求：** Node.js 18+
 
 ```bash
 # 安裝依賴
@@ -164,9 +202,15 @@ npm run preview
 
 ---
 
+## 🤝 參與貢獻
+
+歡迎提交 Issue 與 Pull Request，建議重大變更前先開 Issue 討論。
+
+---
+
 ## 🤖 AI 輔助開發聲明
 
-本專案使用 AI 工具輔助開發。
+本專案使用 AI 工具輔助開發（程式碼生成與文件撰寫）。
 
 **使用的 AI 模型/服務：** Claude Sonnet 4.6 (Anthropic)、Gemini 2.5 Pro (Google)
 
@@ -176,4 +220,4 @@ npm run preview
 
 ## 📜 授權條款
 
-MIT License — Spark Template 相關資源版權所有 © GitHub, Inc.
+[MIT License](LICENSE) — Spark Template 相關資源版權所有 © GitHub, Inc.
