@@ -225,6 +225,17 @@ export function WorkspaceQueueItem({
               {getStatusIcon()}
             </div>
 
+            {item.status === 'completed' && (item.convertedUrls?.png || item.originalUrl) && (
+              <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-primary/30 bg-background/50 flex-shrink-0">
+                <img
+                  src={item.convertedUrls?.png ?? item.originalUrl}
+                  alt={`${item.name} thumbnail`}
+                  className="w-full h-full object-contain"
+                  loading="lazy"
+                />
+              </div>
+            )}
+
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 {getTypeIcon()}

@@ -38,17 +38,15 @@ interface AutomationDialogProps {
   onOpenChange: (open: boolean) => void
 }
 
-export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogProps) {
-  // 自動偵測作業系統
-  const detectScriptType = (): ScriptType => {
-    const ua = navigator.userAgent.toLowerCase()
-    if (ua.includes('win')) return 'powershell'
-    if (ua.includes('mac')) return 'applescript'
-    return 'bash'
-  }
+const detectScriptType = (): ScriptType => {
+  const ua = navigator.userAgent.toLowerCase()
+  if (ua.includes('win')) return 'powershell'
+  if (ua.includes('mac')) return 'applescript'
+  return 'bash'
+}
 
-  const detectedType = detectScriptType()
-  const [scriptType, setScriptType] = useState<ScriptType>(detectedType)
+export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogProps) {
+  const [scriptType, setScriptType] = useState<ScriptType>(() => detectScriptType())
   const [scriptFormat, setScriptFormat] = useState<'file' | 'inline'>('file')  // 腳本格式：檔案執行 / 複製貼上
   const [targetPaths, setTargetPaths] = useState<string[]>([])
   const [generatedScript, setGeneratedScript] = useState('')
@@ -56,7 +54,7 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
   // 開啟時重置狀態（包含恢復為偵測到的平台）
   useEffect(() => {
     if (open) {
-      setScriptType(detectedType)
+      setScriptType(detectScriptType())
       setScriptFormat('file')  // 預設為檔案執行版
       setTargetPaths([])
       setGeneratedScript('')

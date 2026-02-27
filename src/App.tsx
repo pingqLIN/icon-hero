@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { UploadSimple, Link as LinkIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
@@ -7,15 +7,16 @@ import { Toaster } from '@/components/ui/sonner'
 import { WorkspaceDropZone } from '@/components/WorkspaceDropZone'
 import { LogoDisplay } from '@/components/LogoDisplay'
 import { WorkspaceQueue } from '@/components/WorkspaceQueue'
-import { PreviewDialog } from '@/components/PreviewDialog'
-import { AutomationDialog } from '@/components/AutomationDialog'
-import { ApplyIconDialog } from '@/components/ApplyIconDialog'
 // import { DragInstructions } from '@/components/DragInstructions'
 import { DragTrackingOverlay } from '@/components/DragTrackingOverlay'
 import { WorkspaceItem } from '@/types/workspace'
 import { analyzeDroppedItem } from '@/lib/workspaceAnalyzer'
 import { convertIcon } from '@/lib/iconConverter'
 import { toast } from 'sonner'
+
+const PreviewDialog = lazy(() => import('@/components/PreviewDialog').then(module => ({ default: module.PreviewDialog })))
+const AutomationDialog = lazy(() => import('@/components/AutomationDialog').then(module => ({ default: module.AutomationDialog })))
+const ApplyIconDialog = lazy(() => import('@/components/ApplyIconDialog').then(module => ({ default: module.ApplyIconDialog })))
 
 
 function App() {
@@ -84,6 +85,12 @@ function App() {
   }
 
   const handleWorkspaceDrop = useCallback(async (items: (File | string)[]) => {
+    if (items.length === 0 || isProcessing) {
+      return
+    }
+
+    setIsProcessing(true)
+
     const newItems: WorkspaceItem[] = items.map((item, index) => ({
       id: `${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
       name: typeof item === 'string' ? new URL(item).hostname : item.name,
@@ -95,77 +102,78 @@ function App() {
 
     setWorkspaceItems(prev => [...prev, ...newItems])
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i]
-      const workspaceItem = newItems[i]
+    try {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i]
+        const workspaceItem = newItems[i]
 
-      try {
-        setWorkspaceItems(prev => prev.map(wi =>
-          wi.id === workspaceItem.id ? { ...wi, status: 'analyzing' } : wi
-        ))
+        try {
+          setWorkspaceItems(prev => prev.map(wi =>
+            wi.id === workspaceItem.id ? { ...wi, status: 'analyzing' } : wi
+          ))
 
-        const analyzed = await analyzeDroppedItem(item)
+          const analyzed = await analyzeDroppedItem(item)
 
-        setWorkspaceItems(prev => prev.map(wi =>
-          wi.id === workspaceItem.id
-            ? { ...wi, name: analyzed.name, type: analyzed.type, originalUrl: analyzed.url, format: analyzed.format }
-            : wi
-        ))
-
-        const formats = ['png', 'ico', 'icns'] as const
-
-        for (const targetFormat of formats) {
           setWorkspaceItems(prev => prev.map(wi =>
             wi.id === workspaceItem.id
-              ? { ...wi, status: 'converting', convertedFormat: targetFormat }
+              ? { ...wi, name: analyzed.name, type: analyzed.type, originalUrl: analyzed.url, format: analyzed.format, status: 'converting' }
               : wi
           ))
 
-          const result = await convertIcon(analyzed.url, targetFormat)
+          const formats = ['png', 'ico', 'icns'] as const
+          const convertedResults = await Promise.all(
+            formats.map(async (targetFormat) => {
+              const result = await convertIcon(analyzed.url, targetFormat)
+              return { targetFormat, result }
+            })
+          )
 
           setWorkspaceItems(prev => prev.map(wi => {
-            if (wi.id === workspaceItem.id) {
-              const existingUrls = wi.convertedUrls || {}
-              const existingBlobs = wi.convertedBlobs || {}
-
-              return {
-                ...wi,
-                status: 'completed',
-                convertedUrls: {
-                  ...existingUrls,
-                  [targetFormat]: result.url
-                },
-                convertedBlobs: {
-                  ...existingBlobs,
-                  [targetFormat]: result.blob
-                },
-                completedAt: Date.now()
-              }
+            if (wi.id !== workspaceItem.id) {
+              return wi
             }
-            return wi
-          }))
-        }
 
-        toast.success('轉換完成', {
-          description: `${analyzed.name} 已成功轉換為所有格式`
-        })
-      } catch (error) {
-        setWorkspaceItems(prev => prev.map(wi =>
-          wi.id === workspaceItem.id
-            ? {
+            const convertedUrls = { ...(wi.convertedUrls || {}) }
+            const convertedBlobs = { ...(wi.convertedBlobs || {}) }
+
+            for (const { targetFormat, result } of convertedResults) {
+              convertedUrls[targetFormat] = result.url
+              convertedBlobs[targetFormat] = result.blob
+            }
+
+            return {
               ...wi,
-              status: 'error',
-              error: error instanceof Error ? error.message : '轉換失敗'
+              status: 'completed',
+              convertedFormat: undefined,
+              convertedUrls,
+              convertedBlobs,
+              completedAt: Date.now()
             }
-            : wi
-        ))
+          }))
 
-        toast.error('轉換失敗', {
-          description: `處理 ${workspaceItem.name} 時發生錯誤`
-        })
+          toast.success('轉換完成', {
+            description: `${analyzed.name} 已成功轉換為所有格式`
+          })
+        } catch (error) {
+          setWorkspaceItems(prev => prev.map(wi =>
+            wi.id === workspaceItem.id
+              ? {
+                ...wi,
+                status: 'error',
+                error: error instanceof Error ? error.message : '轉換失敗'
+              }
+              : wi
+          ))
+
+          toast.error('轉換失敗', {
+            description: `處理 ${workspaceItem.name} 時發生錯誤`
+          })
+        }
       }
+    } finally {
+      setIsProcessing(false)
     }
-  }, [])
+  }, [isProcessing])
 
   const handlePreview = (item: WorkspaceItem) => {
     setPreviewItem(item)
@@ -379,23 +387,25 @@ function App() {
           id="icon-upload"
         />
 
-        <PreviewDialog
-          item={previewItem}
-          open={showPreview}
-          onOpenChange={setShowPreview}
-        />
+        <Suspense fallback={null}>
+          <PreviewDialog
+            item={previewItem}
+            open={showPreview}
+            onOpenChange={setShowPreview}
+          />
 
-        <AutomationDialog
-          item={automationItem}
-          open={showAutomation}
-          onOpenChange={setShowAutomation}
-        />
+          <AutomationDialog
+            item={automationItem}
+            open={showAutomation}
+            onOpenChange={setShowAutomation}
+          />
 
-        <ApplyIconDialog
-          item={applyItem}
-          open={showApply}
-          onOpenChange={setShowApply}
-        />
+          <ApplyIconDialog
+            item={applyItem}
+            open={showApply}
+            onOpenChange={setShowApply}
+          />
+        </Suspense>
       </div>
     </>
   );

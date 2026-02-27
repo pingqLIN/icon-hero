@@ -237,16 +237,6 @@ export function WorkspaceQueue({
 
           <div className="overflow-hidden rounded-xl border border-primary/20 p-4">
             <div className="flex items-center gap-3 mb-3">
-              {/* 顯示第一個完成項目的縮圖 */}
-              {completedItems[0]?.convertedUrls?.png && (
-                <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-primary/30 bg-background/50 flex-shrink-0">
-                  <img
-                    src={completedItems[0].convertedUrls.png}
-                    alt="completed icon"
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              )}
               <h3 className="text-sm font-semibold text-muted-foreground">已完成</h3>
             </div>
             <ScrollArea className="h-auto max-h-[600px]">
