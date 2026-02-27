@@ -20,6 +20,10 @@ const ApplyIconDialog = lazy(() => import('@/components/ApplyIconDialog').then(m
 
 
 function App() {
+  const wait = (ms: number) => new Promise<void>(resolve => {
+    setTimeout(resolve, ms)
+  })
+
   // Theme State — 預設明亮場景
   const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
@@ -127,6 +131,9 @@ function App() {
               return { targetFormat, result }
             })
           )
+
+          // 系統性緩衝：讓流程在進入可下載階段前保留 1.5 秒轉換體感
+          await wait(1500)
 
           setWorkspaceItems(prev => prev.map(wi => {
             if (wi.id !== workspaceItem.id) {
@@ -347,6 +354,17 @@ function App() {
                 mascotType={theme === 'dark' ? 'bot' : 'hero'}
                 hasCompletedItems={hasCompletedItems}
               />
+              <div className="mt-4 grid gap-3 text-center md:grid-cols-3">
+                <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
+                  <p className="text-sm font-medium">1. ICON 或網址拖拉進工作區</p>
+                </div>
+                <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
+                  <p className="text-sm font-medium">2. 系統自動偵測檔案類型並轉換</p>
+                </div>
+                <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
+                  <p className="text-sm font-medium">3. 提供 PNG / ICO / ICNS 等格式下載</p>
+                </div>
+              </div>
             </div>
 
             {workspaceItems.length > 0 && (
@@ -376,6 +394,27 @@ function App() {
           </div>
         </main>
 
+        <footer className="border-t border-border/70">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex flex-col gap-2 text-xs text-muted-foreground">
+              <p>
+                GitHub：
+                <a
+                  href="https://github.com/pingqLIN/icon-hero"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-foreground transition-colors"
+                >
+                  https://github.com/pingqLIN/icon-hero
+                </a>
+              </p>
+              <p>
+                免責聲明：本網站僅提供線上圖檔格式轉換服務，請留意素材版權並確認您擁有合法使用與轉換權利。
+              </p>
+            </div>
+          </div>
+        </footer>
+
         <input
           ref={fileInputRef}
           type="file"
@@ -384,6 +423,7 @@ function App() {
           onChange={handleFileChange}
           className="hidden"
           id="icon-upload"
+          aria-label="選擇圖檔上傳"
         />
 
         <Suspense fallback={null}>
