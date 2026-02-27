@@ -1,5 +1,9 @@
 # Icon Changer - 圖示轉換與自動化工具
 
+[![Deploy to GitHub Pages](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg)](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml)
+
+🌐 **線上服務**: [https://pingqlin.github.io/icon-hero/](https://pingqlin.github.io/icon-hero/)
+
 一個專業的圖示轉換工作區，結合即時拖曳追蹤與自動化腳本生成功能。
 
 ## ✨ 主要功能

@@ -10,6 +10,7 @@ const projectRoot = process.env.PROJECT_ROOT || import.meta.dirname
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: (() => { const b = process.env.BASE_URL ?? '/'; return b.endsWith('/') ? b : `${b}/`; })(),
   plugins: [
     react(),
     tailwindcss(),
