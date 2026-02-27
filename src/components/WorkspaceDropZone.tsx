@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { UploadSimple, Folder } from '@phosphor-icons/react'
+import { Folder } from '@phosphor-icons/react'
 import { MascotDisplay } from './MascotDisplay'
 
 interface WorkspaceDropZoneProps {
@@ -10,14 +11,24 @@ interface WorkspaceDropZoneProps {
 }
 
 export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', hasCompletedItems = false }: WorkspaceDropZoneProps) {
+  const [isDragActive, setIsDragActive] = useState(false)
+
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
+    if (!isDragActive) setIsDragActive(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragActive(false)
   }
 
   const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
+    setIsDragActive(false)
 
     const items: (File | string)[] = []
 
@@ -75,11 +86,16 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
       animate={{ opacity: 1, y: 0 }}
       className="relative group"
       onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onPaste={handlePaste}
       tabIndex={0}
     >
-      <div className="relative border-2 border-dashed border-border rounded-2xl bg-secondary/5 p-12 transition-all duration-300 hover:border-primary/50 hover:bg-secondary/10 hover:shadow-[0_0_30px_rgba(var(--primary),0.1)] overflow-hidden">
+      <div className={`relative border-2 border-dashed rounded-2xl p-12 transition-all duration-300 overflow-hidden ${
+        isDragActive 
+          ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(var(--primary),0.2)]' 
+          : 'border-border bg-secondary/5 hover:border-primary/50 hover:bg-secondary/10 hover:shadow-[0_0_30px_rgba(var(--primary),0.1)]'
+      }`}>
 
         {/* Background Grid Pattern */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
@@ -94,7 +110,7 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
             <div className="scale-125 transition-transform duration-300 group-hover:scale-[1.35]">
               <MascotDisplay
                 type={mascotType}
-                state={isProcessing ? 'processing' : 'idle'}
+                state={isProcessing ? 'processing' : isDragActive ? 'analyzing' : 'idle'}
               />
             </div>
           ) : (

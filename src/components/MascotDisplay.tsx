@@ -1,12 +1,20 @@
 import { motion } from 'framer-motion'
 import { Cube } from '@phosphor-icons/react'
-import techBotImage from '@/assets/mascot_tech_rbot.png'
-import heroToolImage from '@/assets/mascot_hero_tool.png'
-import techBotLookDownImage from '@/assets/mascot_tech_rbot_look_down.png'
-import heroToolLookDownImage from '@/assets/mascot_hero_tool_look_down.png'
+
+// Bot Images
+import botFlyImage from '@/assets/bot-fly.png'
+import botWaveImage from '@/assets/bot-wave.png'
+import botThumbsupImage from '@/assets/bot-thumbsup.png'
+import botHoldImage from '@/assets/bot-hold.png'
+
+// Hero Images
+import heroWelcomeImage from '@/assets/hero-welcome.png'
+import heroFlyImage from '@/assets/hero-fly.png'
+import heroWaveImage from '@/assets/hero-wave.png'
+import heroThinkImage from '@/assets/hero-think.png'
 
 type MascotType = 'bot' | 'hero' | 'abstract'
-type MascotState = 'idle' | 'processing' | 'success' | 'error'
+type MascotState = 'idle' | 'processing' | 'success' | 'error' | 'analyzing'
 type MascotVariant = 'default' | 'lookDown'
 
 interface MascotDisplayProps {
@@ -21,21 +29,34 @@ export function MascotDisplay({ type = 'bot', state = 'idle', className = '', va
   // ------------------------------------------------------------------
   // 1. TECH-BOT (Neon Forge Theme)
   // ------------------------------------------------------------------
+  const getBotImage = () => {
+    switch (state) {
+      case 'idle': return botFlyImage
+      case 'analyzing': return botHoldImage
+      case 'processing': return botThumbsupImage
+      case 'success': return botWaveImage
+      case 'error': return botHoldImage
+      default: return botFlyImage
+    }
+  }
+
   const renderBot = () => (
     <div className="relative w-48 h-48 flex items-center justify-center">
       <motion.img
-        src={variant === 'lookDown' ? techBotLookDownImage : techBotImage}
-        initial={{ y: 0 }}
-        animate={state === 'processing'
-          ? { y: [0, -10, 0], rotate: [0, 2, -2, 0], scale: [1, 1.05, 1] }
-          : variant === 'lookDown'
-          ? { y: [0, -5, 0] }
-          : { y: [0, -15, 0] }
-        }
+        key={state + variant} // Force re-render on state change for animation
+        src={getBotImage()}
+        initial={{ y: 0, opacity: 0, scale: 0.9 }}
+        animate={{ 
+          y: state === 'processing' ? [0, -10, 0] : variant === 'lookDown' ? [0, -5, 0] : [0, -15, 0],
+          opacity: 1,
+          scale: 1,
+          rotate: state === 'processing' ? [0, 2, -2, 0] : 0
+        }}
         transition={{
-          duration: state === 'processing' ? 0.5 : variant === 'lookDown' ? 2.5 : 3,
-          repeat: Infinity,
-          ease: "easeInOut"
+          y: { duration: state === 'processing' ? 0.5 : variant === 'lookDown' ? 2.5 : 3, repeat: Infinity, ease: "easeInOut" },
+          opacity: { duration: 0.3 },
+          scale: { duration: 0.3 },
+          rotate: { duration: 0.5, repeat: Infinity, ease: "easeInOut" }
         }}
         className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]"
         alt="Tech Bot"
@@ -52,21 +73,34 @@ export function MascotDisplay({ type = 'bot', state = 'idle', className = '', va
   // ------------------------------------------------------------------
   // 2. TOOL HERO (Creative Studio Theme)
   // ------------------------------------------------------------------
+  const getHeroImage = () => {
+    switch (state) {
+      case 'idle': return heroWelcomeImage
+      case 'analyzing': return heroThinkImage
+      case 'processing': return heroFlyImage
+      case 'success': return heroWaveImage
+      case 'error': return heroThinkImage
+      default: return heroWelcomeImage
+    }
+  }
+
   const renderHero = () => (
     <div className="relative w-48 h-48 flex items-center justify-center">
       <motion.img
-        src={variant === 'lookDown' ? heroToolLookDownImage : heroToolImage}
-        initial={{ y: 0 }}
-        animate={state === 'processing'
-          ? { y: [0, -20, 0], rotate: [0, -5, 5, 0] }
-          : variant === 'lookDown'
-          ? { y: [0, -8, 0] }
-          : { y: [0, -15, 0] }
-        }
+        key={state + variant} // Force re-render on state change for animation
+        src={getHeroImage()}
+        initial={{ y: 0, opacity: 0, scale: 0.9 }}
+        animate={{ 
+          y: state === 'processing' ? [0, -15, 0] : variant === 'lookDown' ? [0, -8, 0] : [0, -15, 0],
+          opacity: 1,
+          scale: 1,
+          rotate: state === 'processing' ? [0, -5, 5, 0] : 0
+        }}
         transition={{
-          duration: state === 'processing' ? 0.8 : variant === 'lookDown' ? 3 : 4,
-          repeat: Infinity,
-          ease: "easeInOut"
+          y: { duration: state === 'processing' ? 0.8 : variant === 'lookDown' ? 3 : 4, repeat: Infinity, ease: "easeInOut" },
+          opacity: { duration: 0.3 },
+          scale: { duration: 0.3 },
+          rotate: { duration: 0.8, repeat: Infinity, ease: "easeInOut" }
         }}
         className="w-full h-full object-contain relative z-10 drop-shadow-[0_10px_20px_rgba(59,130,246,0.4)]"
         alt="Tool Hero"
