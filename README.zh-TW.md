@@ -1,74 +1,179 @@
-# Icon Changer - 圖示轉換與自動化工具
+<p align="center">
+  <img src="src/assets/ICONHERO.png" width="120" alt="Icon Hero Logo">
+</p>
 
-[![Deploy to GitHub Pages](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg)](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml)
+<h1 align="center">ICON HERO</h1>
 
-🌐 **線上服務**: [https://pingqlin.github.io/icon-hero/](https://pingqlin.github.io/icon-hero/)
+<p align="center">
+  <b>專業圖示轉換工作區</b><br>
+  將任意圖片轉換為 PNG · ICO · ICNS，並自動化跨平台圖示替換
+</p>
 
-一個專業的圖示轉換工作區，結合即時拖曳追蹤與自動化腳本生成功能。
+<p align="center">
+  <a href="https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml">
+    <img src="https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg" alt="部署狀態">
+  </a>
+  <img src="https://img.shields.io/badge/React-19-61dafb?logo=react" alt="React 19">
+  <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/授權-MIT-green" alt="MIT 授權">
+</p>
 
-## ✨ 主要功能
-
-### 🔄 圖示轉換
-- 支援多種圖檔格式（PNG, JPG, ICO, ICNS）
-- 自動轉換為 PNG、ICO、ICNS 三種格式
-- 批次處理多個圖示檔案
-- URL 圖示解析與下載
-
-### 🎯 拖曳互動
-- **視覺追蹤系統**: 拖曳檔案時顯示即時動畫軌跡
-- **智慧拖放**: 直接拖曳轉換後的圖示至系統資料夾
-- **自訂拖曳預覽**: 顯示檔案名稱的拖曳圖示
-- **跨平台支援**: Windows (ICO)、macOS (ICNS)、Linux (PNG)
-
-### 🤖 自動化腳本生成
-- **Windows PowerShell**: 自動套用 ICO 至多個資料夾（含 desktop.ini 設定）
-- **macOS AppleScript**: 批次更新資料夾圖示
-- **Linux Bash**: 設定 .directory 檔案
-- **路徑拖放**: 可直接拖曳資料夾至腳本生成器
-- **一鍵下載**: 生成的腳本可複製或下載
-
-### 📦 批次下載
-- 打包所有格式為 ZIP 檔案
-- 依格式篩選下載（僅 PNG / ICO / ICNS）
-- 自動組織檔案結構
-
-## 🚀 GitHub Pages 部署
-
-- 已新增 `.github/workflows/deploy-pages.yml`，使用 `peaceiris/actions-gh-pages@v4.0.0` 部署 `dist/` 到 `gh-pages` 分支。
-- 建置會加上 `--base "/<repo-name>/"`，確保 project pages 子路徑下的靜態資源可正確載入。
-
-## 🎨 設計特色
-
-- **現代化介面**: 使用 Space Grotesk 字型與紫藍色調
-- **流暢動畫**: Framer Motion 驅動的狀態轉場
-- **即時回饋**: 處理狀態即時更新
-- **響應式設計**: 完整支援桌面與行動裝置
-
-## 🛠️ 技術架構
-
-- **框架**: React 19 + TypeScript
-- **UI 元件**: Shadcn UI (v4)
-- **樣式**: Tailwind CSS 4
-- **動畫**: Framer Motion
-- **圖示**: Phosphor Icons
-- **建置工具**: Vite
-
-## 📋 使用說明
-
-1. **上傳圖示**: 拖曳圖檔或輸入 URL
-2. **等待轉換**: 系統自動分析並轉換為多種格式
-3. **拖曳使用**: 直接拖曳格式按鈕至目標位置
-4. **生成腳本**: 點擊自動化按鈕，設定目標路徑，生成批次腳本
-5. **批次下載**: 使用下載選單打包所有檔案
-
-## 🎯 適用場景
-
-- 開發者自訂應用程式圖示
-- 系統管理員批次更新資料夾圖示
-- 設計師快速轉換圖示格式
-- 網站管理員處理 favicon
+<p align="center">
+  <a href="https://pingqlin.github.io/icon-hero/">🌐 線上體驗</a> •
+  <a href="#-功能特色">功能特色</a> •
+  <a href="#️-操作步驟">操作步驟</a> •
+  <a href="#️-平台支援">平台支援</a> •
+  <a href="README.md">English</a>
+</p>
 
 ---
 
-📄 **授權條款**  
-Spark Template 相關資源依 MIT 授權條款提供，版權所有 © GitHub, Inc.
+## ✨ 功能展示
+
+<p align="center">
+  <img src="docs/images/demo.gif" width="800" alt="Icon Hero 完整操作示範">
+</p>
+
+> 拖曳圖片、輸入網址，或直接貼上 — ICON HERO 即時轉換為三種格式，並生成可直接執行的自動化腳本。
+
+---
+
+## 🎨 雙主題切換
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/images/screenshot-light.png" alt="Creative Studio — 亮色主題" width="420">
+      <br><b>Creative Studio</b> — 亮色主題搭配英雄吉祥物
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/images/screenshot-dark.png" alt="Neon Forge — 暗色主題" width="420">
+      <br><b>Neon Forge</b> — 暗色主題搭配機器人吉祥物
+    </td>
+  </tr>
+</table>
+
+---
+
+## ⚡ 功能特色
+
+- **格式轉換** — 支援 PNG、JPG、ICO、ICNS 輸入，同時輸出三種格式
+- **多種輸入方式** — 上傳檔案、拖曳放置、剪貼簿貼上、或輸入任意網站 URL
+- **URL 解析** — 自動擷取網站的 favicon 與 Open Graph 圖片
+- **視覺拖曳追蹤** — 拖曳圖示至資料夾時顯示即時動畫軌跡
+- **自動化腳本生成** — 產生 PowerShell、AppleScript、Bash 批次替換腳本
+- **一鍵打包下載** — 將圖示 + 腳本 + 說明文件打包為 ZIP 檔
+- **批次處理** — 工作區佇列同時處理多個圖示
+- **雙主題系統** — Neon Forge（暗色）與 Creative Studio（亮色），含動態吉祥物動畫
+
+---
+
+## 🗺️ 操作步驟
+
+<p align="center">
+  <img src="docs/images/workflow-diagram.svg" width="800" alt="四步驟操作流程：上傳 → 分析 → 轉換 → 套用">
+</p>
+
+### 詳細說明
+
+**第一步：輸入圖示**
+
+```
+方式 A：點擊「選擇圖檔」選取本機檔案
+方式 B：點擊「從 URL 載入」貼上任意網站網址
+方式 C：直接拖曳圖檔至工作區拖放區
+方式 D：使用 ⌘/Ctrl + V 貼上剪貼簿圖片
+```
+
+**第二步：等待自動轉換** — 佇列會顯示即時處理進度
+
+<p align="center">
+  <img src="docs/images/screenshot-result.png" width="700" alt="轉換完成後佇列顯示 PNG/ICO/ICNS 下載按鈕">
+</p>
+
+**第三步：下載圖示**
+
+| 操作 | 方式 |
+|------|------|
+| 下載單一格式 | 點擊 **PNG**、**ICO** 或 **ICNS** 按鈕 |
+| 拖曳至資料夾 | 長按格式按鈕並拖曳至目標位置 |
+| 批次下載 ZIP | 點擊佇列上方的 **批次下載** 按鈕 |
+
+**第四步：生成自動化腳本** — 點擊佇列項目的 `</>` 按鈕
+
+<p align="center">
+  <img src="docs/images/screenshot-automation.png" width="700" alt="自動化腳本生成器對話框 — Windows/macOS/Linux 標籤頁">
+</p>
+
+```
+① 選擇平台：Windows / macOS / Linux
+② 輸入目標資料夾路徑（支援直接拖曳資料夾）
+③ 點擊「生成腳本」預覽腳本內容
+④ 複製貼上或下載為腳本檔案
+```
+
+---
+
+## 🖥️ 平台支援
+
+| 平台 | 格式 | 腳本語言 | 實作方式 |
+|------|------|----------|----------|
+| **Windows** | ICO | PowerShell | `desktop.ini` + `IconResource` |
+| **macOS** | ICNS | AppleScript / Bash | `fileicon` CLI 或 `osascript` |
+| **Linux** | PNG | Bash | `gio set metadata::custom-icon` |
+
+### 腳本功能特色
+
+- **路徑正規化** — 支援 `%USERPROFILE%`、`~`、混合斜線
+- **模糊搜尋** — 路徑不完全符合時自動在上層目錄搜尋
+- **批次套用** — 一次設定多個目標路徑
+- **雙模式輸出** — 複製貼上版（含暫停指令）與下載執行版
+
+---
+
+## 🛠️ 技術架構
+
+| 分類 | 技術 |
+|------|------|
+| 框架 | React 19 + TypeScript |
+| 建置工具 | Vite 7 |
+| UI 元件 | Shadcn UI (Radix UI primitives) |
+| 樣式 | Tailwind CSS 4 |
+| 動畫 | Framer Motion |
+| ZIP 打包 | JSZip |
+| 圖示庫 | Phosphor Icons + Lucide React |
+
+---
+
+## 🚀 本地開發
+
+```bash
+# 安裝依賴
+npm install
+
+# 啟動開發伺服器 (http://localhost:5173)
+npm run dev
+
+# 建置正式版本
+npm run build
+
+# 預覽建置結果
+npm run preview
+```
+
+---
+
+## 🤖 AI 輔助開發聲明
+
+本專案使用 AI 工具輔助開發。
+
+**使用的 AI 模型/服務：** Claude Sonnet 4.6 (Anthropic)、Gemini 2.5 Pro (Google)
+
+> ⚠️ **免責聲明：** 作者已盡力審查並驗證 AI 生成的程式碼，但無法保證其正確性、安全性或適用性。使用風險由使用者自行承擔。
+
+---
+
+## 📜 授權條款
+
+MIT License — Spark Template 相關資源版權所有 © GitHub, Inc.
