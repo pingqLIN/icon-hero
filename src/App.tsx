@@ -7,6 +7,7 @@ import { Toaster } from '@/components/ui/sonner'
 import { WorkspaceDropZone } from '@/components/WorkspaceDropZone'
 import { LogoDisplay } from '@/components/LogoDisplay'
 import { WorkspaceQueue } from '@/components/WorkspaceQueue'
+import { IconResourcesSection } from '@/components/IconResourcesSection'
 // import { DragInstructions } from '@/components/DragInstructions'
 import { DragTrackingOverlay } from '@/components/DragTrackingOverlay'
 import { WorkspaceItem } from '@/types/workspace'
@@ -392,6 +393,9 @@ function App() {
               </div>
             )}
           </div>
+
+          {/* Top 10 Icon Resource Websites */}
+          <IconResourcesSection />
         </main>
 
         <footer className="border-t border-border/70">
