@@ -61,7 +61,7 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
       setTargetPaths([])
       setGeneratedScript('')
     }
-  }, [open])
+  }, [open, detectedType])
 
   if (!item || item.status !== 'completed') return null
 
