@@ -33,7 +33,7 @@ function App() {
   }
 
   // Original Logic
-  const [isProcessing, setIsProcessing] = useState(false)
+  const [isProcessing] = useState(false)
   const [urlInput, setUrlInput] = useState('')
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [workspaceItems, setWorkspaceItems] = useState<WorkspaceItem[]>([])
