@@ -73,6 +73,29 @@
 
 ---
 
+## 🌍 Top 10 Icon Resources
+
+<p align="center">
+  <img src="docs/images/screenshot-icon-resources.png" width="900" alt="Top 10 icon resource cards in Icon Hero">
+</p>
+
+The workspace now includes a curated "Top 10 Icon Resources" section (right above the footer) for quick discovery and style comparison.
+
+| Website | Icon Count | License | Highlight |
+|---------|------------|---------|-----------|
+| Flaticon | 22M+ | Free + Paid | Largest icon library |
+| Icons8 | 1.5M+ | Free + Paid | Wide style coverage |
+| The Noun Project | 5M+ | Free + Paid | Minimal design system |
+| Iconfinder | 6M+ | Free + Paid | Premium-quality sets |
+| Font Awesome | 30k+ | Free + Paid | Frontend classic |
+| Phosphor Icons | 9k+ | Free | Used by this project |
+| Heroicons | 300+ | Free | Official Tailwind icons |
+| Lucide | 1.5k+ | Free | Active open-source community |
+| Feather Icons | 287 | Free | Minimal open-source set |
+| Material Icons | 2500+ | Free | Official Google set |
+
+---
+
 ## 🗺️ How to Use
 
 <p align="center">

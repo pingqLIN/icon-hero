@@ -73,6 +73,29 @@
 
 ---
 
+## 🌍 全球 Top 10 Icon 資源
+
+<p align="center">
+  <img src="docs/images/screenshot-icon-resources.png" width="900" alt="ICON HERO 內建 Top 10 Icon 資源卡片">
+</p>
+
+在工作區下方（footer 上方）新增了「全球 Top 10 Icon 資源」區塊，方便直接比較網站風格、授權與圖示量級。
+
+| 網站 | 圖示數 | 授權 | 特色 |
+|------|--------|------|------|
+| Flaticon | 22M+ | 免費 + 付費 | 最大圖示庫 |
+| Icons8 | 1.5M+ | 免費 + 付費 | 風格多元 |
+| The Noun Project | 5M+ | 免費 + 付費 | 極簡設計 |
+| Iconfinder | 6M+ | 免費 + 付費 | 品質首選 |
+| Font Awesome | 30k+ | 免費 + 付費 | 前端經典 |
+| Phosphor Icons | 9k+ | 免費 | 本站採用 |
+| Heroicons | 300+ | 免費 | Tailwind 官方 |
+| Lucide | 1.5k+ | 免費 | 社群活躍 |
+| Feather Icons | 287 | 免費 | 極簡開源 |
+| Material Icons | 2500+ | 免費 | Google 官方 |
+
+---
+
 ## 🗺️ 操作步驟
 
 <p align="center">
