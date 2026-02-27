@@ -3,6 +3,7 @@ import { Cube } from '@phosphor-icons/react'
 
 // Bot Images
 import botFlyImage from '@/assets/bot-fly.png'
+import botFlyHeroImage from '@/assets/bot-fly-hero.png'
 import botWaveImage from '@/assets/bot-wave.png'
 import botThumbsupImage from '@/assets/bot-thumbsup.png'
 import botHoldImage from '@/assets/bot-hold.png'
@@ -31,12 +32,12 @@ export function MascotDisplay({ type = 'bot', state = 'idle', className = '', va
   // ------------------------------------------------------------------
   const getBotImage = () => {
     switch (state) {
-      case 'idle': return botFlyImage
+      case 'idle': return variant === 'lookDown' ? botFlyImage : botFlyHeroImage
       case 'analyzing': return botHoldImage
       case 'processing': return botThumbsupImage
       case 'success': return botWaveImage
       case 'error': return botHoldImage
-      default: return botFlyImage
+      default: return variant === 'lookDown' ? botFlyImage : botFlyHeroImage
     }
   }
 
@@ -47,7 +48,7 @@ export function MascotDisplay({ type = 'bot', state = 'idle', className = '', va
         src={getBotImage()}
         initial={{ y: 0, opacity: 0, scale: 0.9 }}
         animate={{ 
-          y: state === 'processing' ? [0, -10, 0] : variant === 'lookDown' ? [0, -5, 0] : [0, -15, 0],
+          y: state === 'processing' ? [0, -10, 0] : variant === 'lookDown' ? [0, -2, 0] : [0, -15, 0],
           opacity: 1,
           scale: 1,
           rotate: state === 'processing' ? [0, 2, -2, 0] : 0

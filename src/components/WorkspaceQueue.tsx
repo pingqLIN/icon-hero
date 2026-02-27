@@ -217,25 +217,35 @@ export function WorkspaceQueue({
 
       {completedItems.length > 0 && (
         <div className="relative">
-          {/* 吉祥物 - 向下看，遮罩穿透效果 */}
-          {/* Tool Hero (hero) → PNG 按鍵上方左側，放大110%，向上移動30px */}
-          {/* Tech-Bot (bot) → ICO 按鍵上方，向上移動13px */}
-          <div className={`absolute z-20 pointer-events-none ${
+          {/* 吉祥物 - Bot: 趴在卡片邊框上，z-10 讓卡片遮住白板身體，只露頭部和手 */}
+          {/* Hero: 原有浮在上方效果不變 */}
+          <div className={`absolute pointer-events-none ${
             mascotType === 'hero'
-              ? 'right-[210px] -top-[70px]'  // PNG 按鍵上方，向上移動30px (原-40px → -70px)
-              : 'right-[110px] -top-[53px]'  // ICO 按鍵上方，向上移動13px (原-40px → -53px)
+              ? 'z-20 right-[213px] -top-[84px]'
+              : 'z-10 right-[80px] -top-[73px]'
           }`}>
-            <MascotDisplay
-              type={mascotType}
-              state="success"
-              variant="lookDown"
-              className={`drop-shadow-2xl w-32 h-32 ${
-                mascotType === 'hero' ? 'scale-110' : ''
-              }`}
-            />
+            {mascotType === 'bot' ? (
+              <div className="scale-[1.3] origin-top">
+                <MascotDisplay
+                  type="bot"
+                  state="idle"
+                  variant="lookDown"
+                  className="drop-shadow-2xl"
+                />
+              </div>
+            ) : (
+              <MascotDisplay
+                type="hero"
+                state="analyzing"
+                variant="lookDown"
+                className="drop-shadow-2xl scale-[1.3]"
+              />
+            )}
           </div>
 
-          <div className="overflow-hidden rounded-xl border border-primary/20 p-4">
+          <div className={`overflow-hidden rounded-xl border border-primary/20 p-4 ${
+            mascotType === 'bot' ? 'relative z-20' : ''
+          }`}>
             <div className="flex items-center gap-3 mb-3">
               <h3 className="text-sm font-semibold text-muted-foreground">已完成</h3>
             </div>

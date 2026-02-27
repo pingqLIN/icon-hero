@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { UploadSimple, Link as LinkIcon } from '@phosphor-icons/react'
+import { UploadSimple, Link as LinkIcon, Sun, Moon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Toaster } from '@/components/ui/sonner'
@@ -20,8 +20,8 @@ const ApplyIconDialog = lazy(() => import('@/components/ApplyIconDialog').then(m
 
 
 function App() {
-  // Theme State
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+  // Theme State — 預設明亮場景
+  const [theme, setTheme] = useState<'light' | 'dark'>('light')
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -34,7 +34,7 @@ function App() {
   }
 
   // Original Logic
-  const [isProcessing] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false)
   const [urlInput, setUrlInput] = useState('')
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [workspaceItems, setWorkspaceItems] = useState<WorkspaceItem[]>([])
@@ -263,11 +263,10 @@ function App() {
               <div className="flex items-center gap-4">
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="icon"
                   onClick={toggleTheme}
-                  className="gap-2"
                 >
-                  {theme === 'dark' ? '切換至 Creative Studio (亮色)' : '切換至 Neon Forge (暗色)'}
+                  {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                 </Button>
               </div>
             </div>
