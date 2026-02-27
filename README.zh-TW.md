@@ -28,6 +28,11 @@
 - 依格式篩選下載（僅 PNG / ICO / ICNS）
 - 自動組織檔案結構
 
+## 🚀 GitHub Pages 部署
+
+- 已新增 `.github/workflows/deploy-pages.yml`，使用 `peaceiris/actions-gh-pages@v4.0.0` 部署 `dist/` 到 `gh-pages` 分支。
+- 建置會加上 `--base "/<repo-name>/"`，確保 project pages 子路徑下的靜態資源可正確載入。
+
 ## 🎨 設計特色
 
 - **現代化介面**: 使用 Space Grotesk 字型與紫藍色調
