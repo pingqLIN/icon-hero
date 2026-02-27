@@ -1,5 +1,9 @@
 # Icon Changer - 圖示轉換與自動化工具
 
+[![Deploy to GitHub Pages](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg)](https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml)
+
+🌐 **線上服務**: [https://pingqlin.github.io/icon-hero/](https://pingqlin.github.io/icon-hero/)
+
 一個專業的圖示轉換工作區，結合即時拖曳追蹤與自動化腳本生成功能。
 
 ## ✨ 主要功能
@@ -27,6 +31,11 @@
 - 打包所有格式為 ZIP 檔案
 - 依格式篩選下載（僅 PNG / ICO / ICNS）
 - 自動組織檔案結構
+
+## 🚀 GitHub Pages 部署
+
+- 已新增 `.github/workflows/deploy-pages.yml`，使用 `peaceiris/actions-gh-pages@v4.0.0` 部署 `dist/` 到 `gh-pages` 分支。
+- 建置會加上 `--base "/<repo-name>/"`，確保 project pages 子路徑下的靜態資源可正確載入。
 
 ## 🎨 設計特色
 
