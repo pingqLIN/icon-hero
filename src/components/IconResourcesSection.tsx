@@ -1,14 +1,15 @@
 import { motion } from 'framer-motion'
 import { ArrowSquareOut, Star } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
 
 interface IconSite {
   name: string
   url: string
-  tagline: string
+  taglineKey: string
   count: string
   license: 'free' | 'freemium' | 'paid'
   formats: string[]
-  highlight: string
+  highlightKey: string
   accentColor: string
   logo: string
 }
@@ -17,120 +18,114 @@ const ICON_SITES: IconSite[] = [
   {
     name: 'Flaticon',
     url: 'https://www.flaticon.com',
-    tagline: '全球最大圖示庫，涵蓋扁平、輪廓、3D 等多種風格',
+    taglineKey: 'iconSites.flaticon.tagline',
     count: '22M+',
     license: 'freemium',
     formats: ['SVG', 'PNG', 'ICO', 'PSD'],
-    highlight: '最大圖示庫',
+    highlightKey: 'iconSites.flaticon.highlight',
     accentColor: '#00BFA5',
     logo: '🟩',
   },
   {
     name: 'Icons8',
     url: 'https://icons8.com',
-    tagline: '一鍵調色、多風格切換，支援插畫、照片與 AI 生成資源',
+    taglineKey: 'iconSites.icons8.tagline',
     count: '1.5M+',
     license: 'freemium',
     formats: ['SVG', 'PNG', 'ICO', 'PDF'],
-    highlight: '風格多元',
+    highlightKey: 'iconSites.icons8.highlight',
     accentColor: '#43A047',
     logo: '🟢',
   },
   {
     name: 'The Noun Project',
     url: 'https://thenounproject.com',
-    tagline: '社群設計師貢獻的極簡 SVG 圖示，以「通用語言」為設計哲學',
+    taglineKey: 'iconSites.theNounProject.tagline',
     count: '5M+',
     license: 'freemium',
     formats: ['SVG', 'PNG'],
-    highlight: '極簡設計',
+    highlightKey: 'iconSites.theNounProject.highlight',
     accentColor: '#757575',
     logo: '⬛',
   },
   {
     name: 'Iconfinder',
     url: 'https://www.iconfinder.com',
-    tagline: '高品質圖示市集，從精緻寫實到扁平化應有盡有',
+    taglineKey: 'iconSites.iconfinder.tagline',
     count: '6M+',
     license: 'freemium',
     formats: ['SVG', 'PNG', 'ICO', 'ICNS'],
-    highlight: '品質首選',
+    highlightKey: 'iconSites.iconfinder.highlight',
     accentColor: '#1E88E5',
     logo: '🔵',
   },
   {
     name: 'Font Awesome',
     url: 'https://fontawesome.com',
-    tagline: '前端開發的經典圖示套件，支援 CSS/JS 快速引入',
+    taglineKey: 'iconSites.fontAwesome.tagline',
     count: '30k+',
     license: 'freemium',
     formats: ['SVG', 'WebFont', 'React'],
-    highlight: '前端經典',
+    highlightKey: 'iconSites.fontAwesome.highlight',
     accentColor: '#228BE6',
     logo: '🔷',
   },
   {
     name: 'Phosphor Icons',
     url: 'https://phosphoricons.com',
-    tagline: '6 種筆觸重量彈性切換，MIT 授權，React / Vue 原生支援',
+    taglineKey: 'iconSites.phosphorIcons.tagline',
     count: '9k+',
     license: 'free',
     formats: ['SVG', 'React', 'Vue', 'Flutter'],
-    highlight: '本站採用',
+    highlightKey: 'iconSites.phosphorIcons.highlight',
     accentColor: '#7950F2',
     logo: '🟣',
   },
   {
     name: 'Heroicons',
     url: 'https://heroicons.com',
-    tagline: 'Tailwind CSS 官方圖示，Outline / Solid / Mini 三種規格',
+    taglineKey: 'iconSites.heroicons.tagline',
     count: '300+',
     license: 'free',
     formats: ['SVG', 'React', 'Vue'],
-    highlight: 'Tailwind 官方',
+    highlightKey: 'iconSites.heroicons.highlight',
     accentColor: '#06B6D4',
     logo: '🦸',
   },
   {
     name: 'Lucide',
     url: 'https://lucide.dev',
-    tagline: 'Feather Icons 的社群繼承者，持續更新擴充，MIT 授權',
+    taglineKey: 'iconSites.lucide.tagline',
     count: '1.5k+',
     license: 'free',
     formats: ['SVG', 'React', 'Vue', 'Flutter'],
-    highlight: '社群活躍',
+    highlightKey: 'iconSites.lucide.highlight',
     accentColor: '#F97316',
     logo: '✨',
   },
   {
     name: 'Feather Icons',
     url: 'https://feathericons.com',
-    tagline: '一致描線風格的極簡開源圖示集，適合介面設計配置',
+    taglineKey: 'iconSites.featherIcons.tagline',
     count: '287',
     license: 'free',
     formats: ['SVG'],
-    highlight: '極簡開源',
+    highlightKey: 'iconSites.featherIcons.highlight',
     accentColor: '#868E96',
     logo: '🪶',
   },
   {
     name: 'Material Icons',
     url: 'https://fonts.google.com/icons',
-    tagline: 'Google Material Design 官方圖示，5 種主題風格自由選擇',
+    taglineKey: 'iconSites.materialIcons.tagline',
     count: '2500+',
     license: 'free',
     formats: ['SVG', 'PNG', 'Android', 'iOS'],
-    highlight: 'Google 官方',
+    highlightKey: 'iconSites.materialIcons.highlight',
     accentColor: '#4285F4',
     logo: '🔵',
   },
 ]
-
-const LICENSE_LABEL: Record<IconSite['license'], { label: string; className: string }> = {
-  free: { label: '免費', className: 'bg-emerald-500/15 text-emerald-500 ring-1 ring-emerald-500/30' },
-  freemium: { label: '免費 + 付費', className: 'bg-amber-500/15 text-amber-500 ring-1 ring-amber-500/30' },
-  paid: { label: '付費', className: 'bg-rose-500/15 text-rose-500 ring-1 ring-rose-500/30' },
-}
 
 const containerVariants = {
   hidden: {},
@@ -139,10 +134,17 @@ const containerVariants = {
 
 const cardVariants = {
   hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' as const } },
 }
 
 export function IconResourcesSection() {
+  const { t } = useTranslation()
+  const licenseLabel: Record<IconSite['license'], { label: string; className: string }> = {
+    free: { label: t('iconSitesLicense.free'), className: 'bg-emerald-500/15 text-emerald-500 ring-1 ring-emerald-500/30' },
+    freemium: { label: t('iconSitesLicense.freemium'), className: 'bg-amber-500/15 text-amber-500 ring-1 ring-amber-500/30' },
+    paid: { label: t('iconSitesLicense.paid'), className: 'bg-rose-500/15 text-rose-500 ring-1 ring-rose-500/30' },
+  }
+
   return (
     <section className="mt-16">
       {/* Section Header */}
@@ -150,14 +152,14 @@ export function IconResourcesSection() {
         <div className="h-px flex-1 bg-border" />
         <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground tracking-wider uppercase">
           <Star size={14} weight="fill" className="text-primary" />
-          世界前 10 大 Icon 資源網站
+          {t('iconSitesSectionTitle')}
           <Star size={14} weight="fill" className="text-primary" />
         </div>
         <div className="h-px flex-1 bg-border" />
       </div>
 
       <p className="text-center text-sm text-muted-foreground mb-8 -mt-2">
-        找到理想圖示後，直接貼上 URL 或下載後拖入上方工作區即可轉換
+        {t('iconSitesSectionHint')}
       </p>
 
       {/* Cards Grid */}
@@ -169,15 +171,16 @@ export function IconResourcesSection() {
         viewport={{ once: true, margin: '-60px' }}
       >
         {ICON_SITES.map((site) => (
-          <SiteCard key={site.name} site={site} />
+          <SiteCard key={site.name} site={site} licenseLabel={licenseLabel} />
         ))}
       </motion.div>
     </section>
   )
 }
 
-function SiteCard({ site }: { site: IconSite }) {
-  const license = LICENSE_LABEL[site.license]
+function SiteCard({ site, licenseLabel }: { site: IconSite; licenseLabel: Record<IconSite['license'], { label: string; className: string }> }) {
+  const { t } = useTranslation()
+  const license = licenseLabel[site.license]
 
   return (
     <motion.a
@@ -227,7 +230,7 @@ function SiteCard({ site }: { site: IconSite }) {
 
       {/* Tagline */}
       <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3 flex-1">
-        {site.tagline}
+        {t(site.taglineKey)}
       </p>
 
       {/* Formats */}
@@ -247,7 +250,7 @@ function SiteCard({ site }: { site: IconSite }) {
         className="absolute -top-2.5 right-3 text-[10px] font-bold px-2 py-0.5 rounded-full text-white shadow-sm leading-none"
         style={{ background: site.accentColor }}
       >
-        {site.highlight}
+        {t(site.highlightKey)}
       </div>
     </motion.a>
   )

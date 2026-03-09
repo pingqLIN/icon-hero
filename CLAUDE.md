@@ -44,13 +44,19 @@ npm run optimize
 - **iconConverter.ts**: 使用 Canvas API 轉換圖示為 PNG/ICO/ICNS
 - **scriptGenerator.ts**: 生成跨平台腳本（對話框模式，支援 inline/file 兩種模式）
 - **iconApplyPackager.ts**: 打包圖示+腳本為 ZIP（一鍵下載模式，包含路徑正規化與模糊搜尋）
+- **batchDownload.ts**: 批次下載所有已完成項目（打包為 ZIP）
 
 #### Component Architecture
 - **WorkspaceDropZone**: 拖放區域 + Mascot 動畫（bot/hero 雙主題）
-- **WorkspaceQueue**: 處理佇列容器，包含 "Clear Completed" 功能
+- **WorkspaceQueue**: 處理佇列容器，包含 "Clear Completed" 功能與完成區 Mascot 提示
 - **WorkspaceQueueItem**: 單一轉換項目，支援預覽/下載/自動化/拖曳
+- **MascotDisplay**: 吉祥物動畫元件（bot/hero/abstract 三種類型，支援 lookDown 變體）
+- **LogoDisplay**: 頁首 Logo 展示
 - **AutomationDialog**: 舊版腳本生成器（複製/下載分離，手動輸入路徑）
 - **ApplyIconDialog**: 新版一鍵打包器（拖曳路徑輸入，ZIP 下載）
+- **FolderPathInput**: 路徑輸入元件，支援拖曳資料夾取得路徑
+- **PreviewDialog**: 圖示預覽對話框
+- **IconResourcesSection**: 頁面底部 Icon 資源網站推薦區塊
 - **DragTrackingOverlay**: 全域拖曳軌跡動畫（Canvas 繪製）
 
 ### Dual Theme System
@@ -108,6 +114,7 @@ for (const targetFormat of ['png', 'ico', 'icns']) {
 - 元件檔案：PascalCase (e.g., `WorkspaceDropZone.tsx`)
 - Utility 模組：camelCase (e.g., `scriptGenerator.ts`)
 - 類型定義：通常內嵌於檔案頂部或 `src/types/`
+- 全域型別宣告：`src/vite-env.d.ts`（包含 Vite client 型別與 Spark runtime 常數）
 
 ## Platform-Specific Notes
 

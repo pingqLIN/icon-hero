@@ -408,7 +408,7 @@ function App() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col gap-2 text-xs text-muted-foreground">
               <p>
-                GitHub：
+                {t('githubLabel')}
                 <a
                   href="https://github.com/pingqLIN/icon-hero"
                   target="_blank"
@@ -433,7 +433,7 @@ function App() {
           onChange={handleFileChange}
           className="hidden"
           id="icon-upload"
-          aria-label="選擇圖檔上傳"
+          aria-label={t('uploadAriaLabel')}
         />
 
         <Suspense fallback={null}>
