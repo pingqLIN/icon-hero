@@ -96,6 +96,7 @@ function Carousel({
 
   useEffect(() => {
     if (!api) return
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Shadcn UI carousel pattern: sync initial selection state
     onSelect(api)
     api.on("reInit", onSelect)
     api.on("select", onSelect)

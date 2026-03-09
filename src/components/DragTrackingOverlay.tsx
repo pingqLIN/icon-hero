@@ -17,10 +17,7 @@ export function DragTrackingOverlay({ isActive, fileName }: DragTrackingOverlayP
   const [trail, setTrail] = useState<DragPosition[]>([])
 
   useEffect(() => {
-    if (!isActive) {
-      setTrail([])
-      return
-    }
+    if (!isActive) return
 
     const handleMouseMove = (e: MouseEvent) => {
       const newPos = { x: e.clientX, y: e.clientY }
@@ -33,7 +30,10 @@ export function DragTrackingOverlay({ isActive, fileName }: DragTrackingOverlayP
     }
 
     window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      setTrail([])
+    }
   }, [isActive])
 
   return (

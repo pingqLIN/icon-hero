@@ -53,9 +53,10 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
   const [targetPaths, setTargetPaths] = useState<string[]>([])
   const [generatedScript, setGeneratedScript] = useState('')
 
-  // 開啟時重置狀態（包含恢復為偵測到的平台）
+  // 關閉時重置狀態（下次開啟時呈現乾淨狀態）
   useEffect(() => {
-    if (open) {
+    if (!open) return
+    return () => {
       setScriptType(detectScriptType())
       setScriptFormat('file')  // 預設為檔案執行版
       setTargetPaths([])
