@@ -51,6 +51,10 @@ export default defineConfig({
             return 'vendor-utils'
           }
 
+          if (id.includes('i18next') || id.includes('react-i18next')) {
+            return 'vendor-i18n'
+          }
+
           if (id.includes('@github/spark')) {
             return 'vendor-spark'
           }
