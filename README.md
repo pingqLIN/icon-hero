@@ -27,6 +27,7 @@
   <a href="https://github.colorgeek.co/icon-hero/">🌐 Live Demo</a> •
   <a href="#-features">Features</a> •
   <a href="#-how-to-use">How to Use</a> •
+  <a href="#-architecture">Architecture</a> •
   <a href="#-platform-support">Platform Support</a> •
   <a href="README.zh-TW.md">中文版</a>
 </p>
@@ -70,6 +71,10 @@
     </td>
   </tr>
 </table>
+
+- **Neon Forge (dark)**: Purple-blue gradients + Robot mascot
+- **Creative Studio (light)**: Orange-red gradients + Hero mascot
+- Theme toggle simultaneously switches mascot type and color variables
 
 ---
 
@@ -119,6 +124,8 @@ Option D: Paste an image with ⌘/Ctrl + V
   <img src="docs/images/screenshot-result.png" width="700" alt="Conversion result in queue with PNG/ICO/ICNS download buttons">
 </p>
 
+Status progression: `pending` → `analyzing` → `converting` (per format) → `completed` / `error`
+
 **3. Download your icon**
 
 | Action | How |
@@ -144,6 +151,89 @@ Option D: Paste an image with ⌘/Ctrl + V
 
 ---
 
+## 🏗️ Architecture
+
+### Core Flow
+
+```
+1. Upload / URL Input
+        ↓
+2. workspaceAnalyzer.ts    ← Analyze files, extract favicon & Open Graph images
+        ↓
+3. iconConverter.ts        ← Canvas API → PNG / ICO / ICNS
+        ↓
+4. WorkspaceQueue          ← Real-time status display
+        ↓
+5. scriptGenerator.ts      ← PowerShell / Bash / osascript
+   iconApplyPackager.ts    ← ZIP bundle (icon + script + README)
+```
+
+### State Management (App.tsx)
+
+- Centralized state: `workspaceItems[]` tracks all conversion items
+- Each item contains: original file, conversion status, URLs and Blobs for all three formats
+- Uses `useCallback` and `useEffect` for drag events and global cleanup
+
+### Icon Conversion Pipeline (`src/lib/`)
+
+| Module | Responsibility |
+|--------|---------------|
+| **workspaceAnalyzer.ts** | Analyze uploaded files or URLs; parse favicon and Open Graph images |
+| **iconConverter.ts** | Convert icons to PNG/ICO/ICNS via Canvas API |
+| **scriptGenerator.ts** | Generate cross-platform scripts (dialog mode, inline/file variants) |
+| **iconApplyPackager.ts** | Bundle icon + script into ZIP (one-click download with path normalization & fuzzy search) |
+
+### Component Architecture
+
+| Component | Role |
+|-----------|------|
+| **WorkspaceDropZone** | Drop zone + mascot animation (bot/hero dual themes) |
+| **WorkspaceQueue** | Queue container with "Clear Completed" action |
+| **WorkspaceQueueItem** | Single conversion item — preview, download, automation, drag |
+| **AutomationDialog** | Legacy script generator (copy/download split, manual path input) |
+| **ApplyIconDialog** | New one-click packager (drag-to-input paths, ZIP download) |
+| **DragTrackingOverlay** | Global drag trail animation (Canvas-rendered) |
+
+### Drag & Drop System
+
+- **Global drag cleanup**: Listens to `dragend`, `mouseup`, `blur` events to reset pointer-events
+- **Custom drag preview**: Uses `setDragImage` to show filename + format info
+- **File system integration**: `DataTransfer.setData('DownloadURL')` enables dragging directly to file explorer
+
+### Script Generation — Two Systems
+
+Two script systems coexist:
+
+1. **AutomationDialog** (`scriptGenerator.ts`):
+   - Supports PowerShell / AppleScript / Bash
+   - `isInlineMode` parameter controls pause instructions (copy-paste vs. file execution)
+   - Features: path normalization, environment variable expansion, fuzzy search
+
+2. **ApplyIconDialog** (`iconApplyPackager.ts`):
+   - Bundles icon + script + README into a ZIP
+   - FolderPathInput component supports drag-to-get folder path
+   - Auto-selects recommended format per platform (Windows=ICO, macOS=ICNS, Linux=PNG)
+
+### File Processing Pipeline
+
+```typescript
+// Every icon goes through the full conversion pipeline
+for (const targetFormat of ['png', 'ico', 'icns']) {
+  const result = await convertIcon(analyzed.url, targetFormat)
+  // Store URL and Blob (for drag & download)
+}
+```
+
+### Path Normalization Strategy (`iconApplyPackager.ts`)
+
+All platform scripts include:
+1. **Environment variable expansion**: `%USERPROFILE%` (Windows) / `~` (Unix)
+2. **Slash normalization**: `/` → `\` (Windows)
+3. **Fuzzy search**: When path doesn't exist, case-insensitive search in parent directory
+4. **Error anticipation**: Distinguishes "not a folder" from "path doesn't exist"
+
+---
+
 ## 🖥️ Platform Support
 
 | Platform | Format | Script | Method |
@@ -152,11 +242,11 @@ Option D: Paste an image with ⌘/Ctrl + V
 | **macOS** | ICNS | Bash + osascript | `fileicon` CLI or `osascript` fallback |
 | **Linux** | PNG | Bash | `gio set metadata::custom-icon` (GNOME/Nautilus) |
 
-### Notes
+### Platform Notes
 
-- **macOS**: The script tries `fileicon` first. Install it with `brew install fileicon`, or it falls back to `osascript`.
-- **Linux**: The `gio` method works on GNOME-based desktops (Ubuntu, Fedora, etc.). Other desktop environments may differ.
-- **Windows**: Script sets folder icon via `desktop.ini`. PowerShell execution policy must allow scripts (`Set-ExecutionPolicy RemoteSigned`).
+- **Windows**: Uses `desktop.ini` + `IconResource`. Requires hidden/system attributes (`attrib +h +s`). PowerShell execution policy must allow scripts (`Set-ExecutionPolicy RemoteSigned`).
+- **macOS**: Tries `fileicon` CLI first (`brew install fileicon`); falls back to `osascript` + AppKit framework. `.command` extension allows double-click execution. Requires `chmod +x`.
+- **Linux**: Uses `gio set metadata::custom-icon`. Requires `gvfs` package. `.sh` scripts must be run manually.
 
 ### Script Features
 
@@ -182,26 +272,21 @@ Option D: Paste an image with ⌘/Ctrl + V
 |----------|-----------|
 | Framework | React 19 + TypeScript |
 | Build | Vite 7 |
-| UI Components | Shadcn UI (Radix UI primitives) |
-| Styling | Tailwind CSS 4 |
+| UI Components | Shadcn UI v4 (Radix UI primitives) |
+| Styling | Tailwind CSS 4 (CSS variable system) |
 | Animation | Framer Motion |
 | ZIP Packaging | JSZip |
 | Icons | Phosphor Icons + Lucide React |
 
-### Architecture
+UI components are located in `src/components/ui/`, using `cn()` utility (tailwind-merge) for className merging.
 
-```
-Upload/URL Input
-      ↓
-workspaceAnalyzer.ts   ← Analyzes files, fetches favicons
-      ↓
-iconConverter.ts       ← Canvas API → PNG / ICO / ICNS
-      ↓
-WorkspaceQueue         ← Real-time status display
-      ↓
-scriptGenerator.ts     ← PowerShell / Bash / osascript
-iconApplyPackager.ts   ← ZIP bundle with icon + script + README
-```
+---
+
+## ⚠️ Known Limitations
+
+- ICO conversion is limited to 256×256 (browser Canvas API constraint)
+- ICNS format is actually a PNG wrapper (relies on macOS system for native handling)
+- Drag-to-file-explorer depends on browser support for the `DownloadURL` format (Chromium-based browsers work best)
 
 ---
 
@@ -216,12 +301,24 @@ npm install
 # Start dev server (http://localhost:5173)
 npm run dev
 
-# Build for production
+# Build for production (output to dist/)
 npm run build
+
+# Run ESLint
+npm run lint
 
 # Preview production build
 npm run preview
+
+# Clear and re-optimize dependencies
+npm run optimize
 ```
+
+### File Naming Conventions
+
+- Components: PascalCase (e.g., `WorkspaceDropZone.tsx`)
+- Utility modules: camelCase (e.g., `scriptGenerator.ts`)
+- Type definitions: typically inline at file top or in `src/types/`
 
 ---
 
