@@ -31,6 +31,10 @@ export default defineConfig({
             return undefined
           }
 
+          if (id.includes('i18next') || id.includes('react-i18next')) {
+            return 'vendor-i18n'
+          }
+
           if (id.includes('react') || id.includes('scheduler')) {
             return 'vendor-react'
           }
@@ -49,10 +53,6 @@ export default defineConfig({
 
           if (id.includes('jszip') || id.includes('marked')) {
             return 'vendor-utils'
-          }
-
-          if (id.includes('i18next') || id.includes('react-i18next')) {
-            return 'vendor-i18n'
           }
 
           if (id.includes('@github/spark')) {
