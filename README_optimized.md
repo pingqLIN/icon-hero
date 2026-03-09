@@ -239,7 +239,7 @@ The workspace includes a curated icon resources section for quick discovery, ins
 
 ## 🚀 Local Development
 
-**Requirements:** Node.js 18+
+**Requirements:** Node.js 20+
 
 ```bash
 # Install dependencies
