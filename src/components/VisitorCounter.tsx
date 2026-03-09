@@ -9,7 +9,7 @@ export function VisitorCounter() {
   return (
     <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
       <Users size={16} />
-      <span>{t('visitorCount')}：</span>
+      <span>{t('visitorCount')}:</span>
       {loading ? (
         <span className="animate-pulse">{t('visitorLoading')}</span>
       ) : error ? (

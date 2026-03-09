@@ -14,17 +14,27 @@ const LANGUAGES = [
 ]
 
 export function LanguageSwitcher() {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
 
   const handleChange = (code: string) => {
-    i18n.changeLanguage(code).catch(() => {/* language change failed silently */})
-    localStorage.setItem('icon-hero-lang', code)
+    i18n
+      .changeLanguage(code)
+      .then(() => {
+        try {
+          localStorage.setItem('icon-hero-lang', code)
+        } catch {
+          // ignoring storage errors to avoid crashing the component tree
+        }
+      })
+      .catch(() => {
+        /* language change failed silently */
+      })
   }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" aria-label="Switch language">
+        <Button variant="outline" size="icon" aria-label={t('switchLanguage')}>
           <Globe size={18} />
         </Button>
       </DropdownMenuTrigger>

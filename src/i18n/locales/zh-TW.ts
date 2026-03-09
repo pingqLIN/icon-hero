@@ -44,6 +44,7 @@ const zhTW = {
 
     // Language switcher
     language: '語言',
+    switchLanguage: '切換語言',
   }
 }
 

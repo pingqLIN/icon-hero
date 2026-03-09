@@ -44,6 +44,7 @@ const en = {
 
     // Language switcher
     language: 'Language',
+    switchLanguage: 'Switch language',
   }
 }
 
