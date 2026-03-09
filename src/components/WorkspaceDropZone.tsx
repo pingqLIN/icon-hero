@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Folder } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
 import { MascotDisplay } from './MascotDisplay'
 
 interface WorkspaceDropZoneProps {
@@ -12,6 +13,7 @@ interface WorkspaceDropZoneProps {
 
 export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', hasCompletedItems = false }: WorkspaceDropZoneProps) {
   const [isDragActive, setIsDragActive] = useState(false)
+  const { t } = useTranslation()
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -147,11 +149,11 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
 
           <div className="text-center space-y-3">
             <h3 className="text-2xl font-bold bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-transparent">
-              {isProcessing ? '正在處理您的圖示...' : '拖曳檔案或連結到此處'}
+              {isProcessing ? t('workspaceDropProcessing') : t('workspaceDropIdle')}
             </h3>
             <p className="text-base text-muted-foreground max-w-md mx-auto leading-relaxed">
-              支援 <span className="text-primary font-medium">PNG, JPG, ICO, ICNS</span> 和網站 URL<br />
-              系統將自動啟動轉換引擎
+              {t('workspaceDropSupportsPrefix')} <span className="text-primary font-medium">PNG, JPG, ICO, ICNS</span> {t('workspaceDropSupportsSuffix')}<br />
+              {t('workspaceDropAutoStart')}
             </p>
 
             <motion.div
@@ -162,7 +164,7 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
               <span className="w-4 h-4 flex items-center justify-center bg-muted rounded text-[10px]">⌘</span>
               <span>+</span>
               <span className="w-4 h-4 flex items-center justify-center bg-muted rounded text-[10px]">V</span>
-              <span>貼上也可以</span>
+              <span>{t('workspaceDropPasteHint')}</span>
             </motion.div>
           </div>
         </div>
