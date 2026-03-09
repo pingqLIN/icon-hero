@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import iconHeroLogo from '@/assets/ICONHERO.png'
 
 interface LogoDisplayProps {
@@ -6,6 +7,7 @@ interface LogoDisplayProps {
 }
 
 export function LogoDisplay({ className = '' }: LogoDisplayProps) {
+    const { t } = useTranslation()
     return (
         <div className={`relative flex items-center gap-4 group ${className}`}>
             {/* Spotlight Effect - Background Glow */}
@@ -84,7 +86,7 @@ export function LogoDisplay({ className = '' }: LogoDisplayProps) {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8, duration: 0.5 }}
                 >
-                    您的終極圖示轉換工具
+                    {t('logoSubtitle')}
                 </motion.p>
             </div>
         </div>

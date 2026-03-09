@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { UploadSimple, Link as LinkIcon, Sun, Moon } from '@phosphor-icons/react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Toaster } from '@/components/ui/sonner'
@@ -10,6 +11,8 @@ import { WorkspaceQueue } from '@/components/WorkspaceQueue'
 import { IconResourcesSection } from '@/components/IconResourcesSection'
 // import { DragInstructions } from '@/components/DragInstructions'
 import { DragTrackingOverlay } from '@/components/DragTrackingOverlay'
+import { LanguageSwitcher } from '@/components/LanguageSwitcher'
+import { VisitorCounter } from '@/components/VisitorCounter'
 import { WorkspaceItem } from '@/types/workspace'
 import { analyzeDroppedItem } from '@/lib/workspaceAnalyzer'
 import { convertIcon } from '@/lib/iconConverter'
@@ -21,6 +24,8 @@ const ApplyIconDialog = lazy(() => import('@/components/ApplyIconDialog').then(m
 
 
 function App() {
+  const { t } = useTranslation()
+
   const wait = (ms: number) => new Promise<void>(resolve => {
     setTimeout(resolve, ms)
   })
@@ -61,13 +66,13 @@ function App() {
     const trimmedUrl = urlInput.trim()
 
     if (!trimmedUrl) {
-      toast.error('請輸入有效的 URL')
+      toast.error(t('urlRequired'))
       return
     }
 
     if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
-      toast.error('請輸入有效的 URL', {
-        description: 'URL 必須以 http:// 或 https:// 開頭'
+      toast.error(t('urlRequired'), {
+        description: t('urlInvalidPrefix')
       })
       return
     }
@@ -159,8 +164,8 @@ function App() {
             }
           }))
 
-          toast.success('轉換完成', {
-            description: `${analyzed.name} 已成功轉換為所有格式`
+          toast.success(t('toastConvertSuccess'), {
+            description: t('toastConvertSuccessDesc', { name: analyzed.name })
           })
         } catch (error) {
           setWorkspaceItems(prev => prev.map(wi =>
@@ -173,15 +178,15 @@ function App() {
               : wi
           ))
 
-          toast.error('轉換失敗', {
-            description: `處理 ${workspaceItem.name} 時發生錯誤`
+          toast.error(t('toastConvertError'), {
+            description: t('toastConvertErrorDesc', { name: workspaceItem.name })
           })
         }
       }
     } finally {
       setIsProcessing(false)
     }
-  }, [isProcessing])
+  }, [isProcessing, t])
 
   const handlePreview = (item: WorkspaceItem) => {
     setPreviewItem(item)
@@ -219,7 +224,7 @@ function App() {
     a.click()
     document.body.removeChild(a)
 
-    toast.success('下載已開始', {
+    toast.success(t('toastDownloadStart'), {
       description: `${item.name}.${format}`
     })
   }
@@ -269,6 +274,8 @@ function App() {
                 <LogoDisplay />
               </div>
               <div className="flex items-center gap-4">
+                <VisitorCounter />
+                <LanguageSwitcher />
                 <Button
                   variant="outline"
                   size="icon"
@@ -291,7 +298,7 @@ function App() {
               disabled={isProcessing}
             >
               <UploadSimple size={20} />
-              {isProcessing ? '處理中...' : '選擇圖檔'}
+              {isProcessing ? t('processing') : t('selectFile')}
             </Button>
             <Button
               onClick={() => setShowUrlInput(!showUrlInput)}
@@ -301,7 +308,7 @@ function App() {
               disabled={isProcessing}
             >
               <LinkIcon size={20} />
-              從 URL 載入
+              {t('loadFromUrl')}
             </Button>
           </div>
 
@@ -317,7 +324,7 @@ function App() {
                   <div className="flex gap-2">
                     <Input
                       type="url"
-                      placeholder="輸入圖檔 URL 或網站 URL（例如：https://example.com/icon.png）"
+                      placeholder={t('urlPlaceholder')}
                       value={urlInput}
                       onChange={(e) => setUrlInput(e.target.value)}
                       onKeyDown={(e) => {
@@ -335,11 +342,11 @@ function App() {
                       className="gap-2 whitespace-nowrap"
                     >
                       <LinkIcon size={18} />
-                      載入
+                      {t('load')}
                     </Button>
                   </div>
                   <p className="text-xs text-muted-foreground mt-2">
-                    支援直接圖檔連結或網站 URL，系統將自動解析網頁中的圖示
+                    {t('urlHint')}
                   </p>
                 </div>
               </motion.div>
@@ -348,7 +355,7 @@ function App() {
 
           <div className="grid gap-8">
             <div>
-              <h2 className="text-xl font-bold mb-4">工作區拖放區</h2>
+              <h2 className="text-xl font-bold mb-4">{t('workspaceTitle')}</h2>
               <WorkspaceDropZone
                 onDrop={handleWorkspaceDrop}
                 isProcessing={isProcessing}
@@ -357,13 +364,13 @@ function App() {
               />
               <div className="mt-4 grid gap-3 text-center md:grid-cols-3">
                 <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
-                  <p className="text-sm font-medium">1. ICON 或網址拖拉進工作區</p>
+                  <p className="text-sm font-medium">{t('step1')}</p>
                 </div>
                 <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
-                  <p className="text-sm font-medium">2. 系統自動偵測檔案類型並轉換</p>
+                  <p className="text-sm font-medium">{t('step2')}</p>
                 </div>
                 <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
-                  <p className="text-sm font-medium">3. 提供 PNG / ICO / ICNS 等格式下載</p>
+                  <p className="text-sm font-medium">{t('step3')}</p>
                 </div>
               </div>
             </div>
@@ -371,10 +378,9 @@ function App() {
             {workspaceItems.length > 0 && (
               <div>
                 <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-4">
-                  <h2 className="text-xl font-bold">處理佇列</h2>
+                  <h2 className="text-xl font-bold">{t('queueTitle')}</h2>
                   <span className="text-xs text-muted-foreground">
-                    拖曳功能啟用：長按格式按鈕（PNG / ICO /
-                    ICNS）並拖曳至系統檔案或資料夾，即可替換該目標
+                    {t('queueDragHint')}
                   </span>
                 </div>
                 {/* DragInstructions removed as mascot is moved to Completed area */}
@@ -413,7 +419,7 @@ function App() {
                 </a>
               </p>
               <p>
-                免責聲明：本網站僅提供線上圖檔格式轉換服務，請留意素材版權並確認您擁有合法使用與轉換權利。
+                {t('disclaimer')}
               </p>
             </div>
           </div>
