@@ -13,7 +13,7 @@ export function VisitorCounter() {
       {loading ? (
         <span className="animate-pulse">{t('visitorLoading')}</span>
       ) : error ? (
-        <span>{t('visitorError')}</span>
+        <span className="tabular-nums">-</span>
       ) : (
         <span className="font-semibold tabular-nums text-foreground">
           {count?.toLocaleString() ?? '-'}

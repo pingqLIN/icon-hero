@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion'
-import { ArrowSquareOut, Star } from '@phosphor-icons/react'
+import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowSquareOut, CaretDown, Star } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 
 interface IconSite {
@@ -139,6 +140,7 @@ const cardVariants = {
 
 export function IconResourcesSection() {
   const { t } = useTranslation()
+  const [isExpanded, setIsExpanded] = useState(false)
   const licenseLabel: Record<IconSite['license'], { label: string; className: string }> = {
     free: { label: t('iconSitesLicense.free'), className: 'bg-emerald-500/15 text-emerald-500 ring-1 ring-emerald-500/30' },
     freemium: { label: t('iconSitesLicense.freemium'), className: 'bg-amber-500/15 text-amber-500 ring-1 ring-amber-500/30' },
@@ -147,33 +149,54 @@ export function IconResourcesSection() {
 
   return (
     <section className="mt-16">
-      {/* Section Header */}
-      <div className="flex items-center gap-3 mb-6">
+      <button
+        type="button"
+        onClick={() => setIsExpanded(prev => !prev)}
+        className="flex w-full items-center gap-3 rounded-2xl px-2 py-3 text-left transition-colors hover:bg-secondary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        aria-expanded={isExpanded}
+      >
         <div className="h-px flex-1 bg-border" />
         <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground tracking-wider uppercase">
           <Star size={14} weight="fill" className="text-primary" />
           {t('iconSitesSectionTitle')}
+          <motion.span
+            animate={{ rotate: isExpanded ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="inline-flex items-center justify-center"
+          >
+            <CaretDown size={14} weight="bold" className="text-primary/80" />
+          </motion.span>
           <Star size={14} weight="fill" className="text-primary" />
         </div>
         <div className="h-px flex-1 bg-border" />
-      </div>
+      </button>
 
-      <p className="text-center text-sm text-muted-foreground mb-8 -mt-2">
-        {t('iconSitesSectionHint')}
-      </p>
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, y: -8 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -8 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            className="overflow-hidden"
+          >
+            <p className="mb-8 mt-1 text-center text-sm text-muted-foreground">
+              {t('iconSitesSectionHint')}
+            </p>
 
-      {/* Cards Grid */}
-      <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-60px' }}
-      >
-        {ICON_SITES.map((site) => (
-          <SiteCard key={site.name} site={site} licenseLabel={licenseLabel} />
-        ))}
-      </motion.div>
+            <motion.div
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {ICON_SITES.map((site) => (
+                <SiteCard key={site.name} site={site} licenseLabel={licenseLabel} />
+              ))}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

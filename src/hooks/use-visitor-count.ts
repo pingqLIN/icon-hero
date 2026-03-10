@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const COUNTER_URL = 'https://api.counterapi.dev/v1/icon-hero/visits/up'
+const CACHE_KEY = 'icon-hero-visitor-count'
 
 interface UseVisitorCountResult {
   count: number | null
@@ -9,7 +10,15 @@ interface UseVisitorCountResult {
 }
 
 export function useVisitorCount(): UseVisitorCountResult {
-  const [count, setCount] = useState<number | null>(null)
+  const [count, setCount] = useState<number | null>(() => {
+    try {
+      const cached = localStorage.getItem(CACHE_KEY)
+      return cached ? Number(cached) : null
+    } catch {
+      return null
+    }
+  })
+  const hasCachedCountRef = useRef(count !== null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
@@ -22,12 +31,22 @@ export function useVisitorCount(): UseVisitorCountResult {
         if (!response.ok) throw new Error(`Network error: ${response.status} ${response.statusText}`)
         const data = await response.json() as { count?: number }
         if (!cancelled) {
-          setCount(data.count ?? null)
+          const nextCount = data.count ?? null
+          setCount(nextCount)
+          setError(false)
+          if (nextCount !== null) {
+            hasCachedCountRef.current = true
+            try {
+              localStorage.setItem(CACHE_KEY, String(nextCount))
+            } catch {
+              // ignore storage write failures
+            }
+          }
           setLoading(false)
         }
       } catch {
         if (!cancelled) {
-          setError(true)
+          setError(!hasCachedCountRef.current)
           setLoading(false)
         }
       }
