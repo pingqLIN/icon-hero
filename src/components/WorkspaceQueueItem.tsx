@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 interface WorkspaceQueueItemProps {
   item: WorkspaceItem
@@ -53,6 +54,8 @@ export function WorkspaceQueueItem({
   onFileDragStart,
   onFileDragEnd
 }: WorkspaceQueueItemProps) {
+  const { t } = useTranslation()
+
   const getStatusIcon = () => {
     switch (item.status) {
       case 'pending':
@@ -71,15 +74,15 @@ export function WorkspaceQueueItem({
   const getStatusText = () => {
     switch (item.status) {
       case 'pending':
-        return '等待中'
+        return t('queueStatus.pending')
       case 'analyzing':
-        return '分析中'
+        return t('queueStatus.analyzing')
       case 'converting':
-        return `轉換為 ${item.convertedFormat?.toUpperCase()}`
+        return t('queueStatus.converting', { format: item.convertedFormat?.toUpperCase() ?? '' })
       case 'completed':
-        return '完成'
+        return t('queueStatus.completed')
       case 'error':
-        return '失敗'
+        return t('queueStatus.error')
     }
   }
 
@@ -249,13 +252,13 @@ export function WorkspaceQueueItem({
                 
                 {item.format && (
                   <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                    原始: {item.format.toUpperCase()}
+                    {t('queueOriginalFormat', { format: item.format.toUpperCase() })}
                   </Badge>
                 )}
                 
                 {item.convertedFormat && item.status === 'converting' && (
                   <Badge variant="default" className="text-[10px] px-1.5 py-0 animate-pulse">
-                    處理中: {item.convertedFormat.toUpperCase()}
+                    {t('queueProcessingFormat', { format: item.convertedFormat.toUpperCase() })}
                   </Badge>
                 )}
               </div>
@@ -280,7 +283,7 @@ export function WorkspaceQueueItem({
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>預覽</p>
+                      <p>{t('queueActionPreview')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -298,7 +301,7 @@ export function WorkspaceQueueItem({
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>一鍵套用圖示到資料夾</p>
+                      <p>{t('queueActionApplyFolder')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -316,7 +319,7 @@ export function WorkspaceQueueItem({
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>自動化腳本</p>
+                      <p>{t('queueActionAutomation')}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -354,11 +357,13 @@ export function WorkspaceQueueItem({
                           </div>
                         </TooltipTrigger>
                         <TooltipContent side="bottom" className="max-w-xs">
-                          <p className="font-semibold">拖曳至系統檔案/資料夾{isIco ? '（推薦 Windows）' : ''}</p>
+                          <p className="font-semibold">
+                            {t('queueDragToSystemTitle', { platformHint: isIco ? t('queueDragToSystemWindowsHint') : '' })}
+                          </p>
                           <p className="text-xs text-muted-foreground">
                             {isIco 
-                              ? '拖曳 ICO 至 Windows 資料夾內，然後在資料夾屬性中自訂圖示'
-                              : `或點擊下載 ${format.toUpperCase()} 檔案`
+                              ? t('queueDragToSystemIcoDesc')
+                              : t('queueDragToSystemDownloadDesc', { format: format.toUpperCase() })
                             }
                           </p>
                         </TooltipContent>

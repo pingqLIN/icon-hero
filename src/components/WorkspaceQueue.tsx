@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Package, DownloadSimple, FileZip, Trash } from '@phosphor-icons/react'
 import { downloadAllAsZip, downloadByFormat } from '@/lib/batchDownload'
 import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,6 +43,7 @@ export function WorkspaceQueue({
   onFileDragEnd,
   mascotType = 'bot'
 }: WorkspaceQueueProps) {
+  const { t } = useTranslation()
   const [draggedItemId, setDraggedItemId] = useState<string | null>(null)
   const [dragOverItemId, setDragOverItemId] = useState<string | null>(null)
   const [isDownloading, setIsDownloading] = useState(false)
@@ -52,7 +54,7 @@ export function WorkspaceQueue({
         <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mb-4">
           <Package size={32} className="text-muted-foreground" />
         </div>
-        <p className="text-sm text-muted-foreground">尚無處理項目</p>
+        <p className="text-sm text-muted-foreground">{t('queueEmpty')}</p>
       </div>
     )
   }
@@ -66,18 +68,18 @@ export function WorkspaceQueue({
       setIsDownloading(true)
       if (format) {
         await downloadByFormat(completedItems, format)
-        toast.success('批次下載完成', {
-          description: `已下載所有 ${format.toUpperCase()} 格式檔案`
+        toast.success(t('queueBatchDownloadDone'), {
+          description: t('queueBatchDownloadFormatDesc', { format: format.toUpperCase() })
         })
       } else {
         await downloadAllAsZip(completedItems)
-        toast.success('批次下載完成', {
-          description: '已下載所有轉換檔案'
+        toast.success(t('queueBatchDownloadDone'), {
+          description: t('queueBatchDownloadAllDesc')
         })
       }
     } catch (error) {
-      toast.error('下載失敗', {
-        description: error instanceof Error ? error.message : '批次下載時發生錯誤'
+      toast.error(t('queueDownloadFailed'), {
+        description: error instanceof Error ? error.message : t('queueBatchDownloadError')
       })
     } finally {
       setIsDownloading(false)
@@ -150,7 +152,7 @@ export function WorkspaceQueue({
             className="gap-2"
           >
             <Trash size={16} />
-            清除已完成
+            {t('queueClearCompleted')}
           </Button>
 
           <DropdownMenu>
@@ -162,26 +164,26 @@ export function WorkspaceQueue({
                 className="gap-2"
               >
                 <FileZip size={16} />
-                批次下載
+                {t('queueBatchDownload')}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem onClick={() => handleBatchDownload()}>
                 <FileZip size={16} className="mr-2" />
-                下載全部格式
+                {t('queueDownloadAllFormats')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => handleBatchDownload('png')}>
                 <DownloadSimple size={16} className="mr-2" />
-                下載所有 PNG
+                {t('queueDownloadAllFormat', { format: 'PNG' })}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleBatchDownload('ico')}>
                 <DownloadSimple size={16} className="mr-2" />
-                下載所有 ICO
+                {t('queueDownloadAllFormat', { format: 'ICO' })}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => handleBatchDownload('icns')}>
                 <DownloadSimple size={16} className="mr-2" />
-                下載所有 ICNS
+                {t('queueDownloadAllFormat', { format: 'ICNS' })}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -190,7 +192,7 @@ export function WorkspaceQueue({
 
       {pendingItems.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">處理中</h3>
+          <h3 className="text-sm font-semibold mb-3 text-muted-foreground">{t('queueProcessing')}</h3>
           <div className="space-y-2">
             <AnimatePresence>
               {pendingItems.map((item) => (
@@ -247,7 +249,7 @@ export function WorkspaceQueue({
             mascotType === 'bot' ? 'relative z-20' : ''
           }`}>
             <div className="flex items-center gap-3 mb-3">
-              <h3 className="text-sm font-semibold text-muted-foreground">已完成</h3>
+              <h3 className="text-sm font-semibold text-muted-foreground">{t('queueCompleted')}</h3>
             </div>
             <ScrollArea className="h-auto max-h-[600px]">
               <div className="space-y-2 pr-4">
@@ -282,7 +284,7 @@ export function WorkspaceQueue({
         <>
           {(pendingItems.length > 0 || completedItems.length > 0) && <Separator />}
           <div>
-            <h3 className="text-sm font-semibold mb-3 text-destructive">發生錯誤</h3>
+            <h3 className="text-sm font-semibold mb-3 text-destructive">{t('queueErrors')}</h3>
             <div className="space-y-2">
               <AnimatePresence>
                 {errorItems.map((item) => (
