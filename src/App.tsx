@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { UploadSimple, Link as LinkIcon, Sun, Moon } from '@phosphor-icons/react'
+import { UploadSimple, Link as LinkIcon, Sun, Moon, ArrowRight } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -57,6 +57,15 @@ function App() {
   const [applyItem, setApplyItem] = useState<WorkspaceItem | null>(null)
   const [showApply, setShowApply] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const isProcessingRef = useRef(false)
+
+  const getInputSignature = (item: File | string) => {
+    if (typeof item === 'string') {
+      return `url:${item.trim()}`
+    }
+
+    return `file:${item.name}:${item.size}:${item.lastModified}:${item.type}`
+  }
 
   const handleUploadClick = () => {
     fileInputRef.current?.click()
@@ -95,13 +104,24 @@ function App() {
   }
 
   const handleWorkspaceDrop = useCallback(async (items: (File | string)[]) => {
-    if (items.length === 0 || isProcessing) {
+    if (items.length === 0 || isProcessingRef.current) {
       return
     }
 
+    const fileItems = items.filter((item): item is File => item instanceof File)
+    const normalizedItems = (fileItems.length > 0 ? fileItems : items).filter((item, index, source) => {
+      const signature = getInputSignature(item)
+      return source.findIndex(candidate => getInputSignature(candidate) === signature) === index
+    })
+
+    if (normalizedItems.length === 0) {
+      return
+    }
+
+    isProcessingRef.current = true
     setIsProcessing(true)
 
-    const newItems: WorkspaceItem[] = items.map((item, index) => ({
+    const newItems: WorkspaceItem[] = normalizedItems.map((item, index) => ({
       id: `${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
       name: typeof item === 'string' ? new URL(item).hostname : item.name,
       type: 'unknown',
@@ -113,8 +133,8 @@ function App() {
     setWorkspaceItems(prev => [...prev, ...newItems])
 
     try {
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i]
+      for (let i = 0; i < normalizedItems.length; i++) {
+        const item = normalizedItems[i]
         const workspaceItem = newItems[i]
 
         try {
@@ -184,9 +204,10 @@ function App() {
         }
       }
     } finally {
+      isProcessingRef.current = false
       setIsProcessing(false)
     }
-  }, [isProcessing, t])
+  }, [t])
 
   const handlePreview = (item: WorkspaceItem) => {
     setPreviewItem(item)
@@ -238,6 +259,7 @@ function App() {
   }
 
   const hasCompletedItems = workspaceItems.some(item => item.status === 'completed')
+  const workflowSteps = [t('step1'), t('step2'), t('step3')]
 
   useEffect(() => {
     const handleGlobalDragEnd = () => {
@@ -362,21 +384,27 @@ function App() {
                 mascotType={theme === 'dark' ? 'bot' : 'hero'}
                 hasCompletedItems={hasCompletedItems}
               />
-              <div className="mt-4 grid gap-3 text-center md:grid-cols-3">
-                <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
-                  <p className="text-sm font-medium">{t('step1')}</p>
-                </div>
-                <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
-                  <p className="text-sm font-medium">{t('step2')}</p>
-                </div>
-                <div className="rounded-lg border border-border bg-secondary/5 p-3 text-center">
-                  <p className="text-sm font-medium">{t('step3')}</p>
-                </div>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center">
+                {workflowSteps.map((step, index) => (
+                  <div key={step} className="contents">
+                    <p className="text-base font-extrabold tracking-tight text-foreground md:text-lg">
+                      {step}
+                    </p>
+                    {index < workflowSteps.length - 1 && (
+                      <ArrowRight
+                        size={22}
+                        weight="bold"
+                        className="text-primary/70"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
 
             {workspaceItems.length > 0 && (
-              <div>
+              <div className="pt-6 md:pt-8">
                 <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-4">
                   <h2 className="text-xl font-bold">{t('queueTitle')}</h2>
                   <span className="text-xs text-muted-foreground">
