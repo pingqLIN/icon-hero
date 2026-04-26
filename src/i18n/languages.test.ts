@@ -1,5 +1,7 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
+  getInitialLanguage,
+  LANGUAGE_STORAGE_KEY,
   resolveLanguageCode,
   resolvePreferredLanguage,
   SUPPORTED_LANGUAGES,
@@ -14,6 +16,24 @@ import ja from './locales/ja'
 import ko from './locales/ko'
 
 describe('language resolver', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    delete (navigator as Navigator & { languages?: readonly string[] }).languages
+    delete (navigator as Navigator & { language?: string }).language
+    localStorage.clear()
+  })
+
+  const setNavigatorLanguages = (languages: readonly string[], language: string) => {
+    Object.defineProperty(navigator, 'languages', {
+      configurable: true,
+      value: languages,
+    })
+    Object.defineProperty(navigator, 'language', {
+      configurable: true,
+      value: language,
+    })
+  }
+
   it('uses a supported saved language before browser language detection', () => {
     expect(
       resolvePreferredLanguage({
@@ -60,6 +80,30 @@ describe('language resolver', () => {
     expect(resolvePreferredLanguage({ saved: null, navigatorLanguages: ['de-DE'], navigatorLanguage: null })).toBe(
       'zh-TW',
     )
+  })
+
+  it('loads the saved language before browser detection at runtime startup', () => {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, 'ja')
+    setNavigatorLanguages(['en-US'], 'ko-KR')
+
+    expect(getInitialLanguage()).toBe('ja')
+  })
+
+  it('falls back to browser language detection when storage is unavailable', () => {
+    vi.stubGlobal('localStorage', {
+      getItem: () => {
+        throw new Error('storage unavailable')
+      },
+    })
+    setNavigatorLanguages(['ko-KR'], 'fr-FR')
+
+    expect(getInitialLanguage()).toBe('ko')
+  })
+
+  it('uses navigator.language when navigator.languages is empty at runtime startup', () => {
+    setNavigatorLanguages([], 'fr-CA')
+
+    expect(getInitialLanguage()).toBe('fr')
   })
 })
 
