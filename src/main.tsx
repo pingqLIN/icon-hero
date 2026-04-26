@@ -5,16 +5,14 @@ import './i18n'
 import App from './App.tsx'
 import { ErrorFallback } from './ErrorFallback.tsx'
 
-import "./main.css"
-import "./styles/theme.css"
 import "./index.css"
 
-const isLocalDevHost = import.meta.env.DEV && (
+const isLocalHost = (
   window.location.hostname === '127.0.0.1' ||
   window.location.hostname === 'localhost'
 )
 
-if (!isLocalDevHost) {
+if (!isLocalHost) {
   void import("@github/spark/spark")
 }
 

@@ -58,7 +58,9 @@ function App() {
   const [applyItem, setApplyItem] = useState<WorkspaceItem | null>(null)
   const [showApply, setShowApply] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const iconResourcesRef = useRef<HTMLDivElement>(null)
   const isProcessingRef = useRef(false)
+  const [shouldLoadIconResources, setShouldLoadIconResources] = useState(false)
 
   const getInputSignature = (item: File | string) => {
     if (typeof item === 'string') {
@@ -301,6 +303,63 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    if (shouldLoadIconResources) {
+      return
+    }
+
+    const node = iconResourcesRef.current
+    if (!node) {
+      return
+    }
+
+    let cancelIdleLoad: (() => void) | undefined
+
+    const scheduleLoad = () => {
+      if (cancelIdleLoad) {
+        return
+      }
+
+      const requestIdle = (window as typeof window & {
+        requestIdleCallback?: (callback: IdleRequestCallback, options?: IdleRequestOptions) => number
+        cancelIdleCallback?: (handle: number) => void
+      }).requestIdleCallback
+      const cancelIdle = (window as typeof window & {
+        cancelIdleCallback?: (handle: number) => void
+      }).cancelIdleCallback
+
+      if (requestIdle) {
+        const idleHandle = requestIdle(() => setShouldLoadIconResources(true), { timeout: 2000 })
+        cancelIdleLoad = () => cancelIdle?.(idleHandle)
+        return
+      }
+
+      const timeoutHandle = window.setTimeout(() => setShouldLoadIconResources(true), 250)
+      cancelIdleLoad = () => window.clearTimeout(timeoutHandle)
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      scheduleLoad()
+      return () => cancelIdleLoad?.()
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect()
+        scheduleLoad()
+      }
+    }, { rootMargin: '320px 0px' })
+
+    observer.observe(node)
+    const fallbackTimeout = window.setTimeout(scheduleLoad, 3500)
+
+    return () => {
+      observer.disconnect()
+      window.clearTimeout(fallbackTimeout)
+      cancelIdleLoad?.()
+    }
+  }, [shouldLoadIconResources])
+
   return (
     <>
       <Toaster />
@@ -455,9 +514,13 @@ function App() {
           </div>
 
           {/* Top 10 Icon Resource Websites */}
-          <Suspense fallback={null}>
-            <IconResourcesSection />
-          </Suspense>
+          <div ref={iconResourcesRef} className="min-h-16">
+            {shouldLoadIconResources && (
+              <Suspense fallback={null}>
+                <IconResourcesSection />
+              </Suspense>
+            )}
+          </div>
         </main>
 
         <footer className="border-t border-border/70">

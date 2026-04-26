@@ -1,5 +1,37 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @import "tw-animate-css";
+
+@source "./App.tsx";
+@source "./ErrorFallback.tsx";
+@source "./components/ApplyIconDialog.tsx";
+@source "./components/AutomationDialog.tsx";
+@source "./components/DragTrackingOverlay.tsx";
+@source "./components/FolderPathInput.tsx";
+@source "./components/IconResourcesSection.tsx";
+@source "./components/InteractionHelp.tsx";
+@source "./components/LanguageSwitcher.tsx";
+@source "./components/LogoDisplay.tsx";
+@source "./components/MascotDisplay.tsx";
+@source "./components/PreviewDialog.tsx";
+@source "./components/VisitorCounter.tsx";
+@source "./components/WorkspaceDropZone.tsx";
+@source "./components/WorkspaceQueue.tsx";
+@source "./components/WorkspaceQueueItem.tsx";
+@source "./components/ui/alert.tsx";
+@source "./components/ui/badge.tsx";
+@source "./components/ui/button.tsx";
+@source "./components/ui/card.tsx";
+@source "./components/ui/dialog.tsx";
+@source "./components/ui/dropdown-menu.tsx";
+@source "./components/ui/input.tsx";
+@source "./components/ui/label.tsx";
+@source "./components/ui/scroll-area.tsx";
+@source "./components/ui/separator.tsx";
+@source "./components/ui/sonner.tsx";
+@source "./components/ui/tabs.tsx";
+@source "./components/ui/tooltip.tsx";
+
+@custom-variant dark (&:is(.dark *));
 
 @layer base {
   * {

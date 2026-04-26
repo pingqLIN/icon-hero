@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 const COUNTER_URL = 'https://api.counterapi.dev/v1/icon-hero/visits/up'
 const CACHE_KEY = 'icon-hero-visitor-count'
 const LOCAL_DEV_HOSTS = new Set(['localhost', '127.0.0.1'])
+const ENABLE_LOCAL_COUNTER = import.meta.env.VITE_ENABLE_LOCAL_COUNTER === 'true'
 
 interface UseVisitorCountResult {
   count: number | null
@@ -25,7 +26,7 @@ export function useVisitorCount(): UseVisitorCountResult {
 
   useEffect(() => {
     let cancelled = false
-    const shouldFetchCount = !(import.meta.env.DEV && LOCAL_DEV_HOSTS.has(window.location.hostname))
+    const shouldFetchCount = ENABLE_LOCAL_COUNTER || !LOCAL_DEV_HOSTS.has(window.location.hostname)
 
     async function fetchCount() {
       if (!shouldFetchCount) {

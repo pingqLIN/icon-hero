@@ -2,17 +2,17 @@ import { motion } from 'framer-motion'
 import { Cube } from '@phosphor-icons/react'
 
 // Bot Images
-import botFlyImage from '@/assets/bot-fly.png'
-import botFlyHeroImage from '@/assets/bot-fly-hero.png'
-import botWaveImage from '@/assets/bot-wave.png'
-import botThumbsupImage from '@/assets/bot-thumbsup.png'
-import botHoldImage from '@/assets/bot-hold.png'
+import botFlyImage from '@/assets/bot-fly.webp'
+import botFlyHeroImage from '@/assets/bot-fly-hero.webp'
+import botWaveImage from '@/assets/bot-wave.webp'
+import botThumbsupImage from '@/assets/bot-thumbsup.webp'
+import botHoldImage from '@/assets/bot-hold.webp'
 
 // Hero Images
-import heroWelcomeImage from '@/assets/hero-welcome.png'
-import heroFlyImage from '@/assets/hero-fly.png'
-import heroWaveImage from '@/assets/hero-wave.png'
-import heroThinkImage from '@/assets/hero-think.png'
+import heroWelcomeImage from '@/assets/hero-welcome.webp'
+import heroFlyImage from '@/assets/hero-fly.webp'
+import heroWaveImage from '@/assets/hero-wave.webp'
+import heroThinkImage from '@/assets/hero-think.webp'
 
 type MascotType = 'bot' | 'hero' | 'abstract'
 type MascotState = 'idle' | 'processing' | 'success' | 'error' | 'analyzing'
