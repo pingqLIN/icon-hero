@@ -388,31 +388,39 @@ function App() {
           </div>
         </div>
 
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
-            <Button
-              onClick={handleUploadClick}
-              size="lg"
-              variant="default"
-              className="gap-2 whitespace-nowrap"
-              disabled={isProcessing}
-              data-help={t('helpSelectFile')}
-            >
-              <UploadSimple size={20} />
-              {isProcessing ? t('processing') : t('selectFile')}
-            </Button>
-            <Button
-              onClick={() => setShowUrlInput(!showUrlInput)}
-              size="lg"
-              variant={showUrlInput ? "default" : "outline"}
-              className="gap-2 whitespace-nowrap"
-              disabled={isProcessing}
-              data-help={t('helpLoadFromUrl')}
-            >
-              <LinkIcon size={20} />
-              {t('loadFromUrl')}
-            </Button>
-          </div>
+        <main className="relative mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+          <div
+            className="pointer-events-none absolute inset-x-4 top-0 h-[520px] opacity-[0.05] dark:opacity-[0.08]"
+            style={{ backgroundImage: 'linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)', backgroundSize: '48px 48px' }}
+            aria-hidden="true"
+          />
+
+          <section className="relative z-0 border-y border-black/15 py-4 dark:border-white/15">
+            <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+              <Button
+                onClick={handleUploadClick}
+                size="lg"
+                variant="default"
+                className="gap-2 whitespace-nowrap"
+                disabled={isProcessing}
+                data-help={t('helpSelectFile')}
+              >
+                <UploadSimple size={20} />
+                {isProcessing ? t('processing') : t('selectFile')}
+              </Button>
+              <Button
+                onClick={() => setShowUrlInput(!showUrlInput)}
+                size="lg"
+                variant={showUrlInput ? "default" : "outline"}
+                className="gap-2 whitespace-nowrap"
+                disabled={isProcessing}
+                data-help={t('helpLoadFromUrl')}
+              >
+                <LinkIcon size={20} />
+                {t('loadFromUrl')}
+              </Button>
+            </div>
+          </section>
 
           <AnimatePresence mode="wait">
             {showUrlInput && (
@@ -420,9 +428,9 @@ function App() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-6"
+                className="relative z-0 my-5"
               >
-                <div className="max-w-2xl mx-auto">
+                <div className="mx-auto max-w-2xl border-l-4 border-black/70 pl-4 dark:border-primary/70">
                   <div className="flex gap-2">
                     <Input
                       type="url"
@@ -457,9 +465,12 @@ function App() {
             )}
           </AnimatePresence>
 
-          <div className="grid gap-8">
-            <div>
-              <h2 className="text-xl font-bold mb-4">{t('workspaceTitle')}</h2>
+          <div className="relative z-0 grid gap-7 pt-6">
+            <section aria-labelledby="workspace-heading">
+              <div className="mb-4 flex items-center justify-between gap-4">
+                <h2 id="workspace-heading" className="text-xl font-bold">{t('workspaceTitle')}</h2>
+                <div className="hidden h-px flex-1 border-t border-dashed border-black/30 sm:block dark:border-white/25" />
+              </div>
               <WorkspaceDropZone
                 onDrop={handleWorkspaceDrop}
                 isProcessing={isProcessing}
@@ -467,10 +478,10 @@ function App() {
                 hasCompletedItems={hasCompletedItems}
                 helpText={t('helpDropZone')}
               />
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center">
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-y border-black/10 py-3 text-center dark:border-white/10">
                 {workflowSteps.map((step, index) => (
                   <div key={step} className="contents">
-                    <p className="text-base font-extrabold tracking-tight text-foreground md:text-lg">
+                    <p className="text-sm font-extrabold tracking-tight text-foreground sm:text-base">
                       {step}
                     </p>
                     {index < workflowSteps.length - 1 && (
@@ -484,12 +495,12 @@ function App() {
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
 
             {workspaceItems.length > 0 && (
-              <div className="pt-6 md:pt-8">
+              <section className="pt-4 md:pt-6" aria-labelledby="queue-heading">
                 <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 mb-4">
-                  <h2 className="text-xl font-bold">{t('queueTitle')}</h2>
+                  <h2 id="queue-heading" className="text-xl font-bold">{t('queueTitle')}</h2>
                   <span className="text-xs text-muted-foreground">
                     {t('queueDragHint')}
                   </span>
@@ -509,7 +520,7 @@ function App() {
                     mascotType={theme === 'dark' ? 'bot' : 'hero'}
                   />
                 </Suspense>
-              </div>
+              </section>
             )}
           </div>
 

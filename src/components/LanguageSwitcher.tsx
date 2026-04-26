@@ -7,21 +7,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Globe } from '@phosphor-icons/react'
-
-const LANGUAGES = [
-  { code: 'zh-TW', label: '繁體中文' },
-  { code: 'en', label: 'English' },
-]
+import { LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES, type SupportedLanguageCode } from '@/i18n/languages'
 
 export function LanguageSwitcher() {
   const { i18n, t } = useTranslation()
 
-  const handleChange = (code: string) => {
+  const handleChange = (code: SupportedLanguageCode) => {
     i18n
       .changeLanguage(code)
       .then(() => {
         try {
-          localStorage.setItem('icon-hero-lang', code)
+          localStorage.setItem(LANGUAGE_STORAGE_KEY, code)
         } catch {
           // ignoring storage errors to avoid crashing the component tree
         }
@@ -39,7 +35,7 @@ export function LanguageSwitcher() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {LANGUAGES.map(({ code, label }) => (
+        {SUPPORTED_LANGUAGES.map(({ code, label }) => (
           <DropdownMenuItem
             key={code}
             onClick={() => handleChange(code)}

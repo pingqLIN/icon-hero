@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion, type Variants } from 'framer-motion'
 import { Cube } from '@phosphor-icons/react'
 
 // Bot Images
@@ -26,10 +26,42 @@ interface MascotDisplayProps {
 }
 
 export function MascotDisplay({ type = 'bot', state = 'idle', className = '', variant = 'default' }: MascotDisplayProps) {
-  
-  // ------------------------------------------------------------------
-  // 1. TECH-BOT (Neon Forge Theme)
-  // ------------------------------------------------------------------
+  const shouldReduceMotion = useReducedMotion()
+
+  const movement = shouldReduceMotion
+    ? { y: 0, rotate: 0 }
+    : {
+        idle: variant === 'lookDown' ? { y: [0, -3, 0], rotate: [0, -1, 0] } : { y: [0, -10, 0], rotate: [0, 1, 0] },
+        analyzing: { y: [0, -4, 0], rotate: [-2, 2, -2] },
+        processing: { y: [0, -12, 0], rotate: [0, 3, -3, 0] },
+        success: { y: [0, -8, 0], rotate: [0, -2, 2, 0] },
+        error: { y: [0, 3, 0], rotate: [0, -3, 3, 0] },
+      }[state]
+
+  const mascotVariants: Variants = {
+    hidden: { opacity: 0, y: 12, scale: 0.94 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      ...movement,
+      transition: {
+        opacity: { duration: 0.24 },
+        scale: { duration: 0.28, ease: 'easeOut' },
+        y: shouldReduceMotion ? { duration: 0 } : { duration: state === 'processing' ? 1.2 : 3.2, repeat: Infinity, ease: 'easeInOut' },
+        rotate: shouldReduceMotion ? { duration: 0 } : { duration: state === 'processing' ? 1.2 : 3.2, repeat: Infinity, ease: 'easeInOut' },
+      },
+    },
+    exit: { opacity: 0, y: -8, scale: 0.98, transition: { duration: 0.18, ease: 'easeIn' } },
+  }
+
+  const auraAnimation = shouldReduceMotion
+    ? { opacity: 0.35, scale: 1 }
+    : { opacity: state === 'processing' || state === 'analyzing' ? 0.42 : 0.24, scale: state === 'success' ? 1.08 : 1 }
+
+  const shadowAnimation = shouldReduceMotion
+    ? { opacity: 0.32, scale: 1 }
+    : { opacity: state === 'processing' ? 0.42 : 0.28, scale: state === 'processing' ? 0.86 : 1 }
+
   const getBotImage = () => {
     switch (state) {
       case 'idle': return variant === 'lookDown' ? botFlyImage : botFlyHeroImage
@@ -42,38 +74,36 @@ export function MascotDisplay({ type = 'bot', state = 'idle', className = '', va
   }
 
   const renderBot = () => (
-    <div className="relative w-48 h-48 flex items-center justify-center">
-      <motion.img
-        key={state + variant} // Force re-render on state change for animation
-        src={getBotImage()}
-        initial={{ y: 0, opacity: 0, scale: 0.9 }}
-        animate={{ 
-          y: state === 'processing' ? [0, -10, 0] : variant === 'lookDown' ? [0, -2, 0] : [0, -15, 0],
-          opacity: 1,
-          scale: 1,
-          rotate: state === 'processing' ? [0, 2, -2, 0] : 0
-        }}
-        transition={{
-          y: { duration: state === 'processing' ? 0.5 : variant === 'lookDown' ? 2.5 : 3, repeat: Infinity, ease: "easeInOut" },
-          opacity: { duration: 0.3 },
-          scale: { duration: 0.3 },
-          rotate: { duration: 0.5, repeat: Infinity, ease: "easeInOut" }
-        }}
-        className="w-full h-full object-contain relative z-10 drop-shadow-[0_0_15px_rgba(6,182,212,0.5)]"
-        alt="Tech Bot"
-      />
-      {/* Shadow */}
+    <div className="relative flex h-48 w-48 items-center justify-center overflow-visible">
       <motion.div
-        animate={{ scale: [1, 0.8, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: variant === 'lookDown' ? 2.5 : 3, repeat: Infinity }}
-        className="absolute bottom-2 w-24 h-6 bg-black/30 blur-xl rounded-[100%]"
+        aria-hidden="true"
+        animate={auraAnimation}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="absolute inset-8 rounded-full bg-cyan-400/25 blur-2xl"
+      />
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={`${type}-${state}-${variant}`}
+          src={getBotImage()}
+          variants={mascotVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="relative z-10 h-full w-full object-contain drop-shadow-[0_14px_24px_rgba(6,182,212,0.34)]"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+        />
+      </AnimatePresence>
+      <motion.div
+        aria-hidden="true"
+        animate={shadowAnimation}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="absolute bottom-2 h-5 w-24 rounded-[100%] bg-black/30 blur-xl"
       />
     </div>
   )
 
-  // ------------------------------------------------------------------
-  // 2. TOOL HERO (Creative Studio Theme)
-  // ------------------------------------------------------------------
   const getHeroImage = () => {
     switch (state) {
       case 'idle': return heroWelcomeImage
@@ -86,64 +116,62 @@ export function MascotDisplay({ type = 'bot', state = 'idle', className = '', va
   }
 
   const renderHero = () => (
-    <div className="relative w-48 h-48 flex items-center justify-center">
-      <motion.img
-        key={state + variant} // Force re-render on state change for animation
-        src={getHeroImage()}
-        initial={{ y: 0, opacity: 0, scale: 0.9 }}
-        animate={{ 
-          y: state === 'processing' ? [0, -15, 0] : variant === 'lookDown' ? [0, -8, 0] : [0, -15, 0],
-          opacity: 1,
-          scale: 1,
-          rotate: state === 'processing' ? [0, -5, 5, 0] : 0
-        }}
-        transition={{
-          y: { duration: state === 'processing' ? 0.8 : variant === 'lookDown' ? 3 : 4, repeat: Infinity, ease: "easeInOut" },
-          opacity: { duration: 0.3 },
-          scale: { duration: 0.3 },
-          rotate: { duration: 0.8, repeat: Infinity, ease: "easeInOut" }
-        }}
-        className="w-full h-full object-contain relative z-10 drop-shadow-[0_10px_20px_rgba(59,130,246,0.4)]"
-        alt="Tool Hero"
+    <div className="relative flex h-48 w-48 items-center justify-center overflow-visible">
+      <motion.div
+        aria-hidden="true"
+        animate={auraAnimation}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="absolute inset-7 rounded-full bg-blue-400/20 blur-2xl"
       />
-       {/* Shadow */}
-       <motion.div
-        animate={{ scale: [1, 0.85, 1], opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: variant === 'lookDown' ? 3 : 4, repeat: Infinity }}
-        className="absolute bottom-2 w-24 h-6 bg-blue-900/20 blur-xl rounded-[100%]"
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={`${type}-${state}-${variant}`}
+          src={getHeroImage()}
+          variants={mascotVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="relative z-10 h-full w-full object-contain drop-shadow-[0_16px_26px_rgba(59,130,246,0.34)]"
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+        />
+      </AnimatePresence>
+      <motion.div
+        aria-hidden="true"
+        animate={shadowAnimation}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="absolute bottom-2 h-5 w-24 rounded-[100%] bg-blue-950/24 blur-xl"
       />
     </div>
   )
 
-  // ------------------------------------------------------------------
-  // 3. ABSTRACT (Modern)
-  // ------------------------------------------------------------------
   const renderAbstract = () => (
-    <div className="relative w-32 h-32 flex items-center justify-center">
+    <div className="relative flex h-32 w-32 items-center justify-center overflow-hidden">
       <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        animate={shouldReduceMotion ? { rotate: 0 } : { rotate: 360 }}
+        transition={{ duration: 20, repeat: shouldReduceMotion ? 0 : Infinity, ease: "linear" }}
         className="relative"
       >
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="absolute -top-6 -left-6 w-12 h-12 bg-primary/30 rounded-full blur-sm" 
+        <motion.div
+          animate={shouldReduceMotion ? { scale: 1 } : { scale: [1, 1.14, 1] }}
+          transition={{ duration: 3, repeat: shouldReduceMotion ? 0 : Infinity }}
+          className="absolute -top-6 -left-6 h-12 w-12 rotate-45 border border-primary/40 bg-primary/10"
         />
-        <motion.div 
-          animate={{ scale: [1.2, 1, 1.2] }}
-          transition={{ duration: 4, repeat: Infinity }}
-          className="absolute -bottom-6 -right-6 w-16 h-16 bg-secondary/30 rounded-full blur-md" 
+        <motion.div
+          animate={shouldReduceMotion ? { scale: 1 } : { scale: [1.12, 1, 1.12] }}
+          transition={{ duration: 4, repeat: shouldReduceMotion ? 0 : Infinity }}
+          className="absolute -bottom-6 -right-6 h-16 w-16 rotate-45 border border-secondary/40 bg-secondary/10"
         />
-        <div className="w-16 h-16 bg-white/10 backdrop-blur-md border border-white/50 rounded-2xl rotate-45 flex items-center justify-center">
-             <Cube className="text-primary w-8 h-8" />
+        <div className="flex h-16 w-16 rotate-45 items-center justify-center rounded-sm border border-white/50 bg-white/10 backdrop-blur-md">
+             <Cube className="h-8 w-8 -rotate-45 text-primary" />
         </div>
       </motion.div>
     </div>
   )
 
   return (
-    <div className={`flex items-center justify-center ${className}`}>
+    <div className={`pointer-events-none flex items-center justify-center ${className}`}>
       {type === 'bot' && renderBot()}
       {type === 'hero' && renderHero()}
       {type === 'abstract' && renderAbstract()}

@@ -100,39 +100,30 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
       tabIndex={0}
       data-help={helpText}
     >
-      <div className={`relative rounded-2xl border-[3px] border-dashed p-12 transition-all duration-300 ${
+      <div className={`relative overflow-hidden rounded-sm border-[3px] border-dashed p-7 transition-all duration-300 sm:p-9 md:p-12 ${
         isDragActive
-          ? 'border-black bg-transparent shadow-[0_0_0_4px_rgba(0,0,0,0.08)] dark:border-primary dark:bg-primary/10 dark:shadow-[0_0_30px_rgba(var(--primary),0.2)]'
-          : 'border-black bg-transparent hover:bg-transparent dark:border-border dark:bg-secondary/5 dark:hover:border-primary/50 dark:hover:bg-secondary/10 dark:hover:shadow-[0_0_30px_rgba(var(--primary),0.1)]'
+          ? 'border-black bg-transparent shadow-[0_0_0_4px_rgba(0,0,0,0.08)] dark:border-white/75 dark:bg-primary/10 dark:shadow-[0_0_30px_rgba(var(--primary),0.16)]'
+          : 'border-black bg-transparent hover:bg-transparent dark:border-white/45 dark:bg-secondary/5 dark:hover:border-primary/60 dark:hover:bg-secondary/10 dark:hover:shadow-[0_0_30px_rgba(var(--primary),0.08)]'
       }`}>
 
-        {/* 裝飾層：獨立 overflow-hidden，不影響吉祥物 */}
-        <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
-          {/* Background Grid Pattern */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div className="absolute inset-0 opacity-0 dark:opacity-[0.03]"
             style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
           </div>
-          {/* Corner Decoration */}
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl opacity-0 dark:opacity-100"
-          />
-          <motion.div
-            animate={{ rotate: -360 }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-10 -left-10 w-32 h-32 bg-secondary/5 rounded-full blur-2xl opacity-0 dark:opacity-100"
-          />
+          <div className="absolute left-4 right-4 top-4 h-px bg-black/20 dark:bg-white/20" />
+          <div className="absolute bottom-4 left-4 right-4 h-px bg-black/12 dark:bg-white/12" />
+          <div className="absolute bottom-4 left-4 top-4 w-px bg-black/12 dark:bg-white/12" />
+          <div className="absolute bottom-4 right-4 top-4 w-px bg-black/12 dark:bg-white/12" />
+          <div className="absolute inset-x-4 top-1/2 h-px border-t border-dashed border-black/10 dark:border-white/10" />
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-6 relative z-10">
+        <div className="relative z-10 flex flex-col items-center justify-center gap-5 sm:gap-6">
 
-          {/* MASCOT DISPLAY vs FOLDER ICON */}
           {!hasCompletedItems ? (
             <div className={`transition-transform duration-300 relative z-20 ${
               mascotType === 'hero'
-                ? 'scale-[1.513] group-hover:scale-[1.634]'
-                : 'scale-125 group-hover:scale-[1.35]'
+                ? 'scale-[1.16] group-hover:scale-[1.22] sm:scale-[1.34] sm:group-hover:scale-[1.42]'
+                : 'scale-110 group-hover:scale-[1.18] sm:scale-125 sm:group-hover:scale-[1.32]'
             }`}>
               <MascotDisplay
                 type={mascotType}
@@ -140,7 +131,7 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
               />
             </div>
           ) : (
-            <div className="w-16 h-16 bg-muted rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-sm border border-border">
+            <div className="mb-2 flex h-16 w-16 items-center justify-center rounded-sm border border-border bg-muted shadow-sm transition-transform duration-300 group-hover:scale-105">
               <Folder
                 size={32}
                 weight="duotone"
@@ -150,7 +141,7 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
           )}
 
           <div className="text-center space-y-3">
-            <h3 className="text-2xl font-bold bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <h3 className="text-xl font-bold text-foreground sm:text-2xl">
               {isProcessing ? t('workspaceDropProcessing') : t('workspaceDropIdle')}
             </h3>
             <p className="text-base text-muted-foreground max-w-md mx-auto leading-relaxed">
@@ -161,11 +152,11 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
             <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 px-3 py-1 bg-background border border-border rounded-full text-xs text-muted-foreground shadow-sm mt-2"
+              className="mt-2 inline-flex items-center gap-2 rounded-sm border border-border bg-background px-3 py-1 text-xs text-muted-foreground shadow-sm"
             >
-              <span className="w-4 h-4 flex items-center justify-center bg-muted rounded text-[10px]">⌘</span>
+              <span className="flex h-4 w-4 items-center justify-center rounded-sm bg-muted text-[10px]">⌘</span>
               <span>+</span>
-              <span className="w-4 h-4 flex items-center justify-center bg-muted rounded text-[10px]">V</span>
+              <span className="flex h-4 w-4 items-center justify-center rounded-sm bg-muted text-[10px]">V</span>
               <span>{t('workspaceDropPasteHint')}</span>
             </motion.div>
           </div>
