@@ -32,7 +32,7 @@ Verified on 2026-04-26:
 
 ## Language Decision
 
-Current languages: `zh-TW`, `en`.
+Original languages before this batch: `zh-TW`, `en`.
 
 Recommended new languages:
 

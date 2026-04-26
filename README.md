@@ -18,7 +18,7 @@
     <img src="https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg" alt="Deploy">
   </a>
   <img src="https://img.shields.io/badge/React-19-61dafb?logo=react" alt="React 19">
-  <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript" alt="TypeScript">
   <img src="https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss" alt="Tailwind CSS">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License"></a>
 </p>
@@ -54,6 +54,7 @@
 - **One-Click Packaging** — Bundle icon + script + README into a ZIP file
 - **Batch Processing** — Handle multiple icons simultaneously in the workspace queue
 - **Dual Theme** — Neon Forge (dark) and Creative Studio (light) with animated mascots
+- **Adaptive Multilingual UI** — Detects saved/browser language across Traditional Chinese, Simplified Chinese, English, Japanese, Spanish, French, and Korean
 
 ---
 

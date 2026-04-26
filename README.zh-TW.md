@@ -18,7 +18,7 @@
     <img src="https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg" alt="部署狀態">
   </a>
   <img src="https://img.shields.io/badge/React-19-61dafb?logo=react" alt="React 19">
-  <img src="https://img.shields.io/badge/TypeScript-5.7-3178c6?logo=typescript" alt="TypeScript">
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript" alt="TypeScript">
   <img src="https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss" alt="Tailwind CSS">
   <a href="LICENSE"><img src="https://img.shields.io/badge/授權-MIT-green" alt="MIT 授權"></a>
 </p>
@@ -53,6 +53,7 @@
 - **一鍵打包下載** — 將圖示 + 腳本 + 說明文件打包為 ZIP 檔
 - **批次處理** — 工作區佇列同時處理多個圖示
 - **雙主題系統** — Neon Forge（暗色）與 Creative Studio（亮色），含動態吉祥物動畫
+- **自動語系介面** — 依儲存偏好與瀏覽器語言切換繁中、簡中、英文、日文、西班牙文、法文與韓文
 
 ---
 
@@ -108,7 +109,7 @@
 
 ```
 方式 A：點擊「選擇圖檔」選取本機檔案
-方式 B：點擊「從 URL 載入」貼上任意網站網址
+方式 B：點擊「從 URL 載入」貼上 HTTPS 網站網址
 方式 C：直接拖曳圖檔至工作區拖放區
 方式 D：使用 ⌘/Ctrl + V 貼上剪貼簿圖片
 ```
