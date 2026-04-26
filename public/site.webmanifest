@@ -1,0 +1,20 @@
+{
+  "name": "ICON HERO - Online Icon Converter",
+  "short_name": "ICON HERO",
+  "description": "Browser-based icon conversion tool for PNG, ICO, and ICNS files, URL loading, batch downloads, and automation scripts.",
+  "start_url": "/icon-hero/",
+  "scope": "/icon-hero/",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#f97316",
+  "lang": "zh-Hant",
+  "categories": ["design", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icon-hero/assets/ICONHERO-DgbJXyeh.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
