@@ -69,7 +69,6 @@ const en = {
     // Icon resources section
     iconSitesSectionTitle: 'Top 10 Icon Resources',
     iconSitesSectionHint: 'Find an icon you like, then paste the URL or download it and drag it into the workspace above.',
-    iconSitesClickHint: 'Click',
     iconSitesLicense: {
       free: 'Free',
       freemium: 'Free + Paid',

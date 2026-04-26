@@ -69,7 +69,6 @@ const zhTW = {
     // Icon resources section
     iconSitesSectionTitle: '世界前 10 大 Icon 資源網站',
     iconSitesSectionHint: '找到理想圖示後，直接貼上 URL 或下載後拖入上方工作區即可轉換',
-    iconSitesClickHint: '可點選',
     iconSitesLicense: {
       free: '免費',
       freemium: '免費 + 付費',

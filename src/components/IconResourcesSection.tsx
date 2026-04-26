@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowSquareOut, CaretDown, HandPointing, Star } from '@phosphor-icons/react'
+import { ArrowSquareOut, CaretDown, HandTap, Star } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 
 interface IconSite {
@@ -160,15 +160,14 @@ export function IconResourcesSection() {
         <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground tracking-wider uppercase">
           <Star size={14} weight="fill" className="text-primary" />
           {t('iconSitesSectionTitle')}
-          {isExpanded && (
+          {!isExpanded && (
             <motion.span
-              className="ml-1 inline-flex items-center gap-1 rounded-full border border-primary/20 bg-background px-2 py-0.5 text-[10px] normal-case tracking-normal text-foreground shadow-sm"
-              animate={{ x: [0, 4, 0] }}
-              transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+              className="ml-1 inline-flex items-center justify-center rounded-full border border-primary/20 bg-background p-1 text-primary shadow-sm"
+              animate={{ y: [0, 4, 0] }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
               aria-hidden="true"
             >
-              <HandPointing size={13} weight="fill" className="text-primary" />
-              {t('iconSitesClickHint')}
+              <HandTap size={15} weight="fill" />
             </motion.span>
           )}
           <motion.span
@@ -250,16 +249,6 @@ function SiteCard({ site, licenseLabel }: { site: IconSite; licenseLabel: Record
           className="mt-0.5 flex-shrink-0 text-muted-foreground/60 group-hover:text-primary transition-colors"
         />
       </div>
-
-      <motion.div
-        className="pointer-events-none absolute right-2 top-8 flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-[10px] font-bold text-foreground opacity-0 shadow-sm ring-1 ring-border transition-opacity group-hover:opacity-100"
-        animate={{ x: [0, -4, 0], y: [0, 2, 0] }}
-        transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
-        aria-hidden="true"
-      >
-        <HandPointing size={14} weight="fill" style={{ color: site.accentColor }} />
-        <span>{t('iconSitesClickHint')}</span>
-      </motion.div>
 
       {/* Count + License */}
       <div className="flex items-center gap-2 flex-wrap">

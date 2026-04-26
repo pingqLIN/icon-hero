@@ -7,8 +7,6 @@ import { Input } from '@/components/ui/input'
 import { Toaster } from '@/components/ui/sonner'
 import { WorkspaceDropZone } from '@/components/WorkspaceDropZone'
 import { LogoDisplay } from '@/components/LogoDisplay'
-import { WorkspaceQueue } from '@/components/WorkspaceQueue'
-import { IconResourcesSection } from '@/components/IconResourcesSection'
 // import { DragInstructions } from '@/components/DragInstructions'
 import { DragTrackingOverlay } from '@/components/DragTrackingOverlay'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
@@ -22,6 +20,8 @@ import { toast } from 'sonner'
 const PreviewDialog = lazy(() => import('@/components/PreviewDialog').then(module => ({ default: module.PreviewDialog })))
 const AutomationDialog = lazy(() => import('@/components/AutomationDialog').then(module => ({ default: module.AutomationDialog })))
 const ApplyIconDialog = lazy(() => import('@/components/ApplyIconDialog').then(module => ({ default: module.ApplyIconDialog })))
+const WorkspaceQueue = lazy(() => import('@/components/WorkspaceQueue').then(module => ({ default: module.WorkspaceQueue })))
+const IconResourcesSection = lazy(() => import('@/components/IconResourcesSection').then(module => ({ default: module.IconResourcesSection })))
 
 
 function App() {
@@ -436,24 +436,28 @@ function App() {
                   </span>
                 </div>
                 {/* DragInstructions removed as mascot is moved to Completed area */}
-                <WorkspaceQueue
-                  items={workspaceItems}
-                  onPreview={handlePreview}
-                  onDownload={handleDownload}
-                  onAutomation={handleAutomation}
-                  onApplyIcon={handleApplyIcon}
-                  onReorder={handleReorder}
-                  onClearCompleted={handleClearCompleted}
-                  onFileDragStart={handleFileDragStart}
-                  onFileDragEnd={handleFileDragEnd}
-                  mascotType={theme === 'dark' ? 'bot' : 'hero'}
-                />
+                <Suspense fallback={null}>
+                  <WorkspaceQueue
+                    items={workspaceItems}
+                    onPreview={handlePreview}
+                    onDownload={handleDownload}
+                    onAutomation={handleAutomation}
+                    onApplyIcon={handleApplyIcon}
+                    onReorder={handleReorder}
+                    onClearCompleted={handleClearCompleted}
+                    onFileDragStart={handleFileDragStart}
+                    onFileDragEnd={handleFileDragEnd}
+                    mascotType={theme === 'dark' ? 'bot' : 'hero'}
+                  />
+                </Suspense>
               </div>
             )}
           </div>
 
           {/* Top 10 Icon Resource Websites */}
-          <IconResourcesSection />
+          <Suspense fallback={null}>
+            <IconResourcesSection />
+          </Suspense>
         </main>
 
         <footer className="border-t border-border/70">
@@ -490,23 +494,29 @@ function App() {
         />
 
         <Suspense fallback={null}>
-          <PreviewDialog
-            item={previewItem}
-            open={showPreview}
-            onOpenChange={setShowPreview}
-          />
+          {previewItem && (
+            <PreviewDialog
+              item={previewItem}
+              open={showPreview}
+              onOpenChange={setShowPreview}
+            />
+          )}
 
-          <AutomationDialog
-            item={automationItem}
-            open={showAutomation}
-            onOpenChange={setShowAutomation}
-          />
+          {automationItem && (
+            <AutomationDialog
+              item={automationItem}
+              open={showAutomation}
+              onOpenChange={setShowAutomation}
+            />
+          )}
 
-          <ApplyIconDialog
-            item={applyItem}
-            open={showApply}
-            onOpenChange={setShowApply}
-          />
+          {applyItem && (
+            <ApplyIconDialog
+              item={applyItem}
+              open={showApply}
+              onOpenChange={setShowApply}
+            />
+          )}
         </Suspense>
       </div>
     </>

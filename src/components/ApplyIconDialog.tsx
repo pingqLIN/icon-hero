@@ -21,17 +21,24 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { FolderPathInput } from '@/components/FolderPathInput'
 import { WorkspaceItem } from '@/types/workspace'
-import {
-  createApplyPackage,
-  getRecommendedFormat,
-  ApplyPlatform
-} from '@/lib/iconApplyPackager'
+import type { ApplyPlatform } from '@/lib/iconApplyPackager'
 import { toast } from 'sonner'
 
 interface ApplyIconDialogProps {
   item: WorkspaceItem | null
   open: boolean
   onOpenChange: (open: boolean) => void
+}
+
+const getRecommendedFormat = (platform: ApplyPlatform): 'ico' | 'icns' | 'png' => {
+  switch (platform) {
+    case 'windows':
+      return 'ico'
+    case 'macos':
+      return 'icns'
+    case 'linux':
+      return 'png'
+  }
 }
 
 /**
@@ -83,6 +90,8 @@ export function ApplyIconDialog({ item, open, onOpenChange }: ApplyIconDialogPro
     setIsPackaging(true)
 
     try {
+      const { createApplyPackage } = await import('@/lib/iconApplyPackager')
+
       await createApplyPackage({
         iconBlob,
         iconName: item.name,

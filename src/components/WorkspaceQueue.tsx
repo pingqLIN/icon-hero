@@ -7,7 +7,6 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import { Package, DownloadSimple, FileZip, Trash } from '@phosphor-icons/react'
-import { downloadAllAsZip, downloadByFormat } from '@/lib/batchDownload'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import {
@@ -66,6 +65,8 @@ export function WorkspaceQueue({
   const handleBatchDownload = async (format?: 'png' | 'ico' | 'icns') => {
     try {
       setIsDownloading(true)
+      const { downloadAllAsZip, downloadByFormat } = await import('@/lib/batchDownload')
+
       if (format) {
         await downloadByFormat(completedItems, format)
         toast.success(t('queueBatchDownloadDone'), {
