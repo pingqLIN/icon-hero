@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" aria-label={t('switchLanguage')}>
+        <Button variant="outline" size="icon" aria-label={t('switchLanguage')} data-help={t('helpLanguageSwitcher')}>
           <Globe size={18} />
         </Button>
       </DropdownMenuTrigger>
@@ -44,6 +44,7 @@ export function LanguageSwitcher() {
             key={code}
             onClick={() => handleChange(code)}
             className={i18n.language === code ? 'font-semibold' : ''}
+            data-help={t('helpLanguageOption', { language: label })}
           >
             {label}
           </DropdownMenuItem>

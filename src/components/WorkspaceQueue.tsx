@@ -150,6 +150,7 @@ export function WorkspaceQueue({
             size="sm" 
             onClick={handleClearCompleted}
             className="gap-2"
+            data-help={t('helpClearCompleted')}
           >
             <Trash size={16} />
             {t('queueClearCompleted')}
@@ -162,26 +163,27 @@ export function WorkspaceQueue({
                 size="sm"
                 disabled={isDownloading || completedItems.length === 0}
                 className="gap-2"
+                data-help={t('helpBatchDownload')}
               >
                 <FileZip size={16} />
                 {t('queueBatchDownload')}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => handleBatchDownload()}>
+              <DropdownMenuItem onClick={() => handleBatchDownload()} data-help={t('helpBatchDownloadAll')}>
                 <FileZip size={16} className="mr-2" />
                 {t('queueDownloadAllFormats')}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => handleBatchDownload('png')}>
+              <DropdownMenuItem onClick={() => handleBatchDownload('png')} data-help={t('helpBatchDownloadFormat', { format: 'PNG' })}>
                 <DownloadSimple size={16} className="mr-2" />
                 {t('queueDownloadAllFormat', { format: 'PNG' })}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleBatchDownload('ico')}>
+              <DropdownMenuItem onClick={() => handleBatchDownload('ico')} data-help={t('helpBatchDownloadFormat', { format: 'ICO' })}>
                 <DownloadSimple size={16} className="mr-2" />
                 {t('queueDownloadAllFormat', { format: 'ICO' })}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleBatchDownload('icns')}>
+              <DropdownMenuItem onClick={() => handleBatchDownload('icns')} data-help={t('helpBatchDownloadFormat', { format: 'ICNS' })}>
                 <DownloadSimple size={16} className="mr-2" />
                 {t('queueDownloadAllFormat', { format: 'ICNS' })}
               </DropdownMenuItem>

@@ -69,6 +69,7 @@ const en = {
     // Icon resources section
     iconSitesSectionTitle: 'Top 10 Icon Resources',
     iconSitesSectionHint: 'Find an icon you like, then paste the URL or download it and drag it into the workspace above.',
+    iconSitesClickHint: 'Click',
     iconSitesLicense: {
       free: 'Free',
       freemium: 'Free + Paid',
@@ -137,6 +138,27 @@ const en = {
     // Language switcher
     language: 'Language',
     switchLanguage: 'Switch language',
+
+    // Hover help
+    helpThemeToggle: 'Switch between light and dark scenes.',
+    helpSelectFile: 'Choose one or more local icon images to convert.',
+    helpLoadFromUrl: 'Open the HTTPS URL input field.',
+    helpUrlInput: 'Paste an HTTPS image or website URL for icon extraction.',
+    helpUrlSubmit: 'Load this HTTPS URL into the conversion queue.',
+    helpDropZone: 'Drop image files or HTTPS links here, or focus this area and paste.',
+    helpGithubLink: 'Open the ICON HERO source repository.',
+    helpLanguageSwitcher: 'Change the interface language.',
+    helpLanguageOption: 'Switch the interface to {{language}}.',
+    helpClearCompleted: 'Remove completed items from the queue.',
+    helpBatchDownload: 'Open batch download choices for completed icons.',
+    helpBatchDownloadAll: 'Download every converted format as one ZIP file.',
+    helpBatchDownloadFormat: 'Download all completed {{format}} files as a ZIP.',
+    helpPreview: 'Preview this converted icon.',
+    helpApplyIcon: 'Package this icon with a folder-apply script.',
+    helpAutomation: 'Generate an automation script for this icon.',
+    helpFormatButton: 'Click to download {{format}}, or drag it to a system target.',
+    helpIconSitesToggle: 'Show or hide recommended icon resource websites.',
+    helpIconSiteCard: 'Open {{site}} in a new tab.',
   }
 }
 

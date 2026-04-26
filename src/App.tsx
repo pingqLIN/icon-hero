@@ -13,6 +13,7 @@ import { IconResourcesSection } from '@/components/IconResourcesSection'
 import { DragTrackingOverlay } from '@/components/DragTrackingOverlay'
 import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 import { VisitorCounter } from '@/components/VisitorCounter'
+import { InteractionHelp } from '@/components/InteractionHelp'
 import { WorkspaceItem } from '@/types/workspace'
 import { analyzeDroppedItem } from '@/lib/workspaceAnalyzer'
 import { convertIcon } from '@/lib/iconConverter'
@@ -287,6 +288,7 @@ function App() {
   return (
     <>
       <Toaster />
+      <InteractionHelp />
       <DragTrackingOverlay isActive={isDraggingFile} fileName={draggedFileName} />
       <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
         <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -302,6 +304,7 @@ function App() {
                   variant="outline"
                   size="icon"
                   onClick={toggleTheme}
+                  data-help={t('helpThemeToggle')}
                 >
                   {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                 </Button>
@@ -318,6 +321,7 @@ function App() {
               variant="default"
               className="gap-2 whitespace-nowrap"
               disabled={isProcessing}
+              data-help={t('helpSelectFile')}
             >
               <UploadSimple size={20} />
               {isProcessing ? t('processing') : t('selectFile')}
@@ -328,6 +332,7 @@ function App() {
               variant={showUrlInput ? "default" : "outline"}
               className="gap-2 whitespace-nowrap"
               disabled={isProcessing}
+              data-help={t('helpLoadFromUrl')}
             >
               <LinkIcon size={20} />
               {t('loadFromUrl')}
@@ -357,11 +362,13 @@ function App() {
                       className="flex-1"
                       disabled={isProcessing}
                       id="url-input"
+                      data-help={t('helpUrlInput')}
                     />
                     <Button
                       onClick={handleUrlSubmit}
                       disabled={isProcessing || !urlInput.trim()}
                       className="gap-2 whitespace-nowrap"
+                      data-help={t('helpUrlSubmit')}
                     >
                       <LinkIcon size={18} />
                       {t('load')}
@@ -383,6 +390,7 @@ function App() {
                 isProcessing={isProcessing}
                 mascotType={theme === 'dark' ? 'bot' : 'hero'}
                 hasCompletedItems={hasCompletedItems}
+                helpText={t('helpDropZone')}
               />
               <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center">
                 {workflowSteps.map((step, index) => (
@@ -442,6 +450,7 @@ function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline underline-offset-2 hover:text-foreground transition-colors"
+                  data-help={t('helpGithubLink')}
                 >
                   https://github.com/pingqLIN/icon-hero
                 </a>

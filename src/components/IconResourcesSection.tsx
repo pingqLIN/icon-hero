@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowSquareOut, CaretDown, Star } from '@phosphor-icons/react'
+import { ArrowSquareOut, CaretDown, HandPointing, Star } from '@phosphor-icons/react'
 import { useTranslation } from 'react-i18next'
 
 interface IconSite {
@@ -154,11 +154,23 @@ export function IconResourcesSection() {
         onClick={() => setIsExpanded(prev => !prev)}
         className="flex w-full items-center gap-3 rounded-2xl px-2 py-3 text-left transition-colors hover:bg-secondary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         aria-expanded={isExpanded}
+        data-help={t('helpIconSitesToggle')}
       >
         <div className="h-px flex-1 bg-border" />
         <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground tracking-wider uppercase">
           <Star size={14} weight="fill" className="text-primary" />
           {t('iconSitesSectionTitle')}
+          {isExpanded && (
+            <motion.span
+              className="ml-1 inline-flex items-center gap-1 rounded-full border border-primary/20 bg-background px-2 py-0.5 text-[10px] normal-case tracking-normal text-foreground shadow-sm"
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+              aria-hidden="true"
+            >
+              <HandPointing size={13} weight="fill" className="text-primary" />
+              {t('iconSitesClickHint')}
+            </motion.span>
+          )}
           <motion.span
             animate={{ rotate: isExpanded ? 180 : 0 }}
             transition={{ duration: 0.2 }}
@@ -211,6 +223,7 @@ function SiteCard({ site, licenseLabel }: { site: IconSite; licenseLabel: Record
       href={site.url}
       target="_blank"
       rel="noopener noreferrer"
+      data-help={t('helpIconSiteCard', { site: site.name })}
       className="group relative flex flex-col gap-3 rounded-xl border border-border bg-card p-4 transition-all duration-200
                  hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[0_4px_20px_rgba(0,0,0,0.15)]
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
@@ -237,6 +250,16 @@ function SiteCard({ site, licenseLabel }: { site: IconSite; licenseLabel: Record
           className="mt-0.5 flex-shrink-0 text-muted-foreground/60 group-hover:text-primary transition-colors"
         />
       </div>
+
+      <motion.div
+        className="pointer-events-none absolute right-2 top-8 flex items-center gap-1 rounded-full bg-background/90 px-2 py-1 text-[10px] font-bold text-foreground opacity-0 shadow-sm ring-1 ring-border transition-opacity group-hover:opacity-100"
+        animate={{ x: [0, -4, 0], y: [0, 2, 0] }}
+        transition={{ duration: 1.1, repeat: Infinity, ease: 'easeInOut' }}
+        aria-hidden="true"
+      >
+        <HandPointing size={14} weight="fill" style={{ color: site.accentColor }} />
+        <span>{t('iconSitesClickHint')}</span>
+      </motion.div>
 
       {/* Count + License */}
       <div className="flex items-center gap-2 flex-wrap">

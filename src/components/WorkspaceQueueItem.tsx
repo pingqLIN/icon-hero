@@ -288,6 +288,7 @@ export function WorkspaceQueueItem({
                         variant="ghost"
                         className="h-8 w-8"
                         onClick={() => onPreview?.(item)}
+                        data-help={t('helpPreview')}
                       >
                         <Eye size={16} />
                       </Button>
@@ -306,6 +307,7 @@ export function WorkspaceQueueItem({
                         variant="outline"
                         className="h-8 w-8"
                         onClick={() => onApplyIcon?.(item)}
+                        data-help={t('helpApplyIcon')}
                       >
                         <FolderOpen size={16} weight="fill" />
                       </Button>
@@ -324,6 +326,7 @@ export function WorkspaceQueueItem({
                         variant="outline"
                         className="h-8 w-8"
                         onClick={() => onAutomation?.(item)}
+                        data-help={t('helpAutomation')}
                       >
                         <Code size={16} weight="bold" />
                       </Button>
@@ -348,6 +351,7 @@ export function WorkspaceQueueItem({
                             draggable={true}
                             onDragStart={(e) => handleDragStart(e, format)}
                             className="relative group"
+                            data-help={t('helpFormatButton', { format: format.toUpperCase() })}
                           >
                             <Button
                               size="sm"

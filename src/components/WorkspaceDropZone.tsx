@@ -9,9 +9,10 @@ interface WorkspaceDropZoneProps {
   isProcessing?: boolean
   mascotType?: 'bot' | 'hero' | 'abstract'
   hasCompletedItems?: boolean
+  helpText?: string
 }
 
-export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', hasCompletedItems = false }: WorkspaceDropZoneProps) {
+export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', hasCompletedItems = false, helpText }: WorkspaceDropZoneProps) {
   const [isDragActive, setIsDragActive] = useState(false)
   const { t } = useTranslation()
 
@@ -97,29 +98,30 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
       onDrop={handleDrop}
       onPaste={handlePaste}
       tabIndex={0}
+      data-help={helpText}
     >
-      <div className={`relative border-2 border-dashed rounded-2xl p-12 transition-all duration-300 ${
+      <div className={`relative rounded-2xl border-[3px] border-dashed p-12 transition-all duration-300 ${
         isDragActive
-          ? 'border-primary bg-primary/10 shadow-[0_0_30px_rgba(var(--primary),0.2)]'
-          : 'border-border bg-secondary/5 hover:border-primary/50 hover:bg-secondary/10 hover:shadow-[0_0_30px_rgba(var(--primary),0.1)]'
+          ? 'border-black bg-transparent shadow-[0_0_0_4px_rgba(0,0,0,0.08)] dark:border-primary dark:bg-primary/10 dark:shadow-[0_0_30px_rgba(var(--primary),0.2)]'
+          : 'border-black bg-transparent hover:bg-transparent dark:border-border dark:bg-secondary/5 dark:hover:border-primary/50 dark:hover:bg-secondary/10 dark:hover:shadow-[0_0_30px_rgba(var(--primary),0.1)]'
       }`}>
 
         {/* 裝飾層：獨立 overflow-hidden，不影響吉祥物 */}
         <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
           {/* Background Grid Pattern */}
-          <div className="absolute inset-0 opacity-[0.03]"
+          <div className="absolute inset-0 opacity-0 dark:opacity-[0.03]"
             style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
           </div>
           {/* Corner Decoration */}
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl"
+            className="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-2xl opacity-0 dark:opacity-100"
           />
           <motion.div
             animate={{ rotate: -360 }}
             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-10 -left-10 w-32 h-32 bg-secondary/5 rounded-full blur-2xl"
+            className="absolute -bottom-10 -left-10 w-32 h-32 bg-secondary/5 rounded-full blur-2xl opacity-0 dark:opacity-100"
           />
         </div>
 

@@ -69,6 +69,7 @@ const zhTW = {
     // Icon resources section
     iconSitesSectionTitle: '世界前 10 大 Icon 資源網站',
     iconSitesSectionHint: '找到理想圖示後，直接貼上 URL 或下載後拖入上方工作區即可轉換',
+    iconSitesClickHint: '可點選',
     iconSitesLicense: {
       free: '免費',
       freemium: '免費 + 付費',
@@ -137,6 +138,27 @@ const zhTW = {
     // Language switcher
     language: '語言',
     switchLanguage: '切換語言',
+
+    // Hover help
+    helpThemeToggle: '切換明亮或深色場景。',
+    helpSelectFile: '選擇一個或多個本機圖示圖片進行轉換。',
+    helpLoadFromUrl: '開啟 HTTPS URL 輸入欄位。',
+    helpUrlInput: '貼上 HTTPS 圖檔或網站 URL 以解析圖示。',
+    helpUrlSubmit: '將這個 HTTPS URL 加入轉換佇列。',
+    helpDropZone: '將圖片檔或 HTTPS 連結拖到這裡，也可以聚焦後貼上。',
+    helpGithubLink: '開啟 ICON HERO 原始碼 repository。',
+    helpLanguageSwitcher: '切換介面語言。',
+    helpLanguageOption: '將介面切換為 {{language}}。',
+    helpClearCompleted: '從佇列移除已完成項目。',
+    helpBatchDownload: '開啟已完成圖示的批次下載選項。',
+    helpBatchDownloadAll: '將所有轉換格式打包成一個 ZIP 下載。',
+    helpBatchDownloadFormat: '將所有已完成的 {{format}} 檔打包下載。',
+    helpPreview: '預覽這個已轉換圖示。',
+    helpApplyIcon: '將這個圖示與資料夾套用腳本打包。',
+    helpAutomation: '為這個圖示產生自動化腳本。',
+    helpFormatButton: '點擊下載 {{format}}，或拖曳到系統目標。',
+    helpIconSitesToggle: '展開或收合推薦的 icon 資源網站。',
+    helpIconSiteCard: '在新分頁開啟 {{site}}。',
   }
 }
 
