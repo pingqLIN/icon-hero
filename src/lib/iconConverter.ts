@@ -6,8 +6,59 @@ export interface ConversionResult {
   blob: Blob
 }
 
+const FETCH_TIMEOUT_MS = 10_000
+const MAX_HTML_BYTES = 512 * 1024
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024
+
 async function isRemoteUrl(url: string): Promise<boolean> {
-  return url.startsWith('http://') || url.startsWith('https://')
+  try {
+    const parsedUrl = new URL(url)
+    return parsedUrl.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+function createTimeoutSignal(timeoutMs: number): AbortSignal {
+  const controller = new AbortController()
+  window.setTimeout(() => controller.abort(), timeoutMs)
+  return controller.signal
+}
+
+function ensureSafeRemoteUrl(url: string, baseUrl?: string): string {
+  const parsedUrl = baseUrl ? new URL(url, baseUrl) : new URL(url)
+
+  if (parsedUrl.protocol !== 'https:') {
+    throw new Error('Only HTTPS URLs are supported for remote icons')
+  }
+
+  return parsedUrl.toString()
+}
+
+async function fetchBlobWithLimit(url: string, maxBytes: number): Promise<{ blob: Blob; contentType: string }> {
+  const response = await fetch(url, {
+    redirect: 'follow',
+    signal: createTimeoutSignal(FETCH_TIMEOUT_MS),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Network error: ${response.status} ${response.statusText}`)
+  }
+
+  const contentLength = response.headers.get('content-length')
+  if (contentLength && Number(contentLength) > maxBytes) {
+    throw new Error(`Remote file is too large (>${maxBytes} bytes)`)
+  }
+
+  const blob = await response.blob()
+  if (blob.size > maxBytes) {
+    throw new Error(`Remote file is too large (>${maxBytes} bytes)`)
+  }
+
+  return {
+    blob,
+    contentType: response.headers.get('content-type')?.toLowerCase() ?? blob.type.toLowerCase(),
+  }
 }
 
 async function parseImageFromUrl(url: string): Promise<string> {
@@ -16,15 +67,22 @@ async function parseImageFromUrl(url: string): Promise<string> {
   }
 
   try {
-    const response = await fetch(url)
-    const contentType = response.headers.get('content-type')
+    const safeUrl = ensureSafeRemoteUrl(url)
+    const { blob, contentType } = await fetchBlobWithLimit(safeUrl, MAX_IMAGE_BYTES)
     
-    if (contentType && contentType.startsWith('image/')) {
-      const blob = await response.blob()
+    if (contentType.startsWith('image/')) {
       return URL.createObjectURL(blob)
     }
+
+    if (contentType && !contentType.includes('text/html') && !contentType.includes('application/xhtml+xml')) {
+      throw new Error(`Unsupported content type: ${contentType}`)
+    }
+
+    if (blob.size > MAX_HTML_BYTES) {
+      throw new Error(`Remote HTML is too large (>${MAX_HTML_BYTES} bytes)`)
+    }
     
-    const html = await response.text()
+    const html = await blob.text()
     const parser = new DOMParser()
     const doc = parser.parseFromString(html, 'text/html')
     
@@ -40,35 +98,41 @@ async function parseImageFromUrl(url: string): Promise<string> {
     for (const selector of possibleSelectors) {
       const element = doc.querySelector(selector)
       if (element) {
-        let iconUrl = element.getAttribute('href') || element.getAttribute('content')
+        const iconUrl = element.getAttribute('href') || element.getAttribute('content')
         if (iconUrl) {
-          if (iconUrl.startsWith('//')) {
-            iconUrl = 'https:' + iconUrl
-          } else if (iconUrl.startsWith('/')) {
-            const urlObj = new URL(url)
-            iconUrl = urlObj.origin + iconUrl
-          } else if (!iconUrl.startsWith('http')) {
-            const urlObj = new URL(url)
-            iconUrl = urlObj.origin + '/' + iconUrl
+          const safeIconUrl = ensureSafeRemoteUrl(iconUrl, safeUrl)
+          const { blob: iconBlob, contentType: iconContentType } = await fetchBlobWithLimit(
+            safeIconUrl,
+            MAX_IMAGE_BYTES
+          )
+
+          if (!iconContentType.startsWith('image/')) {
+            throw new Error(`Icon URL did not return an image: ${iconContentType}`)
           }
-          
-          const iconResponse = await fetch(iconUrl)
-          const iconBlob = await iconResponse.blob()
+
           return URL.createObjectURL(iconBlob)
         }
       }
     }
     
-    const defaultFaviconUrl = new URL('/favicon.ico', url).href
-    const faviconResponse = await fetch(defaultFaviconUrl)
-    if (faviconResponse.ok) {
-      const faviconBlob = await faviconResponse.blob()
+    const defaultFaviconUrl = ensureSafeRemoteUrl('/favicon.ico', safeUrl)
+    try {
+      const { blob: faviconBlob, contentType: faviconContentType } = await fetchBlobWithLimit(
+        defaultFaviconUrl,
+        MAX_IMAGE_BYTES
+      )
+      if (!faviconContentType.startsWith('image/')) {
+        throw new Error(`Favicon URL did not return an image: ${faviconContentType}`)
+      }
+
       return URL.createObjectURL(faviconBlob)
+    } catch {
+      // Fall through to the main error below when no supported icon can be resolved.
     }
     
-    throw new Error('無法從 URL 中找到圖示')
+    throw new Error('Could not find a supported icon at the provided URL')
   } catch (error) {
-    throw new Error(`解析 URL 失敗: ${error instanceof Error ? error.message : '未知錯誤'}`)
+    throw new Error(`Failed to parse remote URL: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
