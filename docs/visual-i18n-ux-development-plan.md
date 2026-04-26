@@ -10,6 +10,26 @@ Upgrade ICON HERO from a functional converter into a more globally adaptive, lay
 - Improve layout hierarchy and operational UX using the Spatial Workbench visual philosophy.
 - Make the logo background visually consistent with the site background.
 
+## Current Status
+
+Last reviewed: 2026-04-26
+
+- Batch 1 is implemented: shared language inventory, browser/saved-language resolution, locale expansion, and locale completeness tests are present.
+- Batch 2 is implemented in `MascotDisplay`: state-specific motion, restrained aura/shadow treatment, and reduced-motion handling are present.
+- Batch 3 is mostly implemented in `App`, `WorkspaceDropZone`, and `WorkspaceQueue`: the command band, primary workspace, process rail, and lazy resource section are present.
+- Batch 4 is implemented in `LogoDisplay`: the logo now sits on a token-matched plate with restrained hover polish.
+- Additional regression coverage added after implementation:
+  - runtime language bootstrap tests for saved language, unavailable storage, and `navigator.language` fallback
+  - workspace drop zone intake tests for local files, HTTPS URL drops, deduplication, paste intake, and insecure URL rejection
+
+Verified on 2026-04-26:
+
+- `npm test`
+- `npm run lint` passed with existing `react-refresh/only-export-components` warnings in shared `src/components/ui/*` modules.
+- `npm run build`
+- `npm audit --audit-level=moderate`
+- Playwright desktop and mobile smoke check against `http://127.0.0.1:5001/`
+
 ## Language Decision
 
 Current languages: `zh-TW`, `en`.
