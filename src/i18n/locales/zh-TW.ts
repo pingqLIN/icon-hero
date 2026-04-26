@@ -125,6 +125,20 @@ const zhTW = {
     toastConvertErrorDesc: '處理 {{name}} 時發生錯誤',
     toastDownloadStart: '下載已開始',
 
+    // Conversion errors
+    conversionErrorHttpsOnly: '僅支援 HTTPS 圖檔或網站 URL。',
+    conversionErrorNetwork: '遠端網站阻擋或請求失敗，請改用直接圖檔 URL。',
+    conversionErrorTooLarge: '遠端檔案太大，無法在瀏覽器端安全轉換。',
+    conversionErrorUnsupportedContentType: '這個 URL 沒有回傳圖片或可解析的網頁。',
+    conversionErrorHtmlTooLarge: '網頁內容太大，無法在瀏覽器中安全掃描。',
+    conversionErrorIconNotFound: '找不到 favicon、Open Graph 圖片、Twitter 圖片或 /favicon.ico。',
+    conversionErrorIconNotImage: '解析到的 icon URL 沒有回傳圖片。',
+    conversionErrorImageLoadFailed: '圖片無法載入瀏覽器 canvas。',
+    conversionErrorCanvasUnavailable: '瀏覽器 canvas 無法使用，不能進行轉換。',
+    conversionErrorCanvasExportFailed: '瀏覽器無法匯出轉換後的圖示。',
+    conversionErrorUnsupportedFormat: '不支援這個輸出格式。',
+    conversionErrorUnknown: '發生未預期錯誤，無法轉換圖示。',
+
     // Footer
     githubLabel: 'GitHub：',
     disclaimer: '免責聲明：本網站僅提供線上圖檔格式轉換服務，請留意素材版權並確認您擁有合法使用與轉換權利。',

@@ -16,7 +16,7 @@ import { VisitorCounter } from '@/components/VisitorCounter'
 import { InteractionHelp } from '@/components/InteractionHelp'
 import { WorkspaceItem } from '@/types/workspace'
 import { analyzeDroppedItem } from '@/lib/workspaceAnalyzer'
-import { convertIcon } from '@/lib/iconConverter'
+import { convertIcon, getIconConversionErrorMessage, type IconConversionErrorCode } from '@/lib/iconConverter'
 import { toast } from 'sonner'
 
 const PreviewDialog = lazy(() => import('@/components/PreviewDialog').then(module => ({ default: module.PreviewDialog })))
@@ -189,18 +189,34 @@ function App() {
             description: t('toastConvertSuccessDesc', { name: analyzed.name })
           })
         } catch (error) {
+          const conversionErrorMessages: Record<IconConversionErrorCode, string> = {
+            https_only: t('conversionErrorHttpsOnly'),
+            network: t('conversionErrorNetwork'),
+            too_large: t('conversionErrorTooLarge'),
+            unsupported_content_type: t('conversionErrorUnsupportedContentType'),
+            html_too_large: t('conversionErrorHtmlTooLarge'),
+            icon_not_found: t('conversionErrorIconNotFound'),
+            icon_not_image: t('conversionErrorIconNotImage'),
+            image_load_failed: t('conversionErrorImageLoadFailed'),
+            canvas_unavailable: t('conversionErrorCanvasUnavailable'),
+            canvas_export_failed: t('conversionErrorCanvasExportFailed'),
+            unsupported_format: t('conversionErrorUnsupportedFormat'),
+            unknown: t('conversionErrorUnknown'),
+          }
+          const errorMessage = getIconConversionErrorMessage(error, conversionErrorMessages)
+
           setWorkspaceItems(prev => prev.map(wi =>
             wi.id === workspaceItem.id
               ? {
                 ...wi,
                 status: 'error',
-                error: error instanceof Error ? error.message : '轉換失敗'
+                error: errorMessage
               }
               : wi
           ))
 
           toast.error(t('toastConvertError'), {
-            description: t('toastConvertErrorDesc', { name: workspaceItem.name })
+            description: errorMessage
           })
         }
       }

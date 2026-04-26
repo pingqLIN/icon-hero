@@ -10,10 +10,47 @@ const FETCH_TIMEOUT_MS = 10_000
 const MAX_HTML_BYTES = 512 * 1024
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024
 
-async function isRemoteUrl(url: string): Promise<boolean> {
+export type IconConversionErrorCode =
+  | 'https_only'
+  | 'network'
+  | 'too_large'
+  | 'unsupported_content_type'
+  | 'html_too_large'
+  | 'icon_not_found'
+  | 'icon_not_image'
+  | 'image_load_failed'
+  | 'canvas_unavailable'
+  | 'canvas_export_failed'
+  | 'unsupported_format'
+  | 'unknown'
+
+export class IconConversionError extends Error {
+  code: IconConversionErrorCode
+  cause?: unknown
+
+  constructor(code: IconConversionErrorCode, message: string, options?: { cause?: unknown }) {
+    super(message)
+    this.name = 'IconConversionError'
+    this.code = code
+    this.cause = options?.cause
+  }
+}
+
+export function getIconConversionErrorCode(error: unknown): IconConversionErrorCode {
+  return error instanceof IconConversionError ? error.code : 'unknown'
+}
+
+export function getIconConversionErrorMessage(
+  error: unknown,
+  messages: Record<IconConversionErrorCode, string>
+): string {
+  return messages[getIconConversionErrorCode(error)] ?? messages.unknown
+}
+
+function isRemoteUrl(url: string): boolean {
   try {
     const parsedUrl = new URL(url)
-    return parsedUrl.protocol === 'https:'
+    return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:'
   } catch {
     return false
   }
@@ -29,30 +66,35 @@ function ensureSafeRemoteUrl(url: string, baseUrl?: string): string {
   const parsedUrl = baseUrl ? new URL(url, baseUrl) : new URL(url)
 
   if (parsedUrl.protocol !== 'https:') {
-    throw new Error('Only HTTPS URLs are supported for remote icons')
+    throw new IconConversionError('https_only', 'Only HTTPS URLs are supported for remote icons')
   }
 
   return parsedUrl.toString()
 }
 
 async function fetchBlobWithLimit(url: string, maxBytes: number): Promise<{ blob: Blob; contentType: string }> {
-  const response = await fetch(url, {
-    redirect: 'follow',
-    signal: createTimeoutSignal(FETCH_TIMEOUT_MS),
-  })
+  let response: Response
+  try {
+    response = await fetch(url, {
+      redirect: 'follow',
+      signal: createTimeoutSignal(FETCH_TIMEOUT_MS),
+    })
+  } catch (error) {
+    throw new IconConversionError('network', 'Remote icon request failed', { cause: error })
+  }
 
   if (!response.ok) {
-    throw new Error(`Network error: ${response.status} ${response.statusText}`)
+    throw new IconConversionError('network', `Network error: ${response.status} ${response.statusText}`)
   }
 
   const contentLength = response.headers.get('content-length')
   if (contentLength && Number(contentLength) > maxBytes) {
-    throw new Error(`Remote file is too large (>${maxBytes} bytes)`)
+    throw new IconConversionError('too_large', `Remote file is too large (>${maxBytes} bytes)`)
   }
 
   const blob = await response.blob()
   if (blob.size > maxBytes) {
-    throw new Error(`Remote file is too large (>${maxBytes} bytes)`)
+    throw new IconConversionError('too_large', `Remote file is too large (>${maxBytes} bytes)`)
   }
 
   return {
@@ -61,8 +103,8 @@ async function fetchBlobWithLimit(url: string, maxBytes: number): Promise<{ blob
   }
 }
 
-async function parseImageFromUrl(url: string): Promise<string> {
-  if (!await isRemoteUrl(url)) {
+export async function resolveIconImageUrl(url: string): Promise<string> {
+  if (!isRemoteUrl(url)) {
     return url
   }
 
@@ -75,11 +117,11 @@ async function parseImageFromUrl(url: string): Promise<string> {
     }
 
     if (contentType && !contentType.includes('text/html') && !contentType.includes('application/xhtml+xml')) {
-      throw new Error(`Unsupported content type: ${contentType}`)
+      throw new IconConversionError('unsupported_content_type', `Unsupported content type: ${contentType}`)
     }
 
     if (blob.size > MAX_HTML_BYTES) {
-      throw new Error(`Remote HTML is too large (>${MAX_HTML_BYTES} bytes)`)
+      throw new IconConversionError('html_too_large', `Remote HTML is too large (>${MAX_HTML_BYTES} bytes)`)
     }
     
     const html = await blob.text()
@@ -107,7 +149,7 @@ async function parseImageFromUrl(url: string): Promise<string> {
           )
 
           if (!iconContentType.startsWith('image/')) {
-            throw new Error(`Icon URL did not return an image: ${iconContentType}`)
+            throw new IconConversionError('icon_not_image', `Icon URL did not return an image: ${iconContentType}`)
           }
 
           return URL.createObjectURL(iconBlob)
@@ -122,7 +164,7 @@ async function parseImageFromUrl(url: string): Promise<string> {
         MAX_IMAGE_BYTES
       )
       if (!faviconContentType.startsWith('image/')) {
-        throw new Error(`Favicon URL did not return an image: ${faviconContentType}`)
+        throw new IconConversionError('icon_not_image', `Favicon URL did not return an image: ${faviconContentType}`)
       }
 
       return URL.createObjectURL(faviconBlob)
@@ -130,19 +172,23 @@ async function parseImageFromUrl(url: string): Promise<string> {
       // Fall through to the main error below when no supported icon can be resolved.
     }
     
-    throw new Error('Could not find a supported icon at the provided URL')
+    throw new IconConversionError('icon_not_found', 'Could not find a supported icon at the provided URL')
   } catch (error) {
-    throw new Error(`Failed to parse remote URL: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    if (error instanceof IconConversionError) {
+      throw error
+    }
+
+    throw new IconConversionError('unknown', 'Failed to parse remote URL', { cause: error })
   }
 }
 
 async function loadImage(url: string): Promise<HTMLImageElement> {
-  const imageUrl = await parseImageFromUrl(url)
+  const imageUrl = await resolveIconImageUrl(url)
   
   return new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => resolve(img)
-    img.onerror = reject
+    img.onerror = () => reject(new IconConversionError('image_load_failed', 'Image could not be loaded'))
     img.crossOrigin = 'anonymous'
     img.src = imageUrl
   })
@@ -153,7 +199,7 @@ function createCanvas(width: number, height: number): { canvas: HTMLCanvasElemen
   canvas.width = width
   canvas.height = height
   const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Could not get canvas context')
+  if (!ctx) throw new IconConversionError('canvas_unavailable', 'Could not get canvas context')
   return { canvas, ctx }
 }
 
@@ -168,7 +214,7 @@ async function imageToPNG(imageUrl: string, size: number = 512): Promise<Convers
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((b) => {
       if (b) resolve(b)
-      else reject(new Error('Failed to create PNG blob'))
+      else reject(new IconConversionError('canvas_export_failed', 'Failed to create PNG blob'))
     }, 'image/png')
   })
   
@@ -303,7 +349,7 @@ async function imageToICNS(imageUrl: string): Promise<ConversionResult> {
       const blob = await new Promise<Blob>((resolve, reject) => {
         canvas.toBlob((b) => {
           if (b) resolve(b)
-          else reject(new Error('Failed to create blob'))
+          else reject(new IconConversionError('canvas_export_failed', 'Failed to create blob'))
         }, 'image/png')
       })
       
@@ -365,7 +411,7 @@ export async function convertIcon(imageUrl: string, targetFormat: IconFormat): P
     case 'icns':
       return imageToICNS(imageUrl)
     default:
-      throw new Error(`Unsupported format: ${targetFormat}`)
+      throw new IconConversionError('unsupported_format', `Unsupported format: ${targetFormat}`)
   }
 }
 

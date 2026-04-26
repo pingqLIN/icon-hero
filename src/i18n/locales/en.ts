@@ -125,6 +125,20 @@ const en = {
     toastConvertErrorDesc: 'An error occurred while processing {{name}}',
     toastDownloadStart: 'Download started',
 
+    // Conversion errors
+    conversionErrorHttpsOnly: 'Only HTTPS image or website URLs are supported.',
+    conversionErrorNetwork: 'The remote site blocked or failed the request. Try a direct image URL.',
+    conversionErrorTooLarge: 'The remote file is too large for browser-side conversion.',
+    conversionErrorUnsupportedContentType: 'This URL does not return an image or supported web page.',
+    conversionErrorHtmlTooLarge: 'The web page is too large to scan safely in the browser.',
+    conversionErrorIconNotFound: 'No favicon, Open Graph image, Twitter image, or /favicon.ico was found.',
+    conversionErrorIconNotImage: 'The discovered icon URL did not return an image.',
+    conversionErrorImageLoadFailed: 'The image could not be loaded into the browser canvas.',
+    conversionErrorCanvasUnavailable: 'The browser canvas is unavailable for conversion.',
+    conversionErrorCanvasExportFailed: 'The browser could not export the converted icon.',
+    conversionErrorUnsupportedFormat: 'That output format is not supported.',
+    conversionErrorUnknown: 'The icon could not be converted because of an unexpected error.',
+
     // Footer
     githubLabel: 'GitHub: ',
     disclaimer: 'Disclaimer: This website provides online image format conversion only. Please respect copyright and ensure you have the legal right to use and convert the materials.',
