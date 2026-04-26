@@ -224,7 +224,7 @@ export function WorkspaceQueue({
         <div className="relative">
           {/* 吉祥物 - Bot: 趴在卡片邊框上，z-10 讓卡片遮住白板身體，只露頭部和手 */}
           {/* Hero: 原有浮在上方效果不變 */}
-          <div className={`absolute pointer-events-none ${
+          <div className={`pointer-events-none absolute hidden sm:block ${
             mascotType === 'hero'
               ? 'z-20 right-[213px] -top-[84px]'
               : 'z-10 right-[80px] -top-[73px]'
