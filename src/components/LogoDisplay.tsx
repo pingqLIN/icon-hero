@@ -11,9 +11,9 @@ export function LogoDisplay({ className = '' }: LogoDisplayProps) {
     const shouldReduceMotion = useReducedMotion()
 
     return (
-        <div className={`relative flex items-center gap-4 group ${className}`}>
+        <div className={`group relative flex min-w-0 items-center gap-3 sm:gap-4 ${className}`}>
             <motion.div
-                className="relative z-10"
+                className="relative z-10 shrink-0"
                 initial={{ scale: 0.8, opacity: 0, y: -20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 transition={{
@@ -52,14 +52,14 @@ export function LogoDisplay({ className = '' }: LogoDisplayProps) {
                 </div>
             </motion.div>
 
-            <div className="relative z-10">
+            <div className="relative z-10 min-w-0">
                 <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
                 >
-                    <h1 className="text-3xl font-bold tracking-tight mb-1 relative overflow-hidden">
-                        <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent inline-block drop-shadow-sm filter backdrop-brightness-125">
+                    <h1 className="relative mb-1 overflow-hidden text-2xl font-black leading-none tracking-[0.08em] sm:text-3xl lg:text-[2.15rem]">
+                        <span className="inline-block whitespace-nowrap bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent drop-shadow-sm filter backdrop-brightness-125">
                             ICON HERO
                         </span>
                         <motion.div
@@ -77,7 +77,7 @@ export function LogoDisplay({ className = '' }: LogoDisplayProps) {
                 </motion.div>
 
                 <motion.p
-                    className="text-sm text-muted-foreground font-medium"
+                    className="max-w-[26rem] text-xs font-medium text-muted-foreground sm:text-sm"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8, duration: 0.5 }}

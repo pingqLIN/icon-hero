@@ -365,14 +365,14 @@ function App() {
       <Toaster />
       <InteractionHelp />
       <DragTrackingOverlay isActive={isDraggingFile} fileName={draggedFileName} />
-      <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              <div className="flex items-center gap-4">
+      <div className="min-h-screen overflow-x-hidden bg-background text-foreground transition-colors duration-300">
+        <div className="sticky top-0 z-10 border-b border-border bg-background/92 shadow-[0_14px_38px_rgba(15,23,42,0.04)] backdrop-blur-xl dark:shadow-[0_14px_38px_rgba(0,0,0,0.24)]">
+          <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="min-w-0 flex-1">
                 <LogoDisplay />
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center justify-end gap-3 sm:gap-4">
                 <VisitorCounter />
                 <LanguageSwitcher />
                 <Button
@@ -388,15 +388,24 @@ function App() {
           </div>
         </div>
 
-        <main className="relative mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+        <main className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
           <div
-            className="pointer-events-none absolute inset-x-4 top-0 h-[520px] opacity-[0.05] dark:opacity-[0.08]"
+            className="pointer-events-none absolute inset-x-0 top-0 h-[560px] opacity-[0.05] dark:opacity-[0.08]"
             style={{ backgroundImage: 'linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)', backgroundSize: '48px 48px' }}
             aria-hidden="true"
           />
 
-          <section className="relative z-0 border-y border-black/15 py-4 dark:border-white/15">
-            <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+          <section className="relative z-0 rounded-[2rem] border border-black/10 bg-card/70 p-4 shadow-[0_20px_50px_rgba(15,23,42,0.04)] backdrop-blur-sm dark:border-white/10 dark:bg-card/55 dark:shadow-[0_20px_50px_rgba(0,0,0,0.22)] sm:p-5">
+            <div className="flex flex-col items-stretch gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+                  {t('workspaceTitle')}
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {t('workspaceDropSupportsPrefix')} PNG, JPG, ICO, ICNS
+                </p>
+              </div>
+              <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
               <Button
                 onClick={handleUploadClick}
                 size="lg"
@@ -419,6 +428,7 @@ function App() {
                 <LinkIcon size={20} />
                 {t('loadFromUrl')}
               </Button>
+              </div>
             </div>
           </section>
 
@@ -430,7 +440,7 @@ function App() {
                 exit={{ opacity: 0, y: -10 }}
                 className="relative z-0 my-5"
               >
-                <div className="mx-auto max-w-2xl border-l-4 border-black/70 pl-4 dark:border-primary/70">
+                <div className="rounded-[1.5rem] border border-black/10 bg-card/80 p-4 shadow-sm dark:border-white/10 dark:bg-card/65">
                   <div className="flex gap-2">
                     <Input
                       type="url"
@@ -465,35 +475,37 @@ function App() {
             )}
           </AnimatePresence>
 
-          <div className="relative z-0 grid gap-7 pt-6">
+          <div className="relative z-0 grid gap-8 pt-8">
             <section aria-labelledby="workspace-heading">
               <div className="mb-4 flex items-center justify-between gap-4">
-                <h2 id="workspace-heading" className="text-xl font-bold">{t('workspaceTitle')}</h2>
+                <h2 id="workspace-heading" className="text-xl font-bold sm:text-2xl">{t('workspaceTitle')}</h2>
                 <div className="hidden h-px flex-1 border-t border-dashed border-black/30 sm:block dark:border-white/25" />
               </div>
-              <WorkspaceDropZone
-                onDrop={handleWorkspaceDrop}
-                isProcessing={isProcessing}
-                mascotType={theme === 'dark' ? 'bot' : 'hero'}
-                hasCompletedItems={hasCompletedItems}
-                helpText={t('helpDropZone')}
-              />
-              <div className="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 border-y border-black/10 py-3 text-center dark:border-white/10">
-                {workflowSteps.map((step, index) => (
-                  <div key={step} className="contents">
-                    <p className="text-sm font-extrabold tracking-tight text-foreground sm:text-base">
-                      {step}
-                    </p>
-                    {index < workflowSteps.length - 1 && (
-                      <ArrowRight
-                        size={22}
-                        weight="bold"
-                        className="text-primary/70"
-                        aria-hidden="true"
-                      />
-                    )}
-                  </div>
-                ))}
+              <div className="rounded-[2rem] border border-black/10 bg-card/70 p-5 shadow-[0_24px_60px_rgba(15,23,42,0.05)] backdrop-blur-sm dark:border-white/10 dark:bg-card/55 dark:shadow-[0_24px_60px_rgba(0,0,0,0.24)] sm:p-6 lg:p-8">
+                <WorkspaceDropZone
+                  onDrop={handleWorkspaceDrop}
+                  isProcessing={isProcessing}
+                  mascotType={theme === 'dark' ? 'bot' : 'hero'}
+                  hasCompletedItems={hasCompletedItems}
+                  helpText={t('helpDropZone')}
+                />
+                <div className="mt-6 flex flex-wrap items-center justify-center gap-3 border-t border-black/10 pt-4 text-center dark:border-white/10">
+                  {workflowSteps.map((step, index) => (
+                    <div key={step} className="flex items-center gap-3">
+                      <p className="text-sm font-extrabold tracking-tight text-foreground sm:text-base">
+                        {step}
+                      </p>
+                      {index < workflowSteps.length - 1 && (
+                        <ArrowRight
+                          size={20}
+                          weight="bold"
+                          className="text-primary/70"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </section>
 
@@ -525,7 +537,7 @@ function App() {
           </div>
 
           {/* Top 10 Icon Resource Websites */}
-          <div ref={iconResourcesRef} className="min-h-16">
+          <div ref={iconResourcesRef} className="min-h-16 pt-2">
             {shouldLoadIconResources && (
               <Suspense fallback={null}>
                 <IconResourcesSection />
@@ -535,7 +547,7 @@ function App() {
         </main>
 
         <footer className="border-t border-border/70">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-2 text-xs text-muted-foreground">
               <p>
                 {t('githubLabel')}

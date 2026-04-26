@@ -148,16 +148,16 @@ export function IconResourcesSection() {
   }
 
   return (
-    <section className="mt-16">
+    <section className="mt-12 rounded-[2rem] border border-black/10 bg-card/70 p-4 shadow-[0_24px_60px_rgba(15,23,42,0.05)] backdrop-blur-sm dark:border-white/10 dark:bg-card/55 dark:shadow-[0_24px_60px_rgba(0,0,0,0.22)] sm:p-6">
       <button
         type="button"
         onClick={() => setIsExpanded(prev => !prev)}
-        className="flex w-full items-center gap-3 rounded-2xl px-2 py-3 text-left transition-colors hover:bg-secondary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        className="flex w-full items-center gap-2 rounded-2xl px-2 py-3 text-left transition-colors hover:bg-secondary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 sm:gap-3"
         aria-expanded={isExpanded}
         data-help={t('helpIconSitesToggle')}
       >
         <div className="h-px flex-1 bg-border" />
-        <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground tracking-wider uppercase">
+        <div className="flex items-center gap-2 text-center text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground sm:text-sm">
           <Star size={14} weight="fill" className="text-primary" />
           {t('iconSitesSectionTitle')}
           {!isExpanded && (
@@ -196,7 +196,7 @@ export function IconResourcesSection() {
             </p>
 
             <motion.div
-              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+              className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
