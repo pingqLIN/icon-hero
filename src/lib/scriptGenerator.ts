@@ -303,11 +303,11 @@ export function getScriptExtension(type: ScriptType): string {
 export function getScriptInstructions(type: ScriptType): string {
   switch (type) {
     case 'powershell':
-      return '1. 右鍵點擊腳本檔案\n2. 選擇「以 PowerShell 執行」\n3. 如遇執行政策限制，請以管理員身分執行 PowerShell 並執行：Set-ExecutionPolicy RemoteSigned'
+      return '1. 開啟 PowerShell。\n2. 將腳本內容貼上並直接執行。\n3. 如遇執行政策限制，請以管理員身分執行 PowerShell 並執行：Set-ExecutionPolicy RemoteSigned'
     case 'applescript':
       return '1. 雙擊腳本檔案執行\n2. 或使用「腳本編輯器」開啟並執行\n3. 首次執行可能需要授予「Finder」存取權限'
     case 'bash':
-      return '1. 開啟終端機\n2. 執行：chmod +x script.sh\n3. 執行：./script.sh\n4. 需要安裝 gvfs 套件（Ubuntu/Debian：sudo apt install gvfs）'
+      return '1. 開啟終端機。\n2. 將腳本內容貼上並執行，或儲存成檔案後執行：chmod +x script.sh\n3. 執行：./script.sh\n4. 需要安裝 gvfs 套件（Ubuntu/Debian：sudo apt install gvfs）'
     default:
       return '請參考對應作業系統的執行說明'
   }

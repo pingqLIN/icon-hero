@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { 
   Code, 
   WindowsLogo, 
@@ -7,7 +6,8 @@ import {
   LinuxLogo, 
   Copy, 
   Download,
-  Play
+  Play,
+  Link
 } from '@phosphor-icons/react'
 import {
   Dialog,
@@ -23,13 +23,10 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { FolderPathInput } from '@/components/FolderPathInput'
 import { WorkspaceItem } from '@/types/workspace'
-import { 
-  generateScript, 
-  downloadScript, 
-  getScriptExtension,
-  getScriptInstructions,
-  ScriptType 
-} from '@/lib/scriptGenerator'
+import { type ApplyPlatform } from '@/lib/iconApplyPackager'
+import { generateScript, getScriptInstructions, type ScriptType } from '@/lib/scriptGenerator'
+import { motion } from 'framer-motion'
+
 import { toast } from 'sonner'
 
 interface AutomationDialogProps {
@@ -47,19 +44,46 @@ const detectScriptType = (): ScriptType => {
 
 const detectedType: ScriptType = detectScriptType()
 
+const mapScriptTypeToPlatform = (type: ScriptType): ApplyPlatform => {
+  if (type === 'powershell') return 'windows'
+  if (type === 'applescript') return 'macos'
+  return 'linux'
+}
+
+const terminalHint: Record<ScriptType, string> = {
+  powershell: '請貼到 PowerShell 終端機中執行',
+  applescript: '請貼到 Terminal（終端機）中執行',
+  bash: '請貼到 Bash 終端機中執行',
+}
+
+const osVendorDocs: Record<ScriptType, { label: string; href: string }> = {
+  powershell: {
+    label: 'Windows 專用：變更資料夾圖示說明（Microsoft）',
+    href: 'https://support.microsoft.com/zh-tw/windows',
+  },
+  applescript: {
+    label: 'macOS 專用：Get Info / 圖示變更（Apple）',
+    href: 'https://support.apple.com/zh-tw/guide/mac-help/welcome/mac',
+  },
+  bash: {
+    label: 'Linux 專用：檔案管理與桌面圖示操作說明',
+    href: 'https://help.gnome.org/users/nautilus/stable/',
+  },
+}
+
 export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogProps) {
   const [scriptType, setScriptType] = useState<ScriptType>(() => detectScriptType())
-  const [scriptFormat, setScriptFormat] = useState<'file' | 'inline'>('file')  // 腳本格式：檔案執行 / 複製貼上
   const [targetPaths, setTargetPaths] = useState<string[]>([])
   const [generatedScript, setGeneratedScript] = useState('')
+  const [isDownloadingPackage, setIsDownloadingPackage] = useState(false)
 
   // 開啟時重置狀態（包含恢復為偵測到的平台）
   useEffect(() => {
     if (open) {
       setScriptType(detectScriptType())
-      setScriptFormat('file')  // 預設為檔案執行版
       setTargetPaths([])
       setGeneratedScript('')
+      setIsDownloadingPackage(false)
     }
   }, [open])
 
@@ -83,32 +107,70 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
     }
 
     const format = getRecommendedFormat(scriptType)
-    const iconPath = `/path/to/${item.name}.${format}`
+    const iconPath = `./${item.name}.${format}`
     const script = generateScript({
       targetPaths,
       format,
       iconPath,
-      isInlineMode: scriptFormat === 'inline'  // 傳入格式選項
+      isInlineMode: true
     }, scriptType)
 
     setGeneratedScript(script)
     toast.success('腳本已生成')
   }
 
-  const handleCopyScript = () => {
-    if (generatedScript) {
-      navigator.clipboard.writeText(generatedScript)
-      toast.success('已複製到剪貼簿')
+  const handleCopyScript = async () => {
+    if (!generatedScript) return
+
+    try {
+      await navigator.clipboard.writeText(generatedScript)
+      toast.success('已複製', {
+        description: terminalHint[scriptType],
+      })
+    } catch (error) {
+      toast.error('複製失敗', {
+        description: error instanceof Error ? error.message : '請手動複製文字'
+      })
     }
   }
 
-  const handleDownloadScript = () => {
-    if (generatedScript) {
-      const extension = getScriptExtension(scriptType)
-      downloadScript(generatedScript, `${item.name}_automation.${extension}`)
-      toast.success('腳本已下載')
+  const handleDownloadPackage = async () => {
+    if (targetPaths.length === 0) {
+      toast.error('請至少新增一個目標路徑')
+      return
+    }
+
+    const format = getRecommendedFormat(scriptType)
+    const iconBlob = item.convertedBlobs?.[format]
+    if (!iconBlob) {
+      toast.error(`找不到 ${format.toUpperCase()} 圖示檔案`)
+      return
+    }
+
+    setIsDownloadingPackage(true)
+    try {
+      const { createApplyPackage } = await import('@/lib/iconApplyPackager')
+      await createApplyPackage({
+        iconBlob,
+        iconName: item.name,
+        targetPaths,
+        platform: mapScriptTypeToPlatform(scriptType),
+      })
+
+      toast.success('自動化安裝包已下載！', {
+        description: '已包含自動化批次檔案與 ICON 檔案，執行前請先放在同一個目錄。'
+      })
+    } catch (error) {
+      toast.error('下載失敗', {
+        description: error instanceof Error ? error.message : '未知錯誤'
+      })
+    } finally {
+      setIsDownloadingPackage(false)
     }
   }
+
+  const scriptLines = generatedScript.split('\n').length
+  const previewMaxHeight = Math.min(720, Math.max(180, scriptLines * 18))
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -152,13 +214,13 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
           </div>
         )}
 
-        {/* 表單內容放在 Tabs 外面，避免 TabsContent 動態渲染問題 */}
+        {/* 表單內容 */}
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-semibold">圖示檔案</Label>
               <Badge variant="secondary" className="text-xs">
-                推薦: {getRecommendedFormat(scriptType).toUpperCase()}
+                建議: {getRecommendedFormat(scriptType).toUpperCase()}
               </Badge>
             </div>
             <div className="p-3 bg-secondary/20 rounded-lg border border-border">
@@ -183,21 +245,8 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
             />
           </div>
 
-          {/* 腳本格式選擇（僅 PowerShell）*/}
-          {scriptType === 'powershell' && (
-            <div className="flex items-center justify-between p-2.5 bg-secondary/10 rounded-lg border border-border">
-              <Label className="text-xs text-muted-foreground">腳本格式</Label>
-              <Tabs value={scriptFormat} onValueChange={(v) => setScriptFormat(v as 'file' | 'inline')} className="h-auto">
-                <TabsList className="h-8">
-                  <TabsTrigger value="file" className="text-xs h-7">檔案執行</TabsTrigger>
-                  <TabsTrigger value="inline" className="text-xs h-7">複製貼上</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-          )}
-
-          <Button 
-            onClick={handleGenerateScript} 
+          <Button
+            onClick={handleGenerateScript}
             className="w-full gap-2"
             disabled={targetPaths.length === 0}
             type="button"
@@ -213,28 +262,54 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
               className="space-y-2"
             >
               <Label className="text-sm font-semibold">生成的腳本</Label>
-              <ScrollArea className="h-64 w-full rounded-lg border border-border bg-muted/30">
+              <ScrollArea
+                className="w-full rounded-lg border border-border bg-muted/30"
+                style={{ maxHeight: `${previewMaxHeight}px` }}
+              >
                 <pre className="p-4 text-xs font-mono">
                   <code>{generatedScript}</code>
                 </pre>
               </ScrollArea>
 
               <div className="flex gap-2">
-                <Button onClick={handleCopyScript} variant="outline" className="flex-1 gap-2" type="button">
+                <Button
+                  onClick={handleCopyScript}
+                  variant="outline"
+                  className="flex-1 gap-2"
+                  type="button"
+                >
                   <Copy size={16} />
-                  複製腳本
+                  一鍵複製
                 </Button>
-                <Button onClick={handleDownloadScript} className="flex-1 gap-2" type="button">
+                <Button
+                  onClick={handleDownloadPackage}
+                  className="flex-1 gap-2"
+                  disabled={isDownloadingPackage}
+                  type="button"
+                >
                   <Download size={16} />
-                  下載腳本
+                  {isDownloadingPackage ? '下載中...' : '下載自動化安裝包'}
                 </Button>
               </div>
 
               <div className="p-3 bg-accent/10 rounded-lg border border-accent/20">
                 <p className="text-xs font-semibold text-accent-foreground mb-1">使用說明:</p>
-                <p className="text-xs text-muted-foreground whitespace-pre-line">
+                <p className="text-xs text-muted-foreground whitespace-pre-line mb-2">
                   {getScriptInstructions(scriptType)}
                 </p>
+                <p className="text-xs text-muted-foreground mb-3">
+                  請將圖示檔與自動化批次檔放在同一個目錄後再執行（例如 ZIP 解壓後直接執行腳本）。
+                </p>
+                <p className="text-xs font-semibold text-accent-foreground mb-1">系統官方參考:</p>
+                <a
+                  href={osVendorDocs[scriptType].href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-xs text-primary hover:underline"
+                >
+                  <Link size={12} weight="fill" />
+                  <span className="ml-1">{osVendorDocs[scriptType].label}</span>
+                </a>
               </div>
             </motion.div>
           )}
