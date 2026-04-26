@@ -2,7 +2,7 @@ import { WorkspaceItem, ItemType } from '@/types/workspace'
 
 export async function analyzeDroppedItem(file: File | string): Promise<{ type: ItemType; url: string; name: string; format?: string }> {
   if (typeof file === 'string') {
-    if (file.startsWith('http://') || file.startsWith('https://')) {
+    if (file.startsWith('https://')) {
       try {
         const response = await fetch(file, { method: 'HEAD' })
         const contentType = response.headers.get('content-type')

@@ -20,7 +20,7 @@ This is a focused utility combining file conversion, script generation, and drag
 - **Success criteria**: Accepts multiple items simultaneously, shows visual feedback on hover, handles various file formats
 
 ### URL Parsing and Icon Extraction
-- **Functionality**: Extract icons from website URLs or direct image links
+- **Functionality**: Extract icons from HTTPS website URLs or direct HTTPS image links
 - **Purpose**: Enable users to grab icons directly from websites without manual searching
 - **Progression**: URL dropped → Fetch webpage → Parse HTML for icon links (favicon, apple-touch-icon) → Download best quality icon → Convert
 - **Trigger**: User drops or pastes a URL

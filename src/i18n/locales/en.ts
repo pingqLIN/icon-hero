@@ -11,11 +11,11 @@ const en = {
 
     // URL input
     urlPlaceholder: 'Enter image URL or website URL (e.g. https://example.com/icon.png)',
-    urlHint: 'Supports direct image links or website URLs. The system will automatically extract icons from web pages.',
+    urlHint: 'Supports direct HTTPS image links or HTTPS website URLs. The system will automatically extract icons from web pages.',
 
     // URL validation errors
     urlRequired: 'Please enter a valid URL',
-    urlInvalidPrefix: 'URL must start with http:// or https://',
+    urlInvalidPrefix: 'URL must start with https://',
 
     // Workspace
     workspaceTitle: 'Workspace Drop Zone',
@@ -25,7 +25,7 @@ const en = {
     workspaceDropIdle: 'Drag files or links here',
     workspaceDropProcessing: 'Processing your icons...',
     workspaceDropSupportsPrefix: 'Supports',
-    workspaceDropSupportsSuffix: 'and website URLs',
+    workspaceDropSupportsSuffix: 'and HTTPS website URLs',
     workspaceDropAutoStart: 'The conversion engine will start automatically',
     workspaceDropPasteHint: 'Paste works too',
 

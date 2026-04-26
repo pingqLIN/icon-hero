@@ -47,8 +47,8 @@
 ## ⚡ Features
 
 - **Format Conversion** — Convert PNG, JPG, ICO, ICNS input → outputs all three formats (PNG + ICO + ICNS) simultaneously
-- **Smart Input** — Upload files, drag & drop, paste from clipboard, or enter any website URL
-- **URL Parsing** — Automatically extracts favicon and Open Graph images from any URL (best-effort; CORS/CSP may limit some sites)
+- **Smart Input** — Upload files, drag & drop, paste from clipboard, or enter any HTTPS website URL
+- **URL Parsing** — Automatically extracts favicon and Open Graph images from HTTPS URLs (best-effort; CORS/CSP may limit some sites)
 - **Visual Drag & Drop** — Real-time trail animation as you drag converted icons to folders (Chromium-based browsers recommended)
 - **Automation Scripts** — Generate PowerShell, Bash, and osascript scripts for bulk icon replacement
 - **One-Click Packaging** — Bundle icon + script + README into a ZIP file
@@ -113,7 +113,7 @@ The workspace now includes a curated "Top 10 Icon Resources" section (right abov
 
 ```
 Option A: Click "Select File" (選擇圖檔) to pick a local file
-Option B: Click "Load from URL" (從 URL 載入) and paste any website URL
+Option B: Click "Load from URL" (從 URL 載入) and paste an HTTPS website URL
 Option C: Drag & drop a file directly onto the workspace
 Option D: Paste an image with ⌘/Ctrl + V
 ```
@@ -298,7 +298,7 @@ UI components are located in `src/components/ui/`, using `cn()` utility (tailwin
 # Install dependencies
 npm install
 
-# Start dev server (http://localhost:5173)
+# Start dev server, then open the Local URL printed by Vite
 npm run dev
 
 # Build for production (output to dist/)

@@ -79,7 +79,7 @@ function App() {
       return
     }
 
-    if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+    if (!trimmedUrl.startsWith('https://')) {
       toast.error(t('urlRequired'), {
         description: t('urlInvalidPrefix')
       })

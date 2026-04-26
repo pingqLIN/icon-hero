@@ -46,8 +46,8 @@
 ## ⚡ 功能特色
 
 - **格式轉換** — 支援 PNG、JPG、ICO、ICNS 輸入，同時輸出三種格式（PNG + ICO + ICNS）
-- **多種輸入方式** — 上傳檔案、拖曳放置、剪貼簿貼上、或輸入任意網站 URL
-- **URL 解析** — 自動擷取網站的 favicon 與 Open Graph 圖片（受限於 CORS/CSP，部分網站可能失敗）
+- **多種輸入方式** — 上傳檔案、拖曳放置、剪貼簿貼上、或輸入 HTTPS 網站 URL
+- **URL 解析** — 自動擷取 HTTPS 網站的 favicon 與 Open Graph 圖片（受限於 CORS/CSP，部分網站可能失敗）
 - **視覺拖曳追蹤** — 拖曳圖示至資料夾時顯示即時動畫軌跡（建議使用 Chromium 系瀏覽器）
 - **自動化腳本生成** — 產生 PowerShell、Bash 及 osascript 批次替換腳本
 - **一鍵打包下載** — 將圖示 + 腳本 + 說明文件打包為 ZIP 檔
@@ -213,7 +213,7 @@ iconApplyPackager.ts   ← ZIP 打包（圖示 + 腳本 + README）
 # 安裝依賴
 npm install
 
-# 啟動開發伺服器 (http://localhost:5173)
+# 啟動開發伺服器，然後開啟 Vite 顯示的 Local URL
 npm run dev
 
 # 建置正式版本

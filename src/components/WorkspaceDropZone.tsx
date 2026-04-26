@@ -47,7 +47,7 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
       const uris = e.dataTransfer.getData('text/uri-list').split('\n')
       uris.forEach(uri => {
         const trimmed = uri.trim()
-        if (trimmed && !trimmed.startsWith('#') && (trimmed.startsWith('http://') || trimmed.startsWith('https://'))) {
+        if (trimmed && !trimmed.startsWith('#') && trimmed.startsWith('https://')) {
           urlSet.add(trimmed)
         }
       })
@@ -55,7 +55,7 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
 
     if (e.dataTransfer.types.includes('text/plain')) {
       const text = e.dataTransfer.getData('text/plain').trim()
-      if (text && (text.startsWith('http://') || text.startsWith('https://'))) {
+      if (text && text.startsWith('https://')) {
         urlSet.add(text)
       }
     }
@@ -77,7 +77,7 @@ export function WorkspaceDropZone({ onDrop, isProcessing, mascotType = 'bot', ha
     }
 
     const text = e.clipboardData.getData('text')
-    if (text && (text.startsWith('http://') || text.startsWith('https://'))) {
+    if (text && text.startsWith('https://')) {
       items.push(text)
     }
 

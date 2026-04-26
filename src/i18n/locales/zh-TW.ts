@@ -11,11 +11,11 @@ const zhTW = {
 
     // URL input
     urlPlaceholder: '輸入圖檔 URL 或網站 URL（例如：https://example.com/icon.png）',
-    urlHint: '支援直接圖檔連結或網站 URL，系統將自動解析網頁中的圖示',
+    urlHint: '支援 HTTPS 圖檔連結或 HTTPS 網站 URL，系統將自動解析網頁中的圖示',
 
     // URL validation errors
     urlRequired: '請輸入有效的 URL',
-    urlInvalidPrefix: 'URL 必須以 http:// 或 https:// 開頭',
+    urlInvalidPrefix: 'URL 必須以 https:// 開頭',
 
     // Workspace
     workspaceTitle: '工作區拖放區',
@@ -25,7 +25,7 @@ const zhTW = {
     workspaceDropIdle: '拖曳檔案或連結到此處',
     workspaceDropProcessing: '正在處理您的圖示...',
     workspaceDropSupportsPrefix: '支援',
-    workspaceDropSupportsSuffix: '和網站 URL',
+    workspaceDropSupportsSuffix: '和 HTTPS 網站 URL',
     workspaceDropAutoStart: '系統將自動啟動轉換引擎',
     workspaceDropPasteHint: '貼上也可以',
 

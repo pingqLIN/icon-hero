@@ -123,3 +123,6 @@ stats.html
 # OS
 .DS_Store
 Thumbs.db
+
+# Local retained removals
+.del/

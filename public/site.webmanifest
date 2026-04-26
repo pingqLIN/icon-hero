@@ -11,7 +11,7 @@
   "categories": ["design", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/icon-hero/assets/ICONHERO-DgbJXyeh.png",
+      "src": "ICONHERO.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
