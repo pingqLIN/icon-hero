@@ -182,7 +182,7 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-[calc(48rem+100px)] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Code size={24} weight="bold" className="text-primary" />
