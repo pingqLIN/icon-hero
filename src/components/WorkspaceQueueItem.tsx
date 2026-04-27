@@ -21,6 +21,12 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 
+const formatAccent: Record<'png' | 'ico' | 'icns', string> = {
+  png: '#3B82F6',
+  ico: '#10B981',
+  icns: '#8B5CF6',
+}
+
 interface WorkspaceQueueItemProps {
   item: WorkspaceItem
   onPreview?: (item: WorkspaceItem) => void
@@ -342,6 +348,7 @@ export function WorkspaceQueueItem({
                   if (!hasFormat) return null
                   
                   const isIco = format === 'ico'
+                  const accentColor = formatAccent[format]
                   
                   return (
                     <TooltipProvider key={format}>
@@ -350,18 +357,24 @@ export function WorkspaceQueueItem({
                           <div
                             draggable={true}
                             onDragStart={(e) => handleDragStart(e, format)}
-                            className="relative group"
+                            className="relative group rounded-md p-[2px]"
+                            style={{ backgroundColor: accentColor }}
                             data-help={t('helpFormatButton', { format: format.toUpperCase() })}
                           >
                             <Button
                               size="sm"
                               variant={isIco ? "default" : "outline"}
                               className={cn(
-                                "h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all",
-                                isIco 
-                                  ? "bg-primary hover:bg-primary/90 shadow-sm" 
-                                  : "hover:border-primary hover:bg-primary/5"
+                                "h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all border-0",
+                                isIco
+                                  ? "bg-white text-foreground hover:bg-white/90"
+                                  : "bg-background"
                               )}
+                              style={isIco
+                                ? {
+                                    color: '#0f172a',
+                                  }
+                                : undefined}
                               onClick={() => onDownload?.(item, format)}
                             >
                               <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary-foreground" />
@@ -375,7 +388,7 @@ export function WorkspaceQueueItem({
                             {t('queueDragToSystemTitle', { platformHint: isIco ? t('queueDragToSystemWindowsHint') : '' })}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {isIco 
+                            {isIco
                               ? t('queueDragToSystemIcoDesc')
                               : t('queueDragToSystemDownloadDesc', { format: format.toUpperCase() })
                             }
