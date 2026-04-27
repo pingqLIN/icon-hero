@@ -22,9 +22,15 @@ import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 
 const formatAccent: Record<'png' | 'ico' | 'icns', string> = {
-  png: '#3B82F6',
-  ico: '#10B981',
-  icns: '#8B5CF6',
+  png: '#0EA5E9',
+  ico: '#0EA5E9',
+  icns: '#0EA5E9',
+}
+
+const actionAccent: Record<'preview' | 'folder' | 'automation', string> = {
+  preview: '#22C55E',
+  folder: '#F59E0B',
+  automation: '#8B5CF6',
 }
 
 interface WorkspaceQueueItemProps {
@@ -209,6 +215,8 @@ export function WorkspaceQueueItem({
     onDragStart?.()
   }
 
+  const availableDownloadFormats = (['png', 'ico', 'icns'] as const).filter(format => item.convertedUrls?.[format])
+
   return (
     <div
       draggable={enableReorder}
@@ -286,118 +294,130 @@ export function WorkspaceQueueItem({
 
             {item.status === 'completed' && item.convertedUrls && (
               <div className="flex items-center gap-2 flex-shrink-0">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-8 w-8"
-                        onClick={() => onPreview?.(item)}
-                        data-help={t('helpPreview')}
-                      >
-                        <Eye size={16} />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t('queueActionPreview')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="h-8 w-8"
-                        onClick={() => onApplyIcon?.(item)}
-                        data-help={t('helpApplyIcon')}
-                      >
-                        <FolderOpen size={16} weight="fill" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t('queueActionApplyFolder')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="h-8 w-8"
-                        onClick={() => onAutomation?.(item)}
-                        data-help={t('helpAutomation')}
-                      >
-                        <Code size={16} weight="bold" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{t('queueActionAutomation')}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                {(['png', 'ico', 'icns'] as const).map((format) => {
-                  const hasFormat = item.convertedUrls?.[format]
-                  if (!hasFormat) return null
-                  
-                  const isIco = format === 'ico'
-                  const accentColor = formatAccent[format]
-                  
-                  return (
-                    <TooltipProvider key={format}>
+                <div className="flex items-center gap-2.5 pr-2.5 border-r border-border/60">
+                  <div className="p-[2px] rounded-md" style={{ backgroundColor: actionAccent.preview }}>
+                    <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <div
-                            draggable={true}
-                            onDragStart={(e) => handleDragStart(e, format)}
-                            className="relative group rounded-md p-[2px]"
-                            style={{ backgroundColor: accentColor }}
-                            data-help={t('helpFormatButton', { format: format.toUpperCase() })}
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-8 w-8 bg-background text-foreground"
+                            onClick={() => onPreview?.(item)}
+                            data-help={t('helpPreview')}
                           >
-                            <Button
-                              size="sm"
-                              variant={isIco ? "default" : "outline"}
-                              className={cn(
-                                "h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all border-0",
-                                isIco
-                                  ? "bg-white text-foreground hover:bg-white/90"
-                                  : "bg-background"
-                              )}
-                              style={isIco
-                                ? {
-                                    color: '#0f172a',
-                                  }
-                                : undefined}
-                              onClick={() => onDownload?.(item, format)}
-                            >
-                              <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary-foreground" />
-                              <Download size={14} />
-                              <span className="text-xs font-semibold">{format.toUpperCase()}</span>
-                            </Button>
-                          </div>
+                            <Eye size={16} />
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent side="bottom" className="max-w-xs">
-                          <p className="font-semibold">
-                            {t('queueDragToSystemTitle', { platformHint: isIco ? t('queueDragToSystemWindowsHint') : '' })}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {isIco
-                              ? t('queueDragToSystemIcoDesc')
-                              : t('queueDragToSystemDownloadDesc', { format: format.toUpperCase() })
-                            }
-                          </p>
+                        <TooltipContent>
+                          <p>{t('queueActionPreview')}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                  )
-                })}
+                  </div>
+
+                  <div className="p-[2px] rounded-md" style={{ backgroundColor: actionAccent.folder }}>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            className="h-8 w-8 bg-background text-foreground"
+                            onClick={() => onApplyIcon?.(item)}
+                            data-help={t('helpApplyIcon')}
+                          >
+                            <FolderOpen size={16} weight="fill" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{t('queueActionApplyFolder')}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+
+                  <div className="p-[2px] rounded-md" style={{ backgroundColor: actionAccent.automation }}>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            className="h-8 w-8 bg-background text-foreground"
+                            onClick={() => onAutomation?.(item)}
+                            data-help={t('helpAutomation')}
+                          >
+                            <Code size={16} weight="bold" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{t('queueActionAutomation')}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </div>
+                </div>
+
+                {availableDownloadFormats.length > 0 && (
+                  <div className="ml-2.5 flex items-center gap-2.5">
+                    {availableDownloadFormats.map((format) => {
+                      const hasFormat = item.convertedUrls?.[format]
+                      if (!hasFormat) return null
+
+                      const isIco = format === 'ico'
+                      const accentColor = formatAccent[format]
+
+                      return (
+                        <TooltipProvider key={format}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div
+                                draggable={true}
+                                onDragStart={(e) => handleDragStart(e, format)}
+                                className="relative group rounded-md p-[2px]"
+                                style={{ backgroundColor: accentColor }}
+                                data-help={t('helpFormatButton', { format: format.toUpperCase() })}
+                              >
+                                <Button
+                                  size="sm"
+                                  variant={isIco ? "default" : "outline"}
+                                  className={cn(
+                                    "h-8 px-2 gap-1.5 cursor-grab active:cursor-grabbing transition-all border-0",
+                                    isIco
+                                      ? "bg-white text-foreground hover:bg-white/90"
+                                      : "bg-background"
+                                  )}
+                                  style={isIco
+                                    ? {
+                                        color: '#0f172a',
+                                      }
+                                    : undefined}
+                                  onClick={() => onDownload?.(item, format)}
+                                >
+                                  <HandGrabbing size={14} weight="fill" className="opacity-0 group-hover:opacity-100 transition-opacity absolute -left-1 -top-1 text-primary-foreground" />
+                                  <Download size={14} />
+                                  <span className="text-xs font-semibold">{format.toUpperCase()}</span>
+                                </Button>
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent side="bottom" className="max-w-xs">
+                              <p className="font-semibold">
+                                {t('queueDragToSystemTitle', { platformHint: isIco ? t('queueDragToSystemWindowsHint') : '' })}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {isIco
+                                  ? t('queueDragToSystemIcoDesc')
+                                  : t('queueDragToSystemDownloadDesc', { format: format.toUpperCase() })
+                                }
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             )}
           </div>
