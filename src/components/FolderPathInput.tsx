@@ -40,7 +40,7 @@ export function FolderPathInput({
     let value = trimmed
     try {
       value = decodeURIComponent(trimmed)
-    } catch (_error) {
+    } catch {
       value = trimmed
     }
 

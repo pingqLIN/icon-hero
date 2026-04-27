@@ -88,6 +88,16 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
     }
   }, [open])
 
+  useEffect(() => {
+    const preElement = scriptRef.current
+    if (!preElement) {
+      return
+    }
+
+    const measuredHeight = preElement.scrollHeight + 12
+    setScriptPreviewHeight(Math.min(720, Math.max(180, measuredHeight)))
+  }, [generatedScript])
+
   if (!item || item.status !== 'completed') return null
 
   const getRecommendedFormat = (type: ScriptType): 'png' | 'ico' | 'icns' => {
@@ -169,16 +179,6 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
       setIsDownloadingPackage(false)
     }
   }
-
-  useEffect(() => {
-    const preElement = scriptRef.current
-    if (!preElement) {
-      return
-    }
-
-    const measuredHeight = preElement.scrollHeight + 12
-    setScriptPreviewHeight(Math.min(720, Math.max(180, measuredHeight)))
-  }, [generatedScript])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
