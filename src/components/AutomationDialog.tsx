@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { 
   Code, 
   WindowsLogo, 
@@ -19,7 +19,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
 import { FolderPathInput } from '@/components/FolderPathInput'
 import { WorkspaceItem } from '@/types/workspace'
@@ -76,6 +75,8 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
   const [targetPaths, setTargetPaths] = useState<string[]>([])
   const [generatedScript, setGeneratedScript] = useState('')
   const [isDownloadingPackage, setIsDownloadingPackage] = useState(false)
+  const [scriptPreviewHeight, setScriptPreviewHeight] = useState(180)
+  const scriptRef = useRef<HTMLPreElement>(null)
 
   // 開啟時重置狀態（包含恢復為偵測到的平台）
   useEffect(() => {
@@ -169,8 +170,15 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
     }
   }
 
-  const scriptLines = generatedScript.split('\n').length
-  const previewMaxHeight = Math.min(720, Math.max(180, scriptLines * 18))
+  useEffect(() => {
+    const preElement = scriptRef.current
+    if (!preElement) {
+      return
+    }
+
+    const measuredHeight = preElement.scrollHeight + 12
+    setScriptPreviewHeight(Math.min(720, Math.max(180, measuredHeight)))
+  }, [generatedScript])
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -262,14 +270,17 @@ export function AutomationDialog({ item, open, onOpenChange }: AutomationDialogP
               className="space-y-2"
             >
               <Label className="text-sm font-semibold">生成的腳本</Label>
-              <ScrollArea
-                className="w-full rounded-lg border border-border bg-muted/30"
-                style={{ maxHeight: `${previewMaxHeight}px` }}
+              <div
+                className="w-full overflow-auto rounded-lg border border-border bg-muted/30"
+                style={{ height: `${scriptPreviewHeight}px` }}
               >
-                <pre className="p-4 text-xs font-mono">
+                <pre
+                  ref={scriptRef}
+                  className="p-4 text-xs font-mono leading-5 whitespace-pre-wrap break-words min-h-0"
+                >
                   <code>{generatedScript}</code>
                 </pre>
-              </ScrollArea>
+              </div>
 
               <div className="flex gap-2">
                 <Button
