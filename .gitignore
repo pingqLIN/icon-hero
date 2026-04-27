@@ -120,6 +120,12 @@ out
 dist/
 stats.html
 
+# Local dev/session artifacts
+.devserver.err
+/%SystemDrive%/
+/螢幕錄製 *.mp4
+/錄製內容 *.gif
+
 # OS
 .DS_Store
 Thumbs.db
