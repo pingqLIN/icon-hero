@@ -25,6 +25,7 @@
 
 <p align="center">
   <a href="https://pingqlin.github.io/icon-hero/">🌐 Live Demo</a> •
+  <a href="#-workflow-highlights">Workflow Highlights</a> •
   <a href="#-features">Features</a> •
   <a href="#-how-to-use">How to Use</a> •
   <a href="#-architecture">Architecture</a> •
@@ -41,6 +42,17 @@
 </p>
 
 > Drag & drop any image, enter a URL, or paste from clipboard — ICON HERO automatically converts it to all three icon formats and generates ready-to-run automation scripts.
+
+---
+
+## 🎬 Workflow Highlights
+
+ICON HERO is designed around four clear actions:
+
+- **Add an image** — click, drag, paste, or load an HTTPS image source into the workspace
+- **Let it convert** — the browser analyzes the source and prepares PNG, ICO, and ICNS outputs automatically
+- **Download what you need** — save one format, drag a converted icon, or bundle multiple results as a ZIP
+- **Apply to a target** — generate a local script package for replacing folder or app icons on your platform
 
 ---
 
