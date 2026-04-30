@@ -37,7 +37,7 @@ const featureScenes = [
     body: '把喜歡的圖片拖進工作區，或點選選擇圖檔；ICON HERO 會立即接住素材並準備轉換。',
     bullets: ['拖曳圖片到工作區', '支援本機檔案與貼上', '不需要離開瀏覽器'],
     clip: 'remotion-footage/input-drag.mp4',
-    focus: { scale: 1.42, x: -12, y: -16 },
+    focus: { scale: 1.26, x: -4, y: -8 },
     color: brand.teal,
   },
   {
@@ -50,7 +50,7 @@ const featureScenes = [
     body: '檔案進入佇列後自動分析格式並進行轉換，使用者只需要等待完成狀態出現。',
     bullets: ['自動辨識圖片來源', '顯示處理佇列狀態', '完成後保留可下載結果'],
     clip: 'remotion-footage/auto-convert.mp4',
-    focus: { scale: 1.58, x: 0, y: -8 },
+    focus: { scale: 1.34, x: 0, y: -6 },
     color: brand.coral,
   },
   {
@@ -64,7 +64,7 @@ const featureScenes = [
     bullets: ['PNG 用於通用預覽', 'ICO 推薦 Windows', 'ICNS 對應 macOS'],
     clip: 'remotion-footage/conversion-result.mp4',
     clipStart: 160,
-    focus: { scale: 1.5, x: -92, y: -230 },
+    focus: { scale: 1.28, x: -58, y: -178 },
     color: brand.blue,
   },
   {
@@ -77,7 +77,7 @@ const featureScenes = [
     body: '選擇平台與目標路徑，下載腳本與 icon package；真正變更資料夾圖示的動作在本機執行。',
     bullets: ['選擇 Windows / macOS / Linux', '輸入或選取目標資料夾', '下載後在本機執行腳本'],
     clip: 'remotion-footage/script-install.mp4',
-    focus: { scale: 1.48, x: 0, y: -28 },
+    focus: { scale: 1.28, x: 0, y: -18 },
     color: brand.plum,
   },
 ] as const

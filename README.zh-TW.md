@@ -53,6 +53,12 @@ ICON HERO 的核心操作可分成四個清楚步驟：
 - **取得檔案** — 下載單一格式、拖曳已轉換圖示，或將多個結果打包成 ZIP
 - **套用目標** — 產生符合平台的本機腳本套件，用於替換資料夾或應用程式圖示
 
+<p align="center">
+  <video src="docs/media/icon-hero-tutorial.mp4" width="800" controls>
+    Icon Hero 產品操作導覽影片
+  </video>
+</p>
+
 ---
 
 ## ⚡ 功能特色

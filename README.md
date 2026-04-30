@@ -54,6 +54,12 @@ ICON HERO is designed around four clear actions:
 - **Download what you need** — save one format, drag a converted icon, or bundle multiple results as a ZIP
 - **Apply to a target** — generate a local script package for replacing folder or app icons on your platform
 
+<p align="center">
+  <video src="docs/media/icon-hero-tutorial.mp4" width="800" controls>
+    Icon Hero product walkthrough video
+  </video>
+</p>
+
 ---
 
 ## ⚡ Features
