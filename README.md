@@ -1,362 +1,128 @@
 <p align="center">
-  <img src="src/assets/ICONHERO.png" width="120" alt="Icon Hero Logo">
+  <img src="src/assets/BANNER.png" width="1280" alt="Icon Hero banner">
 </p>
 
 <h1 align="center">ICON HERO</h1>
 
 <p align="center">
-  <b>Browser-based icon conversion &amp; automation toolkit</b><br>
-  Convert any image to PNG · ICO · ICNS and automate icon replacement across platforms
+  <b>Online icon converter for PNG · ICO · ICNS</b>
 </p>
 
 <p align="center">
-  <b>💡 100% client-side — your files never leave your browser.</b>
+  <a href="https://pingqlin.github.io/icon-hero/"><b>Launch Icon Hero</b></a> ·
+  Browser-side · No upload required
 </p>
 
 <p align="center">
   <a href="https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml">
-    <img src="https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg" alt="Deploy">
+    <img src="https://github.com/pingqLIN/icon-hero/actions/workflows/deploy.yml/badge.svg" alt="Deploy status">
   </a>
-  <img src="https://img.shields.io/badge/React-19-61dafb?logo=react" alt="React 19">
-  <img src="https://img.shields.io/badge/TypeScript-5.9-3178c6?logo=typescript" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Online-ready-2f9e44" alt="Online ready">
+  <img src="https://img.shields.io/badge/Formats-PNG%20%7C%20ICO%20%7C%20ICNS-3178c6" alt="PNG ICO ICNS">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green" alt="MIT License"></a>
 </p>
 
 <p align="center">
-  <a href="https://pingqlin.github.io/icon-hero/">🌐 Live Demo</a> •
-  <a href="#-workflow-highlights">Workflow Highlights</a> •
-  <a href="#-features">Features</a> •
-  <a href="#-how-to-use">How to Use</a> •
-  <a href="#-architecture">Architecture</a> •
-  <a href="#-platform-support">Platform Support</a> •
-  <a href="README.zh-TW.md">中文版</a>
+  <a href="https://pingqlin.github.io/icon-hero/">Live Website</a> ·
+  <a href="#three-step-icon-conversion">Quick Start</a> ·
+  <a href="README.zh-TW.md">繁體中文</a>
 </p>
 
 ---
 
-## ✨ Demo
+## Why Icon Hero
+
+Icon Hero is an online icon conversion tool you can use immediately. No desktop app, no cloud upload, no setup ceremony. Open the website and turn logos, design assets, screenshots, or favicons into practical icon formats.
+
+- **Instant access**: Start converting from the live website whenever you need quick project icons or handoff assets.
+- **Multiple formats at once**: Export PNG, ICO, and ICNS for websites, Windows, macOS, and general project needs.
+- **Flexible input**: Upload local images, drag and drop, paste from clipboard, or load an HTTPS URL.
+- **Batch download**: Package multiple icons together to reduce repetitive downloads and cleanup.
+- **Local privacy**: Conversion runs in your browser, so your images stay on your device.
+- **Most importantly**: It is very cute.
 
 <p align="center">
-  <img src="docs/images/demo.gif" width="800" alt="Icon Hero Demo — upload, convert, download">
+  <img src="docs/images/demo.gif" width="820" alt="Icon Hero online conversion demo">
 </p>
-
-> Drag & drop any image, enter a URL, or paste from clipboard — ICON HERO automatically converts it to all three icon formats and generates ready-to-run automation scripts.
 
 ---
 
-## 🎬 Workflow Highlights
+## Three-Step Icon Conversion
 
-ICON HERO is designed around four clear actions:
+### 1. Add an image
 
-- **Add an image** — click, drag, paste, or load an HTTPS image source into the workspace
-- **Let it convert** — the browser analyzes the source and prepares PNG, ICO, and ICNS outputs automatically
-- **Download what you need** — save one format, drag a converted icon, or bundle multiple results as a ZIP
-- **Apply to a target** — generate a local script package for replacing folder or app icons on your platform
+Upload a file, drag an image onto the page, paste from your clipboard, or enter an HTTPS website URL. Icon Hero automatically analyzes the available source.
 
 <p align="center">
-  <video src="docs/media/icon-hero-tutorial.mp4" width="800" controls>
-    Icon Hero product walkthrough video
-  </video>
+  <img src="docs/images/step-add-image.gif" width="760" alt="Add image by drag and drop in Icon Hero">
 </p>
 
----
+### 2. Wait for live conversion
 
-## ⚡ Features
-
-- **Format Conversion** — Convert PNG, JPG, ICO, ICNS input → outputs all three formats (PNG + ICO + ICNS) simultaneously
-- **Smart Input** — Upload files, drag & drop, paste from clipboard, or enter any HTTPS website URL
-- **URL Parsing** — Automatically extracts favicon and Open Graph images from HTTPS URLs (best-effort; CORS/CSP may limit some sites)
-- **Visual Drag & Drop** — Real-time trail animation as you drag converted icons to folders (Chromium-based browsers recommended)
-- **Automation Scripts** — Generate PowerShell, Bash, and osascript scripts for bulk icon replacement
-- **One-Click Packaging** — Bundle icon + script + README into a ZIP file
-- **Batch Processing** — Handle multiple icons simultaneously in the workspace queue
-- **Dual Theme** — Neon Forge (dark) and Creative Studio (light) with animated mascots
-- **Adaptive Multilingual UI** — Detects saved/browser language across Traditional Chinese, Simplified Chinese, English, Japanese, Spanish, French, and Korean
-
----
-
-## 🎨 Dual Theme
-
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/screenshot-light.png" alt="Creative Studio — Light Theme" width="420">
-      <br><b>Creative Studio</b> — Light theme with Hero mascot
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/screenshot-dark.png" alt="Neon Forge — Dark Theme" width="420">
-      <br><b>Neon Forge</b> — Dark theme with Robot mascot
-    </td>
-  </tr>
-</table>
-
-- **Neon Forge (dark)**: Purple-blue gradients + Robot mascot
-- **Creative Studio (light)**: Orange-red gradients + Hero mascot
-- Theme toggle simultaneously switches mascot type and color variables
-
----
-
-## 🌍 Top 10 Icon Resources
+The workspace shows each item's processing state. Once complete, you can immediately grab PNG, ICO, and ICNS outputs.
 
 <p align="center">
-  <img src="docs/images/screenshot-icon-resources.png" width="900" alt="Top 10 icon resource cards in Icon Hero">
+  <img src="docs/images/step-auto-convert.gif" width="760" alt="Icon Hero automatically converts images to icon formats">
 </p>
 
-The workspace now includes a curated "Top 10 Icon Resources" section (right above the footer) for quick discovery and style comparison.
+### 3. Download or apply
 
-| Website | Icon Count | License | Highlight |
-|---------|------------|---------|-----------|
-| Flaticon | 22M+ | Free + Paid | Largest icon library |
-| Icons8 | 1.5M+ | Free + Paid | Wide style coverage |
-| The Noun Project | 5M+ | Free + Paid | Minimal design system |
-| Iconfinder | 6M+ | Free + Paid | Premium-quality sets |
-| Font Awesome | 30k+ | Free + Paid | Frontend classic |
-| Phosphor Icons | 9k+ | Free | Used by this project |
-| Heroicons | 300+ | Free | Official Tailwind icons |
-| Lucide | 1.5k+ | Free | Active open-source community |
-| Feather Icons | 287 | Free | Minimal open-source set |
-| Material Icons | 2500+ | Free | Official Google set |
-
----
-
-## 🗺️ How to Use
+Download a single format, bundle everything as a ZIP, or generate a local script for quickly applying folder or app icons on your platform.
 
 <p align="center">
-  <img src="docs/images/workflow-diagram.svg" width="800" alt="4-step workflow: Upload → Analyze → Convert → Apply">
+  <img src="docs/images/step-download-apply.gif" width="760" alt="Download converted icons from Icon Hero">
 </p>
 
-### Step-by-Step
+---
 
-**1. Input your icon**
+## Who It Is For
 
-```
-Option A: Click "Select File" (選擇圖檔) to pick a local file
-Option B: Click "Load from URL" (從 URL 載入) and paste an HTTPS website URL
-Option C: Drag & drop a file directly onto the workspace
-Option D: Paste an image with ⌘/Ctrl + V
-```
+| User | What it helps you finish |
+|------|---------------------------|
+| Designers | Package logos or visual assets into delivery-ready icons |
+| Frontend and app developers | Quickly prepare website, desktop, and project icon formats |
+| Creators | Turn channel, social, or campaign artwork into consistent icons |
+| Everyday users | Prepare icons for folders, shortcuts, and personal projects |
 
-**2. Wait for auto-conversion** — the queue shows real-time progress
+---
+
+## Support
+
+| Type | Support |
+|------|---------|
+| Input | PNG, JPG, ICO, ICNS, clipboard images, HTTPS URL |
+| Output | PNG, ICO, ICNS, ZIP bundle |
+| Online use | Chrome, Edge, Firefox, Safari |
+| Advanced apply | Windows PowerShell, macOS shell/osascript, Linux shell |
+
+> Dragging converted icons into the file explorer works best in Chrome or Edge.
+
+---
+
+## Copyright Reminder
+
+Icon Hero helps convert image formats, but it does not grant rights to third-party logos, mascots, artwork, or icon sets. Before using a converted icon in public, commercial, app store, or client-facing work, make sure you have the right license or permission for the original image.
+
+---
+
+## Start Using
+
+Open the live website:
 
 <p align="center">
-  <img src="docs/images/screenshot-result.png" width="700" alt="Conversion result in queue with PNG/ICO/ICNS download buttons">
+  <a href="https://pingqlin.github.io/icon-hero/"><b>https://pingqlin.github.io/icon-hero/</b></a>
 </p>
 
-Status progression: `pending` → `analyzing` → `converting` (per format) → `completed` / `error`
-
-**3. Download your icon**
-
-| Action | How |
-|--------|-----|
-| Download single format | Click **PNG**, **ICO**, or **ICNS** button |
-| Drag to folder | Long-press a format button and drag to any folder (Chromium only) |
-| Batch download (ZIP) | Click **Batch Download** (批次下載) in the queue header |
-
-**4. Generate automation script** — click the `</>` button on any queue item
-
-<p align="center">
-  <img src="docs/images/screenshot-automation.png" width="700" alt="Automation Script Generator dialog — Windows/macOS/Linux tabs">
-</p>
-
-```
-① Select platform: Windows / macOS / Linux
-② Enter target folder paths (supports drag & drop)
-③ Click "Generate Script" (生成腳本) to preview
-④ Copy and paste the script, or download as a file to run directly
-```
-
-> The generated scripts run **outside the browser** on your local machine. No server involved.
-
----
-
-## 🏗️ Architecture
-
-### Core Flow
-
-```
-1. Upload / URL Input
-        ↓
-2. workspaceAnalyzer.ts    ← Analyze files, extract favicon & Open Graph images
-        ↓
-3. iconConverter.ts        ← Canvas API → PNG / ICO / ICNS
-        ↓
-4. WorkspaceQueue          ← Real-time status display
-        ↓
-5. scriptGenerator.ts      ← PowerShell / Bash / osascript
-   iconApplyPackager.ts    ← ZIP bundle (icon + script + README)
-```
-
-### State Management (App.tsx)
-
-- Centralized state: `workspaceItems[]` tracks all conversion items
-- Each item contains: original file, conversion status, URLs and Blobs for all three formats
-- Uses `useCallback` and `useEffect` for drag events and global cleanup
-
-### Icon Conversion Pipeline (`src/lib/`)
-
-| Module | Responsibility |
-|--------|---------------|
-| **workspaceAnalyzer.ts** | Analyze uploaded files or URLs; parse favicon and Open Graph images |
-| **iconConverter.ts** | Convert icons to PNG/ICO/ICNS via Canvas API |
-| **scriptGenerator.ts** | Generate cross-platform scripts (dialog mode, inline/file variants) |
-| **iconApplyPackager.ts** | Bundle icon + script into ZIP (one-click download with path normalization & fuzzy search) |
-
-### Component Architecture
-
-| Component | Role |
-|-----------|------|
-| **WorkspaceDropZone** | Drop zone + mascot animation (bot/hero dual themes) |
-| **WorkspaceQueue** | Queue container with "Clear Completed" action |
-| **WorkspaceQueueItem** | Single conversion item — preview, download, automation, drag |
-| **AutomationDialog** | Legacy script generator (copy/download split, manual path input) |
-| **ApplyIconDialog** | New one-click packager (drag-to-input paths, ZIP download) |
-| **DragTrackingOverlay** | Global drag trail animation (Canvas-rendered) |
-
-### Drag & Drop System
-
-- **Global drag cleanup**: Listens to `dragend`, `mouseup`, `blur` events to reset pointer-events
-- **Custom drag preview**: Uses `setDragImage` to show filename + format info
-- **File system integration**: `DataTransfer.setData('DownloadURL')` enables dragging directly to file explorer
-
-### Script Generation — Two Systems
-
-Two script systems coexist:
-
-1. **AutomationDialog** (`scriptGenerator.ts`):
-   - Supports PowerShell / AppleScript / Bash
-   - `isInlineMode` parameter controls pause instructions (copy-paste vs. file execution)
-   - Features: path normalization, environment variable expansion, fuzzy search
-
-2. **ApplyIconDialog** (`iconApplyPackager.ts`):
-   - Bundles icon + script + README into a ZIP
-   - FolderPathInput component supports drag-to-get folder path
-   - Auto-selects recommended format per platform (Windows=ICO, macOS=ICNS, Linux=PNG)
-
-### File Processing Pipeline
-
-```typescript
-// Every icon goes through the full conversion pipeline
-for (const targetFormat of ['png', 'ico', 'icns']) {
-  const result = await convertIcon(analyzed.url, targetFormat)
-  // Store URL and Blob (for drag & download)
-}
-```
-
-### Path Normalization Strategy (`iconApplyPackager.ts`)
-
-All platform scripts include:
-1. **Environment variable expansion**: `%USERPROFILE%` (Windows) / `~` (Unix)
-2. **Slash normalization**: `/` → `\` (Windows)
-3. **Fuzzy search**: When path doesn't exist, case-insensitive search in parent directory
-4. **Error anticipation**: Distinguishes "not a folder" from "path doesn't exist"
-
----
-
-## 🖥️ Platform Support
-
-| Platform | Format | Script | Method |
-|----------|--------|--------|--------|
-| **Windows** | ICO | PowerShell | `desktop.ini` + `IconResource` |
-| **macOS** | ICNS | Bash + osascript | `fileicon` CLI or `osascript` fallback |
-| **Linux** | PNG | Bash | `gio set metadata::custom-icon` (GNOME/Nautilus) |
-
-### Platform Notes
-
-- **Windows**: Uses `desktop.ini` + `IconResource`. Requires hidden/system attributes (`attrib +h +s`). PowerShell execution policy must allow scripts (`Set-ExecutionPolicy RemoteSigned`).
-- **macOS**: Tries `fileicon` CLI first (`brew install fileicon`); falls back to `osascript` + AppKit framework. `.command` extension allows double-click execution. Requires `chmod +x`.
-- **Linux**: Uses `gio set metadata::custom-icon`. Requires `gvfs` package. `.sh` scripts must be run manually.
-
-### Script Features
-
-- **Path normalization** — Handles `%USERPROFILE%`, `~`, mixed slashes
-- **Fuzzy search** — Locates folders even with minor path mismatches
-- **Batch apply** — Set multiple target paths at once
-- **Two modes** — Copy-paste version (with pause) vs. downloadable file version (runs directly)
-
-### Browser Compatibility
-
-| Feature | Chrome/Edge | Firefox | Safari |
-|---------|-------------|---------|--------|
-| Format conversion | ✅ | ✅ | ✅ |
-| URL favicon fetch | ✅ | ✅ | ✅ |
-| Drag-to-folder download | ✅ | ❌ | ❌ |
-| Clipboard paste | ✅ | ✅ | ✅ |
-
----
-
-## 🛠️ Tech Stack
-
-| Category | Technology |
-|----------|-----------|
-| Framework | React 19 + TypeScript |
-| Build | Vite 7 |
-| UI Components | Shadcn UI v4 (Radix UI primitives) |
-| Styling | Tailwind CSS 4 (CSS variable system) |
-| Animation | Framer Motion |
-| ZIP Packaging | JSZip |
-| Icons | Phosphor Icons + Lucide React |
-
-UI components are located in `src/components/ui/`, using `cn()` utility (tailwind-merge) for className merging.
-
----
-
-## ⚠️ Known Limitations
-
-- ICO conversion is limited to 256×256 (browser Canvas API constraint)
-- ICNS format is actually a PNG wrapper (relies on macOS system for native handling)
-- Drag-to-file-explorer depends on browser support for the `DownloadURL` format (Chromium-based browsers work best)
-
----
-
-## 🚀 Local Development
-
-**Requirements:** Node.js 18+
+For local development or customization:
 
 ```bash
-# Install dependencies
 npm install
-
-# Start dev server, then open the Local URL printed by Vite
 npm run dev
-
-# Build for production (output to dist/)
 npm run build
-
-# Run ESLint
-npm run lint
-
-# Preview production build
-npm run preview
-
-# Clear and re-optimize dependencies
-npm run optimize
 ```
 
-### File Naming Conventions
-
-- Components: PascalCase (e.g., `WorkspaceDropZone.tsx`)
-- Utility modules: camelCase (e.g., `scriptGenerator.ts`)
-- Type definitions: typically inline at file top or in `src/types/`
-
 ---
 
-## 🤝 Contributing
-
-Issues and pull requests are welcome. Please open an issue first to discuss major changes.
-
----
-
-## 🤖 AI-Assisted Development
-
-This project was developed with AI assistance (code generation and documentation).
-
-**AI Models/Services Used:** Claude Sonnet 4.6 (Anthropic), Gemini 2.5 Pro (Google)
-
-> ⚠️ **Disclaimer:** While the author has made every effort to review and validate the AI-generated code, no guarantee can be made regarding its correctness, security, or fitness for any particular purpose. Use at your own risk.
-
----
-
-## 📜 License
+## License
 
 [MIT License](LICENSE) — Spark Template resources © GitHub, Inc.
